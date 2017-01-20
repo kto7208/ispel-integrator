@@ -1,0 +1,7 @@
+<GetVINexpert xmlns="https://ispel2.iris.sk/WS_ISPEL">
+<!--          <VIN>VSSZZZ6KZVR026970</VIN> -->
+		 <VIN>VSSZZZ6KZVR026970aaaaa</VIN>
+         <IU>wsClientZlin</IU>
+         <ICOFirma>0036216810</ICOFirma>
+         <IRISHeslo>kl95_We8</IRISHeslo>
+</GetVINexpert>

@@ -1,0 +1,51 @@
+1. get vin expert
+
+- se_auta_ws (MEMO) - zapisat label a description, vynechat bezvyznamnu konstatu
+- dat timestamp na zaciatok vypisu
+
+
+
+2. overenia vozidla
+
+tabulka: se_auta_ws
+
+stlpec: TYP_INF MEMO typ 
+
+
+KO - kontrola originality - element KOMsg - obsah elementu a popis elementu podla dokumetacie vypisat obsah. 
+     kazde volanie pridat do MEMO pola
+     
+     
+
+EXEKUCIA - 
+     obsah elementa Exekucie - pridat do MEMO
+
+LEASING - 
+     Leasing msg - obsah elementu pridat do MEMO
+
+
+HIST_KM
+     MileAge  - obsah elementu mileage prepisat MEMO pole, vytriedit podla km
+     stav km z posednej EK a STK do pola se_auta stlpce: KM_STK,KM_EMIS,KM_KO pri kontrole originality
+     datum vykonania KO, ak tam bude do stlpca DT_KO
+     kilometre do KM_KO          
+
+PATRANIE 
+     element PatranieMsg do MEMO pola pridat
+
+STK
+     element TK_EK	pridat do MEMO 		
+      pridat datum poslednej kontroly do se_auta, DT_STK (element Datum odcitania)
+      pridat datum nasl. kontroly do stlpca DT_STK_NASL
+     
+EK	
+     element TK_EK   pridat do MEMO    
+      rozlisovaci element typ pracoviska
+      pridat datum poslednej kontroly do se_auta, DT_EMIS (element Datum odcitania)
+      pridat datum nasl. kontroly do stlpca DT_EMIS_NASL
+     
+
+
+Kazda uspesna operacia WS v se_auta stlpce: DT_GETVINEXPERT, DT_OVERENIEVOZIDLA
+
+

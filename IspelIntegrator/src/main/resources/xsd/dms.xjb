@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jaxb:bindings
+        xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:annox="http://annox.dev.java.net"
+        version="2.1">
+
+
+    <jaxb:globalBindings generateElementProperty="false" fixedAttributeAsConstantProperty="true">
+        <jaxb:javaType name="java.util.Date" xmlType="xsd:dateTime"
+                       parseMethod="ispel.integrator.utils.DatatypeConverter.unmarshal"
+                       printMethod="ispel.integrator.utils.DatatypeConverter.marshal"
+        />
+        <jaxb:javaType name="java.util.Date" xmlType="xsd:date"
+                       parseMethod="ispel.integrator.utils.DatatypeConverter.unmarshal"
+                       printMethod="ispel.integrator.utils.DatatypeConverter.marshal"
+        />
+        <jaxb:javaType name="java.math.BigDecimal" xmlType="xsd:decimal"
+                       parseMethod="ispel.integrator.utils.DatatypeConverter.unmarshalDecimal"
+                       printMethod="ispel.integrator.utils.DatatypeConverter.marshalDecimal"
+        />
+        <jaxb:serializable uid ="0"/>
+        <xjc:serializable/>
+    </jaxb:globalBindings>
+
+    <jaxb:bindings schemaLocation="dms_2.0.xsd">
+        <jaxb:bindings node="//xs:element[@name='SeeVehicleUser']">
+            <annox:annotate>
+                <annox:annotate annox:class="javax.xml.bind.annotation.XmlRootElement" name="SeeVehicleUser"/>
+            </annox:annotate>
+            <jaxb:class name="SeeVehicleUser"/>
+        </jaxb:bindings>
+    </jaxb:bindings>
+</jaxb:bindings>

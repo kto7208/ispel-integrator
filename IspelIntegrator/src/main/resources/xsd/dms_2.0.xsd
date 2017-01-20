@@ -1,0 +1,1253 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xml:lang="en">
+  <xsd:annotation>
+    <xsd:documentation>
+
+	Version 2.0p : 10 Apr 2012
+	Added Description, MainOperation elements within Repair Order and ServiceInvoiceLine element. The Description will give a brief description of the RO and MainOperation will identify the service invoice line that is main operation of 	the RO. 
+	Added useForMarketing element within the Customer element. This element is used to indicate if the customer information is to be used for campaigns/marketing
+	Added StreetType and DateOfBirth elements within the VehicleUser and VehicleOwner.
+	All the above elements are optional
+
+	Version 2.0o : 10 Apr 2008
+	Removed Movements from schema. 
+
+	Version 2.0n : 20 Mar 2008
+	Added DMS Details; Vendor, Product Name, Version and Notes. These are the details of the DMS
+	system sending the extract. Notes is a free text field which can contain any DMS specific debug/configuration
+	information.
+
+        Version 2.0m : 12 Mar 2008
+        For Parts Stock elements we expect to see all parts on the dealers stock file even regardless of 
+        whether the quantity is positive, negative or zero.
+        
+        There is a new attribute WarehouseCode for parts stock which is for the internal warehouse code,
+        the existing Warehouse field is to be used for the warehouse description.
+        
+        There is a new element Movements which contains Part Movements, please note
+        that this is in a specific format detailed in the element FtMovement.          
+
+        Version 2.0l : 17 Jan 2008
+        Changed quantity for part stock to accept zero and negative amounts. This is so that if a part has values for 
+        either Quantity on Order, Quantity Back Order or Reserved quantity, then we can accept a part
+        with zero quantity and a value in one of these other fields. If all quantity fields are zero
+        then we don't expect to receive a line.
+        
+        Version 2.0k : 21 May 2007
+        Changed the franchise element to be a normalized string of free text, rather than a restricted
+        list
+        
+        Version 2.0j :  16 May 2007
+        Copyright 2003-2007 Snap-On Business Solutions. All rights reserved.
+        
+        Changed in Version 2.0j : 16 May 2007
+        Snap On added into version. Dates updated
+        
+        Changed in Version 2.0i : 12 March 2007
+        Added VATNumber as an optional part of the Customer element. Added Jaguar/Land rover franchise.
+        
+        Changed in Version 2.0h : 20 February 2007
+        Added QuantityOnOrder, QuantityBackOrder, ReservedQuantity, LastOutDate and LastInDate, PartStocked, UnitCost 
+        and QtyOnOrder, QtyBackOrder, ReservedQty, LastOutDate, LastInDate, PartStocked, UnitCost for parts stock.
+        
+        Also added Warehouse and Location for parts stock.
+        
+        Warehouse has been added as an optional attribute to the PartsStk element, this is so that we can
+        recieve multiple PartsStk's, one for each warehouse (rather than having to specifiy on each part).
+        
+        Added "return" as an invoice type for parts, service and other invoice type lines.
+        
+        Added "Exceptional Demand" as an optional attribute for the part element
+        
+        Note: PartsStk is the preferred element for sending Parts Stock
+        
+        Changed in Version 2.0g :  16 June 2006
+        Percent added as optional attribute in PartsInvoiceLine, ServiceInvoiceLine and OtherInvoiceLine.
+
+        Changed in Version 2.0f :  20 March 2006
+        Note on Trade Sales Transactions added. 
+
+        Changed in Version 2.0e : 21 November 2005
+        Note on Personal Information revised.
+
+        Changed in Version 2.0d : 22 September 2005
+        Name element in VehicleUser now optional
+
+        Changed in Version 2.0c : 24 August 2005
+        The EndDate attribute of a RepairOrder is now optional.
+        Additional franchises added.
+        
+        Changed in Version 2.0b :  9 August 2005
+        The Type attribute on a LabourRecord element is now required rather than optional.
+        Notes on PtStk element revised.
+
+        Changed in Version 2.0 :  16 June 2005
+        InvoiceSummary element added to Invoice.
+        RepairOrder and LabourRecord elements added.
+        Various dates added to Vehicle element.
+        The VehicleUser element is no longer deprecated.  Its use is subject to the note on personal information below.
+        The VehicleOwner element has been added.  Its use is subject to the note on personal information below.
+        Note on character encoding added.
+        Note on personal information added.
+        All documents conforming to v1.10 will also conform to v2.0.
+
+        Changed in 1.10 : 30 Sept 2004
+        PartsStk and PtStk elements introduced.  These provide a much more compact way of reporting the current
+        parts stock levels than the PartsStock and PartsStockItem elements, and are therefore preferred.
+
+        Changed in 1.9
+        VehicleUser element modified. Name element is now optional.
+
+        Changed in 1.8
+        Invoice element modifed - PartsInvoiceLine, ServiceInvoiceLine and OtherInvoiceLine elements may now be 
+        mixed in any order.
+
+        Changed in 1.7
+        OtherInvoiceLine modified - Quantity element is now optional.
+
+        Changed in 1.6
+        Data type of Quantity element changed to positiveDecimal.
+
+        VehicleUser element deprecated.  It should no longer be used. It remains in the Schema for compatibility
+        with existing applications.
+
+        The Registration element within the Vehicle element is deprecated, and should no longer be used. It remains 
+        in the Schema for compatibility with existing applications.  See the Vehicle element for further details.
+
+        MenuCode element added as an optional part of a PartsInvoiceLine, ServiceInvoiceLine and OtherInvoiceLine.
+
+        ServiceInvoiceLine and OtherInvoiceLine elements added, along with lower-level elements used within those two 
+        elements.
+
+        Changed in 1.5
+        PartsStock and PartsStockItem added.  These provide a mechanism for a Site to report their current parts stock.
+
+        Changed in 1.4
+        Documentation only.  Additional explanation of Sequence attributes on DMSextract and Site elements
+        added.
+
+        Changed in 1.3
+        Postcode element made optional within Customer and VehicleUser elements.
+
+        Changed in 1.2
+        Invoice Type enumeration extended to include Other department.
+        </xsd:documentation>
+  </xsd:annotation>
+  <xsd:annotation>
+    <xsd:documentation>
+        Personal Information
+
+        Important:-
+        All DMS Vendors must have the permission of the Dealers Manufacturer before any Personal data can be 
+        extracted and passed to Snap-On.
+
+        The following rule also applies:-
+
+        Personal information should only be included where the person has indicated that the information may be 
+        passed outside the dealership. The elements regarded as personal information include:
+
+        The VehicleUser and VehicleOwner elements and the elements enclosed by them, where they refer to an individual 
+        rather than a company or organization.
+
+        The Registration element within the Vehicle element.
+        </xsd:documentation>
+  </xsd:annotation>
+  <xsd:annotation>
+    <xsd:documentation>
+        Character Encoding.
+        The default character-encoding for an XML document is UTF-8. This means that non-ASCII 
+        characters, such as currency symbols and accented characters must be specially encoded. 
+        The alternative to encoding these characters in UTF-8 is to specify the encoding for 
+        the XML document.  This can be done easily by adding a line at the top of the file, 
+        before the DMSextract which defines the encoding.  An example is contained inside the comment below.
+        <!--
+        <?xml version="1.0" encoding="iso-8859-1" ?>
+        -->
+        There are numerous possible encodings. iso-8859-1 is likely to cover most of Western 
+        Europe, but we can also support many of the others.
+        </xsd:documentation>
+  </xsd:annotation>
+  <xsd:annotation>
+    <xsd:documentation>
+        Menu Pricing.
+
+        Menu priced items
+
+        The sum total of the transacted items must equal the total invoiced to the customer, exclusive of 
+        surcharges and taxes. 
+
+        The parts prices applied to a menu priced job must be at the price defined by the dealer. Where the 
+        price is not defined by the dealer the current list retail price is to be applied.
+
+        Should the sum of transacted items not equal the total invoiced to the customer then the labour sales 
+        price should be adjusted to comply with this rule. i.e Actual Invoice total less specified transaction 
+        lines =  0  if not then labour sales revenue value must be adjusted by x to make the sum comply 
+        with the rule. It is possible that the labour value may be a negative value.
+
+        In all cases the sold hours reported by the dealer will be as reported and not derived from any other 
+        formulae such as labour sales value divided by a 'standard hourly rate'.
+
+        </xsd:documentation>
+  </xsd:annotation>
+  <xsd:annotation>
+    <xsd:documentation>
+        Trade Sales Transaction Reporting - Monthly invoices and Immediate invoices
+
+        Summary
+        In some markets it is common practice to generate a single customer invoice at the end of a month for all 
+        parts drawn by the trade customer during the month. This practice conflicts with need for daily transaction 
+        reporting required for PRISM.
+        DMS providers with systems supporting this practice must follow the instructions to enable transactions to 
+        be reported daily and avoid accumulated volumes of transaction data at the end of each month.
+
+        Definitions
+
+        Monthly invoices
+        Where the DMS allows the dealer to issue parts to an account customer during the month and issue a 
+        single invoice for all issued and returned parts at month end. All month sales are on a single tax point date.
+
+        Immediate invoices
+        Where the issued parts are invoiced on the same day as issued.
+
+         Action
+
+        Where monthly invoices are an option for the dealer the following action must be applied in the extract
+
+        1.      The documents issuing the parts should be treated and presented as invoices. 
+        2.      Any documents accepting the return of a part issued in this manner should be treated and presented 
+                as credits. 
+        3.      The single monthly issued invoices must not be reported
+        4.      Any credits issued against the monthly invoice must be reported
+        5.      Immediate invoices must be treated as invoices and reported daily
+
+        Outcome
+        Daily parts transactions are reported
+        Monthly invoices are not reported but credit notes against monthly invoices are reported.
+        </xsd:documentation>
+  </xsd:annotation>
+  <xsd:element name="DMSextract">
+    <xsd:annotation>
+      <xsd:documentation>
+                The DMSextract element is the root element for the document.
+
+                The Source attribute identifies the particular DMS installation providing the data.
+
+                The Sequence attribute should be incremented by 1 each time data for this Source is generated.
+        
+                The Source name should ideally identify the server, but the important thing is that it is unique 
+                within the dealer network.  (It could perhaps be the 'public' ip address, or part of your software 
+                licence code - depending on what's available that would be unique.)
+                We recognize that a server may handle several sites.  That's why there is a separate sequence number 
+                at this level.  
+
+                Our monitoring will be expecting that every time we see the same 'source', the associated sequence 
+                has gone up by 1 - otherwise we've lost something.  Similarly every time we see the same 'site' we expect 
+                its sequence to have gone up by one.  We won't reject the file, but it highlights a problem to be 
+                investigated.
+
+                For example, if there is a server handling 2 sites we might have source XY34DT, and sites 12345 and 67890.  If you 
+                choose to send one file per site, the files we get might be
+
+                Source XY34DT seq 1 - Site 12345 seq 1
+                Source XY34DT seq 2 - Site 67890 seq 1
+                Source XY34DT seq 3 - Site 12345 seq 2
+                Source XY34DT seq 4 - Site 67890 seq 2
+                Source XY34DT seq 5 - Site 12345 seq 3
+
+                and so on.
+
+                It would be useful for our support purposes if the same 'source' could be used for all file from that 
+                server, because then we would know that if the two sites were late it was only one problem.  But if 
+                there is no suitable identifier to use, then the dealership name (or site code) would work.  In this 
+                case, the sequence number would be the same for the source as the site.
+
+                We certainly don't want it to be something general like 'DMS', because we'd get the same sequence number 
+                from lots of different servers.
+                
+                The DMSVendor attribute identifies the Vendor of the DMS system.
+                
+                The DMSProductName attribute identifies the Name of the product of the DMS system.
+                
+                The DMSVersion attribute identifies the Version of the DMS system.
+                
+                The DMSNotes attribute is a free text field to allow the DMS vendor to include any diagnostic information.
+                
+                
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence maxOccurs="unbounded">
+        <xsd:element ref="Site" />
+      </xsd:sequence>
+      <xsd:attribute name="Sequence" type="xsd:positiveInteger" use="required" />
+      <xsd:attribute name="Source" type="xsd:normalizedString" use="required" />
+      <xsd:attribute name="DMSVendor" type="xsd:normalizedString" use="optional" />
+      <xsd:attribute name="DMSProductName" type="xsd:normalizedString" use="optional" />
+      <xsd:attribute name="DMSVersion" type="xsd:normalizedString" use="optional" />
+      <xsd:attribute name="DMSNotes" type="xsd:normalizedString" use="optional" />
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Site">
+    <xsd:annotation>
+      <xsd:documentation>
+                A Site represents a single operating location as defined by the vehicle manufacturer.
+
+                The Sequence attribute should be incremented by 1 each time data for this site is generated.
+                It is the first pair of Franchise / FranchiseCode elements that uniquely identifies the site 
+                for the purposes of sequence generation.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Country" />
+        <xsd:element ref="Currency" />
+        <xsd:sequence maxOccurs="1">
+          <xsd:element ref="Franchise" />
+          <xsd:element ref="FranchiseCode" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="Transactions" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="RepairOrders" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="PartsStock" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+          <xsd:element ref="PartsStk" />
+        </xsd:sequence>
+      </xsd:sequence>
+      <xsd:attribute name="Sequence" type="xsd:positiveInteger" use="required" />
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Franchise" type="xsd:normalizedString">
+    <xsd:annotation>
+      <xsd:documentation>
+                The Franchise element identifies the manufacturer.
+                
+                The Franchise element identifies the manufacturer by use of the franchise name.
+                In previous versions of the schema, this was restricted to the list below, but is 
+                now free text. Please continue to use one of the selections below (or if not on the
+                list, then please use the same format).         
+                
+                </xsd:documentation>
+    </xsd:annotation>
+    <!-- 
+
+                <xsd:simpleType>
+                        
+                        <xsd:restriction base="xsd:normalizedString">
+                                <xsd:enumeration value="PEUGEOT"/>
+                                <xsd:enumeration value="Peugeot"/>
+                                <xsd:enumeration value="CITROEN"/>
+                                <xsd:enumeration value="Citroen"/>
+                                <xsd:enumeration value="FIAT"/>
+                                <xsd:enumeration value="Fiat"/>
+                                <xsd:enumeration value="OPEL"/>
+                                <xsd:enumeration value="Opel"/>
+                                <xsd:enumeration value="VAUXHALL"/>
+                                <xsd:enumeration value="Vauxhall"/>
+                                <xsd:enumeration value="CHEVROLET"/>
+                                <xsd:enumeration value="Chevrolet"/>
+                                <xsd:enumeration value="SAAB"/>
+                                <xsd:enumeration value="Saab"/>
+                                <xsd:enumeration value="HONDA"/>
+                                <xsd:enumeration value="Honda"/>
+                                <xsd:enumeration value="JAGUAR"/>
+                                <xsd:enumeration value="jaguar"/>
+                                <xsd:enumeration value="LANDROVER"/>
+                                <xsd:enumeration value="landrover"/>
+                                <xsd:enumeration value="LAND ROVER"/>
+                                <xsd:enumeration value="land rover"/>
+                                <xsd:enumeration value="Land Rover"/>
+                                <xsd:enumeration value="MAZDA"/>
+                                <xsd:enumeration value="mazda"/>
+					  <xsd:enumeration value="HYUNDAI"/>
+					  <xsd:enumeration value="hyundai"/>
+					  <xsd:enumeration value="Hyundai"/>
+	                               <xsd:enumeration value="PQA"/>
+                        </xsd:restriction>
+                </xsd:simpleType>
+                
+                -->
+  </xsd:element>
+  <xsd:element name="FranchiseCode" type="xsd:normalizedString">
+    <xsd:annotation>
+      <xsd:documentation>
+                The FranchiseCode element is the dealer site code issued by the Manufacturer.
+                </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="Country" type="xsd:normalizedString">
+    <xsd:annotation>
+      <xsd:documentation>
+                This should contain the 2-character ISO country code, e.g. GB, FR, IT
+                </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="Currency" type="xsd:normalizedString">
+    <xsd:annotation>
+      <xsd:documentation>
+                This should contain the 3-character ISO currency code, e.g. GBP, EUR
+                </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="IdentityNotKnown">
+    <xsd:annotation>
+      <xsd:documentation>
+                The IdentityNotKnown element is used in several elements to indicate that the information required 
+                for that element is not known to the originating system.  For example the Vehicle to which a parts 
+                counter sale relates.
+                        See also IdentityWithheld.
+                </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="IdentityWithheld">
+    <xsd:annotation>
+      <xsd:documentation>The IdentityWithheld element is used in several elements to indicate that 
+                        the information required for that element is known to the originating system, but cannot be 
+                        provided due to privacy or data protection policy.
+                        See also IdentityNotKnown.</xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="SeeVehicleUser">
+    <xsd:annotation>
+      <xsd:documentation>
+                The SeeVehicleUser element is used in the VehicleOwner to indicate that the VehicleUser is also 
+                the owner without having to duplicate all the data.
+                </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="Transactions">
+    <xsd:annotation>
+      <xsd:documentation>
+                The Transactions element serves to group together transactional data, to distinguish it from 
+                other types of data that may be included in a later version of this schema.
+                
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence maxOccurs="unbounded">
+        <xsd:element ref="Invoice" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="RepairOrders">
+    <xsd:annotation>
+      <xsd:documentation>
+                The RepairOrders element serves to group together the Repair Orders, to distinguish it from other 
+                types of data that may be included in a later version of this schema.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence maxOccurs="unbounded">
+        <xsd:element ref="RepairOrder" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Invoice">
+    <xsd:annotation>
+      <xsd:documentation>
+                The Employee element is deprecated, and should no longer be used.  It remains in the
+                schema for compatibility.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:sequence minOccurs="1" maxOccurs="1">
+          <xsd:element ref="Customer" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="Employee" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="OrderRef" />
+        </xsd:sequence>
+        <xsd:sequence maxOccurs="unbounded">
+          <xsd:element ref="Vehicle" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="InvoiceSummary" />
+        </xsd:sequence>
+      </xsd:sequence>
+      <xsd:attribute name="Id" type="xsd:normalizedString" use="required" />
+      <xsd:attribute name="Date" type="xsd:date" use="required" />
+      <xsd:attribute name="Type" use="required">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="PartsAccount" />
+            <xsd:enumeration value="PartsCash" />
+            <xsd:enumeration value="PartsVan" />
+            <xsd:enumeration value="PartsInternal" />
+            <xsd:enumeration value="PartsWarranty" />
+            <xsd:enumeration value="PartsOther" />
+            <xsd:enumeration value="WorkshopAccount" />
+            <xsd:enumeration value="WorkshopCash" />
+            <xsd:enumeration value="WorkshopVan" />
+            <xsd:enumeration value="WorkshopInternal" />
+            <xsd:enumeration value="WorkshopWarranty" />
+            <xsd:enumeration value="WorkshopOther" />
+            <xsd:enumeration value="BodyshopAccount" />
+            <xsd:enumeration value="BodyshopCash" />
+            <xsd:enumeration value="BodyshopVan" />
+            <xsd:enumeration value="BodyshopInternal" />
+            <xsd:enumeration value="BodyshopWarranty" />
+            <xsd:enumeration value="BodyshopOther" />
+            <xsd:enumeration value="FastfitAccount" />
+            <xsd:enumeration value="FastfitCash" />
+            <xsd:enumeration value="FastfitVan" />
+            <xsd:enumeration value="FastfitInternal" />
+            <xsd:enumeration value="FastfitWarranty" />
+            <xsd:enumeration value="FastfitOther" />
+            <xsd:enumeration value="OtherAccount" />
+            <xsd:enumeration value="OtherCash" />
+            <xsd:enumeration value="OtherVan" />
+            <xsd:enumeration value="OtherInternal" />
+            <xsd:enumeration value="OtherWarranty" />
+            <xsd:enumeration value="OtherOther" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="RepairOrder">
+    <xsd:annotation>
+      <xsd:documentation>
+                The Repair Order element holds general information about a repair order. Only Repair Orders which 
+                have resulted in at least one invoice should be included.  
+                
+                The Id attribute should hold the RO number (as assigned in the DMS), and should be the same as 
+                the JobReference element in the Invoices resulting form this Repair Order.
+                
+                The StartDate should be the date the repair started.  The EndDate should be the date the repair was 
+                completed. If the Repair Order is still open when the first invoice is sent, then the EndDate should 
+                be omitted. The Repair Order should be sent again, with the EndDate, when it has been closed.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Employee" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="LabourRecord" minOccurs="1" maxOccurs="unbounded" />
+        <xsd:element ref="Description" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+      <xsd:attribute name="Id" type="xsd:normalizedString" use="required" />
+      <xsd:attribute name="StartDate" type="xsd:date" use="required" />
+      <xsd:attribute name="EndDate" type="xsd:date" use="optional" />
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Employee" type="xsd:normalizedString" />
+  <xsd:element name="MainOperation" type="mainOperationType" />
+  <xsd:element name="LabourRecord">
+    <xsd:annotation>
+      <xsd:documentation>
+        The LabourRecord element defines a single job performed on a vehicle.  Where possible, the job 
+        Code should be the manufacturer's standard job code.
+        The Quantity should be the labour hours invoiced for this job.
+        The attributes IsMechanical, IsElectrical and IsBodyshop default to false if not specified.  Each should be
+        specified as true if the job code refers to a job of that type. More than one attribute may be specified as 
+        true.
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Code" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="Quantity" minOccurs="1" maxOccurs="1" />
+      </xsd:sequence>
+      <xsd:attribute name="Type" use="required">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="W">
+              <xsd:annotation>
+                <xsd:documentation>Warranty</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="P">
+              <xsd:annotation>
+                <xsd:documentation>Policy</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="S">
+              <xsd:annotation>
+                <xsd:documentation>Service</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+            <xsd:enumeration value="R">
+              <xsd:annotation>
+                <xsd:documentation>Repair</xsd:documentation>
+              </xsd:annotation>
+            </xsd:enumeration>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+      <xsd:attribute name="IsMechanical" type="xsd:boolean" use="optional" />
+      <xsd:attribute name="IsElectrical" type="xsd:boolean" use="optional" />
+      <xsd:attribute name="IsBodyshop" type="xsd:boolean" use="optional" />
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Customer">
+    <xsd:annotation>
+      <xsd:documentation>
+                The Type attribute is the customer type as held in the DMS.  The dealer will map these onto the 
+                appropriate customer categories (e.g. IMT, Bodyshop, Franchise dealer) within the system.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:choice>
+        <xsd:element ref="IdentityNotKnown"></xsd:element>
+        <xsd:element ref="IdentityWithheld"></xsd:element>
+        <xsd:sequence>
+          <xsd:element ref="Name" />
+          <xsd:element ref="Address" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="Postcode" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="VanRoute" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="useForMarketing" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:choice>
+      <xsd:attribute name="Account" type="xsd:normalizedString" use="required" />
+      <xsd:attribute name="Type" type="xsd:normalizedString" use="optional" />
+      <xsd:attribute name="VATNumber" type="xsd:normalizedString" use="optional" />
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Title" type="xsd:normalizedString" />
+  <xsd:element name="MidInitial" type="xsd:normalizedString" />
+  <xsd:element name="Language" type="xsd:normalizedString" />
+  <xsd:element name="Name" type="xsd:normalizedString" />
+  <xsd:element name="FirstName" type="xsd:normalizedString" />
+  <xsd:element name="LastName" type="xsd:normalizedString" />
+  <xsd:element name="Email" type="xsd:normalizedString" />
+  <xsd:element name="PrivatePhone" type="xsd:normalizedString" />
+  <xsd:element name="BusinessPhone" type="xsd:normalizedString" />
+  <xsd:element name="MobilePhone" type="xsd:normalizedString" />
+  <xsd:element name="useForMarketing" type="marketingInformationType" />
+  <xsd:simpleType name="marketingInformationType">
+    <xsd:annotation>
+      <xsd:documentation>
+		This is to be used for any information to be supplied for promotions/campaigns
+		</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:normalizedString">
+      <xsd:enumeration value="Y">
+        <xsd:annotation>
+          <xsd:documentation>
+				Yes, the information can be used for promotion and campaigns
+				</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="N">
+        <xsd:annotation>
+          <xsd:documentation>
+				No, the information cannot be used for promotion and campaigns
+				</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="Address">
+    <xsd:annotation>
+      <xsd:documentation>
+                The Address element should contain the full postal address, including the postcode or equivalent.
+                This accommodates address formats where the postcode is not the last line of the address.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence maxOccurs="unbounded">
+        <xsd:element ref="AddressLine" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="AddressLine" type="xsd:normalizedString" />
+  <xsd:element name="Postcode" type="xsd:normalizedString" />
+  <xsd:element name="VanRoute" type="xsd:normalizedString" />
+  <xsd:element name="OrderRef" type="xsd:normalizedString">
+    <xsd:annotation>
+      <xsd:documentation>
+                The OrderRef element contains the customer's order reference, purchase authority, or similar.
+                </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="InvoiceSummary">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="InvoiceTotal" minOccurs="1" maxOccurs="1" />
+        <xsd:element ref="SubtotalLabourWkshp" minOccurs="0" maxOccurs="1" />
+        <xsd:choice minOccurs="0" maxOccurs="1">
+          <xsd:element ref="SubtotalLabourBodyPaint" minOccurs="1" maxOccurs="1" />
+          <xsd:sequence>
+            <xsd:element ref="SubtotalLabourBody" minOccurs="1" maxOccurs="1" />
+            <xsd:element ref="SubtotalLabourPaint" minOccurs="1" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:choice>
+        <xsd:element ref="SubtotalPaintMaterial" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="SubtotalParts" minOccurs="0" maxOccurs="1" />
+        <xsd:element ref="SubtotalSubcontract" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="InvoiceTotal" type="xsd:decimal" />
+  <xsd:element name="SubtotalLabourWkshp" type="xsd:decimal" />
+  <xsd:element name="SubtotalLabourBodyPaint" type="xsd:decimal" />
+  <xsd:element name="SubtotalLabourBody" type="xsd:decimal" />
+  <xsd:element name="SubtotalLabourPaint" type="xsd:decimal" />
+  <xsd:element name="SubtotalPaintMaterial" type="xsd:decimal" />
+  <xsd:element name="SubtotalParts" type="xsd:decimal" />
+  <xsd:element name="SubtotalSubcontract" type="xsd:decimal" />
+  <xsd:element name="Vehicle">
+    <xsd:annotation>
+      <xsd:documentation>
+                The Vehicle element contains information about a single vehicle.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:choice>
+          <xsd:element ref="IdentityNotKnown" />
+          <xsd:element ref="IdentityWithheld" />
+          <xsd:sequence>
+            <xsd:annotation>
+              <xsd:documentation>
+                                                Prior to version 1.6, a vehicle could be identified by either 
+                                                a Registration, a VIN, or both.  Therefore both the Registration and 
+                                                VIN elements were optional.
+
+                                                From version 1.6, the Registration element should no longer be included, 
+                                                and vehicles will be identified only by VIN. If the VIN is not available, 
+                                                then an IdentityNotKnown element should 
+                                                be used instead of a Vehicle element.
+
+                                                For compatibility, the Registration element remains in the Schema, 
+                                                and the VIN remains optional.
+
+                                                The VehicleUser element should no longer be included. It remains in the 
+                                                Schema only for compatibility reasons.
+                                                </xsd:documentation>
+            </xsd:annotation>
+            <xsd:element ref="Registration" minOccurs="0" maxOccurs="1" />
+            <xsd:element ref="VIN" minOccurs="0" maxOccurs="1" />
+            <xsd:element ref="Manufacturer" minOccurs="0" maxOccurs="1" />
+            <xsd:element ref="Model" minOccurs="0" maxOccurs="1" />
+            <xsd:element ref="Odometer" minOccurs="0" maxOccurs="1" />
+            <xsd:element ref="RegDate" minOccurs="0" maxOccurs="1" />
+            <xsd:element ref="TechTestDueDate" minOccurs="0" maxOccurs="1" />
+            <xsd:element ref="NationalEmissionDueDate" minOccurs="0" maxOccurs="1" />
+            <xsd:element ref="LocalEmissionDueDate" minOccurs="0" maxOccurs="1" />
+            <xsd:element ref="MobilCard" minOccurs="0" maxOccurs="1" />
+            <xsd:element ref="VehicleUser" minOccurs="0" maxOccurs="1" />
+            <xsd:element ref="VehicleOwner" minOccurs="0" maxOccurs="1" />
+          </xsd:sequence>
+        </xsd:choice>
+        <xsd:element ref="JobReference" minOccurs="0" maxOccurs="unbounded" />
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+          <xsd:element ref="PartsInvoiceLine" minOccurs="0" maxOccurs="unbounded" />
+          <xsd:element ref="ServiceInvoiceLine" minOccurs="0" maxOccurs="unbounded" />
+          <xsd:element ref="OtherInvoiceLine" minOccurs="0" maxOccurs="unbounded" />
+        </xsd:choice>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Registration" type="xsd:normalizedString" />
+  <xsd:element name="VIN" type="xsd:normalizedString" />
+  <xsd:element name="Manufacturer" type="xsd:normalizedString" />
+  <xsd:element name="Model" type="xsd:normalizedString" />
+  <xsd:element name="RegDate" type="xsd:date">
+    <xsd:annotation>
+      <xsd:documentation>
+        The RegDate element is the date on which the vehicle was first 
+        registered.  The element is optional, and should be omitted if not known.
+        </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="TechTestDueDate" type="xsd:date">
+    <xsd:annotation>
+      <xsd:documentation>
+        The TechTestDueDate element is the date on which the next technical
+        inspection (e.g. TUV in Germany, MOT in Great Britain) is due.  
+        The element is optional, and should be omitted if not known.
+        </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="NationalEmissionDueDate" type="xsd:date">
+    <xsd:annotation>
+      <xsd:documentation>
+        The NationalEmissionDueDate element is the date on which the next national 
+        emissions inspection (e.g. ASU in Germany, MOT in Great Britain) is due.  
+        The element is optional, and should be omitted if not known.
+        </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="LocalEmissionDueDate" type="xsd:date">
+    <xsd:annotation>
+      <xsd:documentation>
+        The LocalEmissionDueDate element is the date on which the next local/regional 
+        emissions inspection (e.g. ASU in Germany, MOT in Great Britain) is due.  
+        The element is optional, and should be omitted if not known or not applicable.
+        </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:simpleType name="mobilCardType">
+    <xsd:annotation>
+      <xsd:documentation>Element that can be used to identified specific progams</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:normalizedString">
+      <xsd:enumeration value="A">
+        <xsd:annotation>
+          <xsd:documentation>It can be used to identified a specific progam</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="B">
+        <xsd:annotation>
+          <xsd:documentation>It can be used to identified a specific progam</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="C">
+        <xsd:annotation>
+          <xsd:documentation>It can be used to identified a specific progam</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="D">
+        <xsd:annotation>
+          <xsd:documentation>It can be used to identified a specific progam</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="mainOperationType">
+    <xsd:annotation>
+      <xsd:documentation>
+		This is to be used for indicating if the service invoice line is a main operation
+		</xsd:documentation>
+    </xsd:annotation>
+    <xsd:restriction base="xsd:normalizedString">
+      <xsd:enumeration value="Y">
+        <xsd:annotation>
+          <xsd:documentation>
+				Yes, the invoice line is a main operation
+				</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+      <xsd:enumeration value="N">
+        <xsd:annotation>
+          <xsd:documentation>
+				No, the invoice line is not a main operation
+				</xsd:documentation>
+        </xsd:annotation>
+      </xsd:enumeration>
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="MobilCard" type="mobilCardType" />
+  <xsd:element name="Odometer">
+    <xsd:complexType>
+      <xsd:choice>
+        <xsd:element ref="Miles" />
+        <xsd:element ref="Kilometres" />
+      </xsd:choice>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Miles" type="xsd:positiveInteger" />
+  <xsd:element name="Kilometres" type="xsd:positiveInteger" />
+  <xsd:element name="StreetType" type="xsd:normalizedString" />
+  <xsd:element name="DateOfBirth" type="xsd:date" />
+  <xsd:element name="VehicleUser">
+    <xsd:annotation>
+      <xsd:documentation>
+                See note on Personal Information above.
+
+                If the vehicle user's name can be separated into Title, FirstName, MidInitial, and LastName, then 
+                these elements should be provided.
+                The Name element should always be provided, even where the name has also been separated.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:choice>
+        <xsd:element ref="IdentityNotKnown" />
+        <xsd:element ref="IdentityWithheld" />
+        <xsd:sequence>
+          <xsd:element ref="Title" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="FirstName" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="MidInitial" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="LastName" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="Name" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="Address" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="Postcode" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="Language" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="PrivatePhone" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="BusinessPhone" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="MobilePhone" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="Email" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="StreetType" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="DateOfBirth" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:choice>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="VehicleOwner">
+    <xsd:annotation>
+      <xsd:documentation>
+                See note on Personal Information above.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:choice>
+        <xsd:element ref="IdentityNotKnown" />
+        <xsd:element ref="IdentityWithheld" />
+        <xsd:element ref="SeeVehicleUser" />
+        <xsd:sequence>
+          <xsd:element ref="Title" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="FirstName" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="MidInitial" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="LastName" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="Name" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="Address" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="Postcode" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="Language" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="PrivatePhone" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="BusinessPhone" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="MobilePhone" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="Email" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="StreetType" minOccurs="0" maxOccurs="1" />
+          <xsd:element ref="DateOfBirth" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+      </xsd:choice>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="JobReference" type="xsd:normalizedString" />
+  <xsd:element name="PartsInvoiceLine">
+    <xsd:annotation>
+      <xsd:documentation>
+                A PartsInvoiceLine represents an invoice line item for vehicle parts. The same PartNumber may 
+                occur more than once within a single Vehicle element.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Part" />
+        <xsd:element ref="Quantity" />
+        <xsd:choice>
+          <xsd:element ref="UnitCost" />
+          <xsd:element ref="TotalCost" />
+        </xsd:choice>
+        <xsd:choice>
+          <xsd:element ref="UnitPrice" />
+          <xsd:element ref="TotalPrice" />
+        </xsd:choice>
+        <xsd:choice minOccurs="0" maxOccurs="1">
+          <xsd:element ref="UnitListPrice" />
+          <xsd:element ref="TotalListPrice" />
+        </xsd:choice>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="Purchase" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="MenuCode" />
+        </xsd:sequence>
+      </xsd:sequence>
+      <xsd:attribute name="Type" default="invoice" use="optional">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="invoice" />
+            <xsd:enumeration value="credit" />
+            <xsd:enumeration value="return" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+      <xsd:attribute name="Percent" use="optional" type="percent" />
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Part">
+    <xsd:annotation>
+      <xsd:documentation>
+                The PartNumber attribute should contain a Part Number excluding any franchise identifier
+        added within the DMS (i.e. it should match the part number in the manufacturer's parts files).
+        The FranchiseName attribute should identify the franchise (vehicle manufacturer).
+        The IsFranchise attribute indicates whether this part belongs to one of the franchises that this dealer holds.
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:attribute name="PartNumber" type="xsd:normalizedString" use="required" />
+      <xsd:attribute name="FranchiseName" type="xsd:normalizedString" use="required" />
+      <xsd:attribute name="IsFranchise" type="xsd:boolean" use="required" />
+      <xsd:attribute name="ExceptionalDemand" type="xsd:boolean" use="optional" />
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Quantity" type="positiveDecimal" />
+  <xsd:element name="QuantityOnOrder" type="positiveDecimal" />
+  <xsd:element name="QuantityBackOrder" type="positiveDecimal" />
+  <xsd:element name="ReservedQuantity" type="positiveDecimal" />
+  <xsd:element name="Warehouse" type="xsd:normalizedString">
+    <xsd:annotation>
+      <xsd:documentation>
+        This indicates the Warehouse that the part is stored in.
+        </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="WarehouseCode" type="xsd:normalizedString">
+    <xsd:annotation>
+      <xsd:documentation>
+        This indicates the Dealer's code for the warehouse that the part is stored in.
+        </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="Location" type="xsd:normalizedString">
+    <xsd:annotation>
+      <xsd:documentation>
+        This indicates the Location within the warehouse that the part is stored in.
+        </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="LastOutDate" type="xsd:date">
+    <xsd:annotation>
+      <xsd:documentation>
+        This is the last date that the part left the warehouse
+        </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="LastInDate" type="xsd:date">
+    <xsd:annotation>
+      <xsd:documentation>
+        This is the last date that the part entered the warehouse
+        </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="PartStocked" type="xsd:boolean">
+    <xsd:annotation>
+      <xsd:documentation>
+        Whether this is a part that the dealer keeps in stock
+        </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:simpleType name="positiveDecimal">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:minInclusive value="0.0" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:simpleType name="percent">
+    <xsd:restriction base="xsd:decimal">
+      <xsd:minInclusive value="0.0" />
+      <xsd:maxInclusive value="100.0" />
+    </xsd:restriction>
+  </xsd:simpleType>
+  <xsd:element name="UnitListPrice" type="positiveDecimal" />
+  <xsd:element name="TotalListPrice" type="positiveDecimal" />
+  <xsd:element name="UnitCost" type="positiveDecimal" />
+  <xsd:element name="TotalCost" type="positiveDecimal" />
+  <xsd:element name="UnitPrice" type="positiveDecimal" />
+  <xsd:element name="TotalPrice" type="positiveDecimal" />
+  <xsd:element name="Purchase">
+    <xsd:complexType>
+      <xsd:attribute name="Source" use="optional">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="Manufacturer" />
+            <xsd:enumeration value="Other" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+      <xsd:attribute name="Method" use="optional">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="VOR" />
+            <xsd:enumeration value="Stock" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="MenuCode" type="xsd:token">
+    <xsd:annotation>
+      <xsd:documentation>
+        The MenuCode element is used to link the line items on an invoice that comprise a 'menu-priced' job.
+        The MenuCode element should contain the menu code as used in the DMS, which may or may not be a 
+        manufacturer-specified menu code.
+        </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+  <xsd:element name="ServiceInvoiceLine">
+    <xsd:annotation>
+      <xsd:documentation>
+                A ServiceInvoiceLine represents an invoice line item for service labour.  The Quantity should 
+                be the invoiced hours.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Code" />
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="Description" />
+        </xsd:sequence>
+        <xsd:element ref="Quantity" />
+        <xsd:choice minOccurs="0" maxOccurs="1">
+          <xsd:element ref="UnitCost" />
+          <xsd:element ref="TotalCost" />
+        </xsd:choice>
+        <xsd:choice>
+          <xsd:element ref="UnitPrice" />
+          <xsd:element ref="TotalPrice" />
+        </xsd:choice>
+        <xsd:choice minOccurs="0" maxOccurs="1">
+          <xsd:element ref="UnitListPrice" />
+          <xsd:element ref="TotalListPrice" />
+        </xsd:choice>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="MenuCode" />
+        </xsd:sequence>
+        <xsd:element ref="MainOperation" minOccurs="0" maxOccurs="1" />
+      </xsd:sequence>
+      <xsd:attribute name="Type" default="invoice" use="optional">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="invoice" />
+            <xsd:enumeration value="credit" />
+            <xsd:enumeration value="return" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+      <xsd:attribute name="Percent" use="optional" type="percent" />
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="OtherInvoiceLine">
+    <xsd:annotation>
+      <xsd:documentation>
+                An OtherInvoiceLine represents an invoice line item for items other than service labour or parts.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="Code" />
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="Description" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="Quantity" />
+        </xsd:sequence>
+        <xsd:choice minOccurs="0" maxOccurs="1">
+          <xsd:element ref="UnitCost" />
+          <xsd:element ref="TotalCost" />
+        </xsd:choice>
+        <xsd:choice>
+          <xsd:element ref="UnitPrice" />
+          <xsd:element ref="TotalPrice" />
+        </xsd:choice>
+        <xsd:choice minOccurs="0" maxOccurs="1">
+          <xsd:element ref="UnitListPrice" />
+          <xsd:element ref="TotalListPrice" />
+        </xsd:choice>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="MenuCode" />
+        </xsd:sequence>
+      </xsd:sequence>
+      <xsd:attribute name="Type" default="invoice" use="optional">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:NMTOKEN">
+            <xsd:enumeration value="invoice" />
+            <xsd:enumeration value="credit" />
+            <xsd:enumeration value="return" />
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:attribute>
+      <xsd:attribute name="Percent" use="optional" type="percent" />
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="Code" type="xsd:token" />
+  <xsd:element name="Description" type="xsd:token" />
+  <xsd:element name="PartsStock">
+    <xsd:annotation>
+      <xsd:documentation>
+                The PartsStock element serves to group together all the parts stock items.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+          <xsd:element ref="PartsStockItem" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+          <xsd:element name="PartsStk" />
+        </xsd:sequence>
+      </xsd:sequence>
+      <xsd:attribute name="Date" type="xsd:date" use="required" />
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="PartsStockItem">
+    <xsd:annotation>
+      <xsd:documentation>
+                The PartsStockItem element holds the quantity of a single part.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence maxOccurs="1" minOccurs="1">
+        <xsd:element ref="Part" />
+        <xsd:element name="Quantity" type="xsd:decimal" />
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="QuantityOnOrder" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="QuantityBackOrder" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="ReservedQuantity" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="WarehouseCode" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="Warehouse" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="Location" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="LastOutDate" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="LastInDate" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="PartStocked" />
+        </xsd:sequence>
+        <xsd:sequence minOccurs="0" maxOccurs="1">
+          <xsd:element ref="UnitCost" />
+        </xsd:sequence>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="PartsStk">
+    <xsd:annotation>
+      <xsd:documentation>
+                The PartsStk element serves to group together all the parts stock items. 
+                It is more compact than using PartsStock and PartsStockItem elements.
+                </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+        <xsd:element ref="PtStk" />
+      </xsd:sequence>
+      <xsd:attribute name="FranchiseName" type="xsd:normalizedString" use="required" />
+      <xsd:attribute name="Date" type="xsd:date" use="required" />
+      <xsd:attribute name="WarehouseCode" type="xsd:normalizedString" use="optional" />
+      <xsd:attribute name="Warehouse" type="xsd:normalizedString" use="optional" />
+    </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="PtStk">
+    <xsd:annotation>
+      <xsd:documentation>
+                The Num attribute should contain a Part Number excluding any franchise identifier
+        added within the DMS (i.e. it should match the part number in the manufacturer's parts files).
+                The Qty attribute should contain the 'on-hand' quantity of the part.  
+                
+                
+        </xsd:documentation>
+    </xsd:annotation>
+    <xsd:complexType>
+      <xsd:attribute name="Num" type="xsd:normalizedString" use="required" />
+      <xsd:attribute name="Qty" type="xsd:decimal" use="required" />
+      <xsd:attribute name="QtyOnOrder" type="positiveDecimal" use="optional" />
+      <xsd:attribute name="QtyBackOrder" type="positiveDecimal" use="optional" />
+      <xsd:attribute name="ReservedQty" type="positiveDecimal" use="optional" />
+      <xsd:attribute name="Location" type="xsd:normalizedString" use="optional" />
+      <xsd:attribute name="LastOutDate" type="xsd:date" use="optional" />
+      <xsd:attribute name="LastInDate" type="xsd:date" use="optional" />
+      <xsd:attribute name="PartStocked" type="xsd:boolean" use="optional" />
+      <xsd:attribute name="UnitCost" type="positiveDecimal" use="optional" />
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

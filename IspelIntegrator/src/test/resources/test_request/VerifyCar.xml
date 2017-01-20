@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReturnDataValue>
+	<KOMsg xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<koEmpty>Kontrola originality : Vozidlo sa nenachádza v evidencii KO</koEmpty>
+	</KOMsg>
+	<LeasingMsg xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<leasingEmpty>Nenájdený žiadny záznam o financovaní vozidla leasingovou spolo?nos?ou v SR</leasingEmpty>
+	</LeasingMsg>
+	<HistoriaKm>
+		<DataTable>
+			<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+				<xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:MainDataTable="MileAge" msdata:UseCurrentLocale="true">
+					<xs:complexType>
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:element name="MileAge">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="VIN" type="xs:string" minOccurs="0"/>
+										<xs:element name="Datum_odcitania" type="xs:dateTime" minOccurs="0"/>
+										<xs:element name="Kilometre" type="xs:int" minOccurs="0"/>
+										<xs:element name="Typ_pracoviska" type="xs:string" minOccurs="0"/>
+										<xs:element name="ECV" type="xs:string" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+			</xs:schema>
+			<diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1">
+				<DocumentElement>
+					<MileAge diffgr:id="MileAge1" msdata:rowOrder="0">
+						<VIN>VSSZZZ6KZVR026970</VIN>
+						<Datum_odcitania>2007-12-10T10:24:10+01:00</Datum_odcitania>
+						<Kilometre>85120</Kilometre>
+						<Typ_pracoviska>EK</Typ_pracoviska>
+						<ECV>KE013DV</ECV>
+					</MileAge>
+					<MileAge diffgr:id="MileAge2" msdata:rowOrder="1">
+						<VIN>VSSZZZ6KZVR026970</VIN>
+						<Datum_odcitania>2007-12-27T00:00:00+01:00</Datum_odcitania>
+						<Kilometre>85494</Kilometre>
+						<Typ_pracoviska>TK</Typ_pracoviska>
+						<ECV>KE013DV</ECV>
+					</MileAge>
+					<MileAge diffgr:id="MileAge3" msdata:rowOrder="2">
+						<VIN>VSSZZZ6KZVR026970</VIN>
+						<Datum_odcitania>2009-10-29T00:00:00+01:00</Datum_odcitania>
+						<Kilometre>100523</Kilometre>
+						<Typ_pracoviska>TK</Typ_pracoviska>
+						<ECV>KE013DV</ECV>
+					</MileAge>
+					<MileAge diffgr:id="MileAge4" msdata:rowOrder="3">
+						<VIN>VSSZZZ6KZVR026970</VIN>
+						<Datum_odcitania>2009-10-29T10:35:11+01:00</Datum_odcitania>
+						<Kilometre>100523</Kilometre>
+						<Typ_pracoviska>EK</Typ_pracoviska>
+						<ECV>KE013DV</ECV>
+					</MileAge>
+					<MileAge diffgr:id="MileAge5" msdata:rowOrder="4">
+						<VIN>VSSZZZ6KZVR026970</VIN>
+						<Datum_odcitania>2011-10-28T00:00:00+02:00</Datum_odcitania>
+						<Kilometre>107595</Kilometre>
+						<Typ_pracoviska>TK</Typ_pracoviska>
+						<ECV>KE013DV</ECV>
+					</MileAge>
+					<MileAge diffgr:id="MileAge6" msdata:rowOrder="5">
+						<VIN>VSSZZZ6KZVR026970</VIN>
+						<Datum_odcitania>2011-10-28T10:39:28+02:00</Datum_odcitania>
+						<Kilometre>107595</Kilometre>
+						<Typ_pracoviska>EK</Typ_pracoviska>
+						<ECV>KE013DV</ECV>
+					</MileAge>
+					<MileAge diffgr:id="MileAge7" msdata:rowOrder="6">
+						<VIN>VSSZZZ6KZVR026970</VIN>
+						<Datum_odcitania>2013-10-28T00:00:00+01:00</Datum_odcitania>
+						<Kilometre>115550</Kilometre>
+						<Typ_pracoviska>TK</Typ_pracoviska>
+						<ECV>KE013DV</ECV>
+					</MileAge>
+					<MileAge diffgr:id="MileAge8" msdata:rowOrder="7">
+						<VIN>VSSZZZ6KZVR026970</VIN>
+						<Datum_odcitania>2013-10-28T00:00:00+01:00</Datum_odcitania>
+						<Kilometre>115580</Kilometre>
+						<Typ_pracoviska>TK</Typ_pracoviska>
+						<ECV>KE013DV</ECV>
+					</MileAge>
+					<MileAge diffgr:id="MileAge9" msdata:rowOrder="8">
+						<VIN>VSSZZZ6KZVR026970</VIN>
+						<Datum_odcitania>2013-10-28T08:11:17+01:00</Datum_odcitania>
+						<Kilometre>115550</Kilometre>
+						<Typ_pracoviska>EK</Typ_pracoviska>
+						<ECV>KE013DV</ECV>
+					</MileAge>
+				</DocumentElement>
+			</diffgr:diffgram>
+		</DataTable>
+	</HistoriaKm>
+	<PatranieMsg xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<patrMsg>Pátranie v SR :  Vozidlo sa nenachádza v pátraní</patrMsg>
+	</PatranieMsg>
+	<TK_EK>
+		<DataTable>
+			<xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+				<xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:MainDataTable="TechEms" msdata:UseCurrentLocale="true">
+					<xs:complexType>
+						<xs:choice minOccurs="0" maxOccurs="unbounded">
+							<xs:element name="TechEms">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="Typ_pracoviska" type="xs:string" minOccurs="0"/>
+										<xs:element name="Datum_odcitania" type="xs:dateTime" minOccurs="0"/>
+										<xs:element name="Vysledok_kontroly" type="xs:string" minOccurs="0"/>
+										<xs:element name="Datum_nasledujucej_kontroly" type="xs:dateTime" minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+			</xs:schema>
+			<diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1">
+				<DocumentElement>
+					<TechEms diffgr:id="TechEms1" msdata:rowOrder="0">
+						<Typ_pracoviska>EK</Typ_pracoviska>
+						<Datum_odcitania>2013-10-28T08:11:17+01:00</Datum_odcitania>
+						<Vysledok_kontroly>sposobile</Vysledok_kontroly>
+						<Datum_nasledujucej_kontroly>2015-10-28T00:00:00+01:00</Datum_nasledujucej_kontroly>
+					</TechEms>
+					<TechEms diffgr:id="TechEms2" msdata:rowOrder="1">
+						<Typ_pracoviska>TK</Typ_pracoviska>
+						<Datum_odcitania>2013-10-28T00:00:00+01:00</Datum_odcitania>
+						<Vysledok_kontroly>nesposobile</Vysledok_kontroly>
+						<Datum_nasledujucej_kontroly>2013-10-28T00:00:00+01:00</Datum_nasledujucej_kontroly>
+					</TechEms>
+				</DocumentElement>
+			</diffgr:diffgram>
+		</DataTable>
+	</TK_EK>
+</ReturnDataValue>

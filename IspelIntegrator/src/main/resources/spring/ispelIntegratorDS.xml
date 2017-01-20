@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+							http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+							http://www.springframework.org/schema/jdbc
+							http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd">
+
+	<bean id="txMgr"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="ds" />
+	</bean>
+
+	<!-- <bean id="ds" -->
+	<!-- class="org.springframework.jdbc.datasource.DriverManagerDataSource"> -->
+	<!-- <property name="url" value="${jdbc.url}" /> -->
+	<!-- <property name="username" value="${jdbc.username}" /> -->
+	<!-- <property name="password" value="${jdbc.password}" /> -->
+	<!-- <property name="driverClassName" value="${jdbc.driverClassName}" /> -->
+	<!-- </bean> -->
+
+	<bean id="ds" class="ispel.integrator.datasource.RoutingDataSource">
+		<property name="targetDataSources">
+			<map key-type="java.lang.String">
+				<entry key="kto" value-ref="ktoDataSource" />
+				<entry key="kto_1" value-ref="kto_1DataSource" />
+			</map>
+		</property>
+		<property name="defaultTargetDataSource" ref="ktoDataSource" />
+	</bean>
+
+	<bean id="parentDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		abstract="true">
+		<!-- <property name="driverClassName" value="${mainDataSource.jdbc.driverClassName}" 
+			/> -->
+	</bean>
+
+	<bean id="kto_1DataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		parent="parentDataSource">
+		<property name="url" value="${kto_1.jdbc.url}" />
+		<property name="username" value="${kto_1.jdbc.username}" />
+		<property name="password" value="${kto_1.jdbc.password}" />
+		<property name="driverClassName" value="${kto_1.jdbc.driverClassName}" />
+	</bean>
+
+	<bean id="ktoDataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource"
+		parent="parentDataSource">
+		<property name="url" value="${kto.jdbc.url}" />
+		<property name="username" value="${kto.jdbc.username}" />
+		<property name="password" value="${kto.jdbc.password}" />
+		<property name="driverClassName" value="${kto.jdbc.driverClassName}" />
+	</bean>
+
+</beans>							

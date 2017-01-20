@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ArrayOfValueMutation xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<ValueMutation>
+		<ExtensionData/>
+		<Order>0</Order>
+		<description>VSS Seat Ibiza Mk3 / Cordoba Mk2 (6L), kateg.  M1</description>
+		<key/>
+		<label>Vozidlo</label>
+		<lang/>
+		<selected>true</selected>
+	</ValueMutation>
+	<ValueMutation>
+		<ExtensionData/>
+		<Order>10</Order>
+		<description>-</description>
+		<key>ZZZ</key>
+		<label>Bezvýznamová konštanta</label>
+		<lang>sk</lang>
+		<selected>true</selected>
+	</ValueMutation>
+	<ValueMutation>
+		<ExtensionData/>
+		<Order>20</Order>
+		<description>Seat Ibiza Mk2 (2 dv. hatchback, 4 dv. hatchback, 4 dv. kombi) / Cordoba Mk1 (2 dv. kupé, 4 dv. sedan, 4 dv. kombi)</description>
+		<key>6K</key>
+		<label>Model</label>
+		<lang>sk</lang>
+		<selected>true</selected>
+	</ValueMutation>
+	<ValueMutation>
+		<ExtensionData/>
+		<Order>30</Order>
+		<description>-</description>
+		<key>Z</key>
+		<label>Bezvýznamová konštanta</label>
+		<lang>sk</lang>
+		<selected>true</selected>
+	</ValueMutation>
+	<ValueMutation>
+		<ExtensionData/>
+		<Order>40</Order>
+		<description>1997</description>
+		<key>V</key>
+		<label>Modelový rok alebo konštanta</label>
+		<lang>sk</lang>
+		<selected>true</selected>
+	</ValueMutation>
+	<ValueMutation>
+		<ExtensionData/>
+		<Order>50</Order>
+		<description>Seat S.A., Martorell, Španielsko</description>
+		<key>R</key>
+		<label>Výrobný závod</label>
+		<lang>sk</lang>
+		<selected>true</selected>
+	</ValueMutation>
+	<ValueMutation>
+		<ExtensionData/>
+		<Order>60</Order>
+		<description>026970</description>
+		<key/>
+		<label>Sériové výrobné ?íslo</label>
+		<lang>sk</lang>
+		<selected>true</selected>
+	</ValueMutation>
+	<ValueMutation>
+		<ExtensionData/>
+		<Order>70</Order>
+		<description>1994 - 2002</description>
+		<key/>
+		<label>Obdobie výroby</label>
+		<lang>sk</lang>
+		<selected>true</selected>
+	</ValueMutation>
+	<ValueMutation>
+		<ExtensionData/>
+		<Order>80</Order>
+		<description>SEAT S.A., Martorell - Barcelona, Španielsko (osobné vozidlo)</description>
+		<key/>
+		<label>VSS</label>
+		<lang>sk</lang>
+		<selected>true</selected>
+	</ValueMutation>
+</ArrayOfValueMutation>

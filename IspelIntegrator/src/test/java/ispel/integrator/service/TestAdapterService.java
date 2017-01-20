@@ -1,0 +1,48 @@
+package ispel.integrator.service;
+
+import ispel.integrator.adapter.AdapterRequest;
+import ispel.integrator.adapter.Result;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.transaction.TransactionConfiguration;
+
+@TransactionConfiguration(transactionManager = "txMgr", defaultRollback = true)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = { "classpath:/test_config/system-test-config.xml" })
+public class TestAdapterService {
+
+	@Autowired
+	public AdapterService adapterService;
+
+	@Test
+	public void getVinExpert() throws Exception {
+
+		ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
+
+		AdapterRequest request = AdapterRequest.getEmptyRequest();
+		request.setCarId("1");
+		request.setMethodName(AdapterRequest.MethodName.GetVinExpert);
+		request.setDataSourceName("kto_1");
+
+		Result result = adapterService.getVinExpert(request);
+		System.out.println(result);
+
+	}
+
+	@Test
+	public void verifyCar() throws Exception {
+		ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
+
+		AdapterRequest request = AdapterRequest.getEmptyRequest();
+		request.setCarId("2");
+		request.setMethodName(AdapterRequest.MethodName.VerifyCar);
+		request.setDataSourceName("kto_1");
+
+		adapterService.verifyCar(request);
+
+	}
+}
