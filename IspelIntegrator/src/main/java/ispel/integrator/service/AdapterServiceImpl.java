@@ -1,25 +1,29 @@
 package ispel.integrator.service;
 
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 import generated.DMSextract;
 import ispel.integrator.adapter.AdapterRequest;
 import ispel.integrator.adapter.Result;
 import ispel.integrator.domain.CarInfo;
 import ispel.integrator.service.dms.DmsService;
 import ispel.integrator.utils.ResponseResolver;
-
-import java.io.StringReader;
-import java.io.StringWriter;
-
-import javax.xml.transform.stream.StreamResult;
-import javax.xml.transform.stream.StreamSource;
-
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.client.core.WebServiceTemplate;
+
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 
 @Service
 public class AdapterServiceImpl implements AdapterService {
@@ -45,6 +49,13 @@ public class AdapterServiceImpl implements AdapterService {
 
 	@Autowired
 	ResponseResolver responseResolver;
+
+	@Value("${ispel.dms.directory}")
+	private String dmsDirectory;
+
+	@Autowired
+	private Jaxb2Marshaller dmsExtractMarshaller;
+
 
 	@Autowired
 	private DmsService dmsService;
@@ -133,10 +144,30 @@ public class AdapterServiceImpl implements AdapterService {
 		String documentType = request.getDocumentType();
 
 		DMSextract dmsExtract = dmsService.buildDMS(documentType, documentNumber, documentGroup);
+		StringWriter stringWriter = new StringWriter();
+		dmsExtractMarshaller.marshal(dmsExtract, new StreamResult(stringWriter));
 
+		try {
+			Files.write(stringWriter.toString(),
+					FileUtils.getFile(dmsDirectory, getFileName(dmsExtract)),
+					Charsets.UTF_8);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 
 		Result result = Result.getInstance(request);
 		return result;
+	}
+
+	private String getFileName(DMSextract dmsExtract) {
+		return new StringBuilder()
+				.append("order")
+				.append("-")
+				.append(dmsExtract.getSite().get(0).getTransactions().getInvoice().get(0).getId())
+				.append("-")
+				.append(dmsExtract.getSite().get(0).getSequence())
+				.append(".xml")
+				.toString();
 	}
 
 	public String getIrisUser() {

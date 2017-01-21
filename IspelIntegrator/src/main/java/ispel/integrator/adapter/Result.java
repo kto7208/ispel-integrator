@@ -21,7 +21,7 @@ public class Result {
 	private Result(AdapterRequest adapterRequest) {
 		this.processed = Result.PROCESSED;
 		this.methodName = adapterRequest.getMethodName().name();
-		this.carId = Integer.valueOf(adapterRequest.getCarId());
+		this.carId = Integer.valueOf((adapterRequest.getCarId() == null) ? "0" : adapterRequest.getCarId());
 		this.dataSourceName = adapterRequest.getDataSourceName();
 	}
 

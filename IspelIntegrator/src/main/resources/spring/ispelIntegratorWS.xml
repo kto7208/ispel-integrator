@@ -19,14 +19,14 @@
 <!-- 		<property name="proxyPassword" value="${proxy.pwd}" /> -->
 <!-- 	</bean> -->
 
-	<bean id="httpClient" class="ispel.integrator.client.HttpClientFactoryBean"> 
-		<constructor-arg name="proxyHost" value="${proxy.host}" />
-		<constructor-arg name="proxyPort" value="${proxy.port}" />
-		<constructor-arg name="proxyUser" value="${proxy.user}" />
-		<constructor-arg name="proxyPassword" value="${proxy.pwd}" />
-		<constructor-arg name="ispelUser" value="${ispel.user}" />
-		<constructor-arg name="ispelPassword" value="${ispel.user.pwd}" />
-	</bean>
+	<!--<bean id="httpClient" class="ispel.integrator.client.HttpClientFactoryBean"> -->
+	<!--<constructor-arg name="proxyHost" value="${proxy.host}" />-->
+	<!--<constructor-arg name="proxyPort" value="${proxy.port}" />-->
+	<!--<constructor-arg name="proxyUser" value="${proxy.user}" />-->
+	<!--<constructor-arg name="proxyPassword" value="${proxy.pwd}" />-->
+	<!--<constructor-arg name="ispelUser" value="${ispel.user}" />-->
+	<!--<constructor-arg name="ispelPassword" value="${ispel.user.pwd}" />-->
+	<!--</bean>-->
 	
 	<bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory">
 		<property name="soapVersion">

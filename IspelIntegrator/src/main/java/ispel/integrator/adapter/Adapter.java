@@ -3,18 +3,6 @@ package ispel.integrator.adapter;
 import ispel.integrator.adapter.AdapterRequest.MethodName;
 import ispel.integrator.service.AdapterService;
 import ispel.integrator.service.ServiceCallTimestampHolder;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.RejectedExecutionException;
-
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
@@ -22,6 +10,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 
 @Component
 public class Adapter {
@@ -79,8 +74,8 @@ public class Adapter {
 	}
 
 	void handleRequest(Socket conn) throws IOException {
-		int bufFrame = 43;
-		DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(
+        int bufFrame = 48;
+        DataOutputStream dos = new DataOutputStream(new BufferedOutputStream(
 				conn.getOutputStream(), bufFrame));
 		DataInputStream dis = new DataInputStream(new BufferedInputStream(
 				conn.getInputStream(), bufFrame));
@@ -151,22 +146,32 @@ public class Adapter {
 						.append(ServiceCallTimestampHolder.getAsDateTime())
 						.append(result.getErrorText());
 			}
-		} else if (MethodName.VerifyCar.equals(request.getMethodName())) {
-			if (result.getErrorText() == null
-					|| result.getErrorText().isEmpty()) {
-				reply.append("OK").append(
-						ServiceCallTimestampHolder.getAsDateTime());
-			} else {
-				reply.append("ER")
-						.append(ServiceCallTimestampHolder.getAsDateTime())
-						.append(result.getErrorText());
-			}
-		} else {
-			ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
-			reply.append("ER")
-					.append(ServiceCallTimestampHolder.getAsDateTime())
-					.append("Unknown request method");
-		}
+        } else if (MethodName.VerifyCar.equals(request.getMethodName())) {
+            if (result.getErrorText() == null
+                    || result.getErrorText().isEmpty()) {
+                reply.append("OK").append(
+                        ServiceCallTimestampHolder.getAsDateTime());
+            } else {
+                reply.append("ER")
+                        .append(ServiceCallTimestampHolder.getAsDateTime())
+                        .append(result.getErrorText());
+            }
+        } else if (MethodName.SubmitInvoiceData.equals(request.getMethodName())) {
+            if (result.getErrorText() == null
+                    || result.getErrorText().isEmpty()) {
+                reply.append("OK").append(
+                        ServiceCallTimestampHolder.getAsDateTime());
+            } else {
+                reply.append("ER")
+                        .append(ServiceCallTimestampHolder.getAsDateTime())
+                        .append(result.getErrorText());
+            }
+        } else {
+            ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
+            reply.append("ER")
+                    .append(ServiceCallTimestampHolder.getAsDateTime())
+                    .append("Unknown request method");
+        }
 		return reply.toString();
 	}
 

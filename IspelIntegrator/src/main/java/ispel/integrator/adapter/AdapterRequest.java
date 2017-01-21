@@ -105,6 +105,18 @@ public class AdapterRequest {
 		return this.documentGroup;
 	}
 
+	public void setDocumentType(String documentType) {
+		this.documentType = documentType;
+	}
+
+	public void setDocumentNumber(String documentNumber) {
+		this.documentNumber = documentNumber;
+	}
+
+	public void setDocumentGroup(String documentGroup) {
+		this.documentGroup = documentGroup;
+	}
+
 	@Override
 	public String toString() {
 		return new StringBuilder()
