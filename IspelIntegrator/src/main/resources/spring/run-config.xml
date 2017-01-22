@@ -11,7 +11,7 @@
 		<property name="locations">
 			<list>
 				<value>classpath:properties/application.properties</value>
-                <!--<value>file:${ext.prop.dir}/application.properties</value>-->
+                <value>file:${ext.prop.dir}/application.properties</value>
 			</list>
 		</property>
 		<property name="ignoreResourceNotFound" value="true" />

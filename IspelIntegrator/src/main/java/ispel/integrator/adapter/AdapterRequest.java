@@ -6,7 +6,10 @@ public class AdapterRequest {
 	private static final Logger log = Logger.getLogger(AdapterRequest.class);
 
 	public enum MethodName {
-		GetVinExpert, VerifyCar, SubmitInvoiceData
+		GetVinExpert,
+		VerifyCar,
+		SubmitInvoiceData,
+		SubmitMultipleInvoiceData
 	};
 
 	public enum Direction {

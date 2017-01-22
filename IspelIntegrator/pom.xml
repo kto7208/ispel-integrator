@@ -12,6 +12,9 @@
         <junit.version>4.12</junit.version>
 		<spring.ws.version>2.2.4.RELEASE</spring.ws.version>
 		<httpclient.version>4.5.2</httpclient.version>
+		<httpclient.
+				version>4.5.2
+		</httpclient.version>
 		<guava.version>19.0</guava.version>
 		<skipTests>true</skipTests>
 	</properties>
@@ -218,6 +221,11 @@
 			<artifactId>httpclient</artifactId>
 			<version>${httpclient.version}</version>
 			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>${httpmime.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>net.lingala.zip4j</groupId>

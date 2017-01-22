@@ -122,7 +122,8 @@ public class Adapter {
 			} catch (Exception e1) {
 			}
 			logger.error(e);
-		} finally {
+            e.printStackTrace();
+        } finally {
 			try {
 				dos.flush();
 				dos.close();
