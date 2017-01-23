@@ -411,13 +411,7 @@
                         See also IdentityNotKnown.</xsd:documentation>
     </xsd:annotation>
   </xsd:element>
-  <xsd:element name="SeeVehicleUser">
-    <xsd:annotation>
-      <xsd:documentation>
-                The SeeVehicleUser element is used in the VehicleOwner to indicate that the VehicleUser is also 
-                the owner without having to duplicate all the data.
-                </xsd:documentation>
-    </xsd:annotation>
+    <xsd:element name="SeeVehicleUser" type="SeeVehicleUserType">
   </xsd:element>
   <xsd:element name="Transactions">
     <xsd:annotation>
@@ -1250,4 +1244,12 @@
       <xsd:attribute name="UnitCost" type="positiveDecimal" use="optional" />
     </xsd:complexType>
   </xsd:element>
+    <xsd:complexType name="SeeVehicleUserType">
+        <xsd:annotation>
+            <xsd:documentation>
+                The SeeVehicleUser element is used in the VehicleOwner to indicate that the VehicleUser is also
+                the owner without having to duplicate all the data.
+            </xsd:documentation>
+        </xsd:annotation>
+    </xsd:complexType>
 </xsd:schema>

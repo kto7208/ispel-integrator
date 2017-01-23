@@ -4,7 +4,6 @@ import generated.*;
 import ispel.integrator.domain.dms.*;
 import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -110,15 +109,67 @@ public class InvoiceBuilder {
         }
 
         private String buildType() {
-            // todo
-            return null;
+            if (isInternal() && isBodyshop()) {
+                return "BodyshopInternal";
+            } else if (isInternal() && !isBodyshop()) {
+                return "WorkshopInternal";
+            } else if (isWarranty() && isBodyshop()) {
+                return "BodyshopWarranty";
+            } else if (isWarranty() && !isBodyshop()) {
+                return "WorkshopWarranty";
+            } else if (isVF() && isBodyshop()) {
+                return "BodyshopAccount";
+            } else if (isVF() && !isBodyshop()) {
+                return "WorkshopAccount";
+            } else if (isPD() && isBodyshop()) {
+                return "BodyshopCash";
+            } else if (isPD() && !isBodyshop()) {
+                return "WorkshopCash";
+            } else {
+                throw new IllegalStateException("wrong invoice type");
+            }
+        }
+
+        private boolean isInternal() {
+            return ("VF".equalsIgnoreCase(orderInfo.getTypD())
+                    && orderInfo.getOznaceni_svf().toUpperCase().contains("INTERN")) ||
+                    ("PD".equalsIgnoreCase(orderInfo.getTypD())
+                            && orderInfo.getOznaceni_spd().toUpperCase().contains("INTERN"));
+        }
+
+        private boolean isBodyshop() {
+            for (WorkInfo workInfo : works) {
+                if (("KAR").equalsIgnoreCase(workInfo.getDruh_pp())) {
+                    return true;
+                } else if (("LAK").equalsIgnoreCase(workInfo.getDruh_pp())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private boolean isWarranty() {
+            if (orderInfo.getReklam_c() != null && Integer.valueOf(orderInfo.getReklam_c()) > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        private boolean isVF() {
+            return "VF".equalsIgnoreCase(orderInfo.getTypD());
+        }
+
+        private boolean isPD() {
+            return "PD".equalsIgnoreCase(orderInfo.getTypD());
         }
 
         private String buildName() {
             if (customerInfo == null) {
                 throw new IllegalStateException("customerInfo is null");
             }
-            if (customerInfo.getOrganizace() != null) {
+            if (customerInfo.getOrganizace() != null &&
+                    customerInfo.getOrganizace().length() > 0) {
                 return customerInfo.getOrganizace();
             }
             return new StringBuilder()
@@ -139,8 +190,8 @@ public class InvoiceBuilder {
         }
 
         private MarketingInformationType buildUseForMarketing() {
-            if ("Y".equalsIgnoreCase(this.customerInfo.getEmail_souhlas()) ||
-                    "Y".equalsIgnoreCase(this.customerInfo.getSms_souhlas())) {
+            if ("1".equalsIgnoreCase(this.customerInfo.getEmail_souhlas()) ||
+                    "1".equalsIgnoreCase(this.customerInfo.getSms_souhlas())) {
                 return MarketingInformationType.Y;
             } else {
                 return MarketingInformationType.N;
@@ -148,11 +199,15 @@ public class InvoiceBuilder {
         }
 
         private String buildEmployeeName() {
-            return new StringBuilder()
-                    .append(this.employeeInfo.getPrijmeni())
-                    .append(" ")
-                    .append(this.employeeInfo.getJmeno())
-                    .toString();
+            if (employeeInfo != null) {
+                return new StringBuilder()
+                        .append(this.employeeInfo.getPrijmeni())
+                        .append(" ")
+                        .append(this.employeeInfo.getJmeno())
+                        .toString();
+            } else {
+                return "";
+            }
         }
 
         private String buildOrderRef() {

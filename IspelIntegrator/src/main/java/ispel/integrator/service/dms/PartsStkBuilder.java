@@ -2,7 +2,6 @@ package ispel.integrator.service.dms;
 
 import generated.PartsStk;
 import generated.PtStk;
-import ispel.integrator.domain.dms.OrderInfo;
 import ispel.integrator.domain.dms.PartInfo;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +18,7 @@ public class PartsStkBuilder {
         private ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>() {
             @Override
             protected DateFormat initialValue() {
-                return new SimpleDateFormat("yyyymmdd");
+                return new SimpleDateFormat("yyyyMMdd");
             }
         };
 

@@ -42,6 +42,7 @@ public class PartsInvoiceLinesBuilder {
                 part.setFranchiseName(partInfo.getKatalog());
                 part.setFranchiseName(partInfo.getNazov_p1());
                 part.setIsFranchise("A".equalsIgnoreCase(partInfo.getOriginal_nd()));
+                part.setPartNumber(partInfo.getKatalog());
                 line.setPart(part);
                 line.setQuantity(partInfo.getMnozstvi());
                 line.setUnitCost(partInfo.getCena_skl());

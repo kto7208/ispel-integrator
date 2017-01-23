@@ -4,7 +4,6 @@ import generated.LabourRecord;
 import generated.RepairOrder;
 import generated.RepairOrders;
 import ispel.integrator.domain.dms.CustomerInfo;
-import ispel.integrator.domain.dms.EmployeeInfo;
 import ispel.integrator.domain.dms.OrderInfo;
 import ispel.integrator.domain.dms.WorkInfo;
 import org.springframework.stereotype.Component;
@@ -23,7 +22,7 @@ public class RepairOrdersBuilder {
     private ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>() {
         @Override
         protected DateFormat initialValue() {
-            return new SimpleDateFormat("yyyymmdd");
+            return new SimpleDateFormat("yyyyMMdd");
         }
     };
 
@@ -31,7 +30,6 @@ public class RepairOrdersBuilder {
 
         private CustomerInfo customerInfo;
         private OrderInfo orderInfo;
-        private EmployeeInfo employeeInfo;
         private List<WorkInfo> works;
 
         private Builder() {}
@@ -46,11 +44,6 @@ public class RepairOrdersBuilder {
             return this;
         }
 
-        public Builder withEmployeeInfo(EmployeeInfo employeeInfo) {
-            this.employeeInfo = employeeInfo;
-            return this;
-        }
-
         public Builder withWorks(List<WorkInfo> works) {
             this.works = works;
             return this;
@@ -59,9 +52,6 @@ public class RepairOrdersBuilder {
         public RepairOrders build() {
             if (orderInfo == null) {
                 throw new IllegalStateException("orderInfo is null");
-            }
-            if (employeeInfo == null) {
-                throw new IllegalStateException("employeeInfo is null");
             }
             if (works == null) {
                 throw new IllegalStateException("works is null");
@@ -128,7 +118,8 @@ public class RepairOrdersBuilder {
         }
 
         private String buildType(WorkInfo workInfo) {
-            if (orderInfo.getReklam_c() != null && orderInfo.getReklam_c().length() > 0) {
+            if (orderInfo.getReklam_c() != null && orderInfo.getReklam_c().length() > 0
+                    && Integer.valueOf(orderInfo.getReklam_c()) > 0) {
                 return "W";
             } else if (workInfo.getPopis_pp() != null &&
                         (workInfo.getPopis_pp().toLowerCase().contains("prehl") ||

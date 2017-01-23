@@ -23,6 +23,9 @@ public class OrderInfo {
     private String ci_auto;
     private BigDecimal celkem_sm;
 
+    private String oznaceni_svf;
+    private String oznaceni_spd;
+
 
     public String getDocumentGroup() {
         return documentGroup;
@@ -142,5 +145,21 @@ public class OrderInfo {
 
     public void setCelkem_sm(BigDecimal celkem_sm) {
         this.celkem_sm = celkem_sm;
+    }
+
+    public String getOznaceni_svf() {
+        return oznaceni_svf;
+    }
+
+    public void setOznaceni_svf(String oznaceni_svf) {
+        this.oznaceni_svf = oznaceni_svf;
+    }
+
+    public String getOznaceni_spd() {
+        return oznaceni_spd;
+    }
+
+    public void setOznaceni_spd(String oznaceni_spd) {
+        this.oznaceni_spd = oznaceni_spd;
     }
 }

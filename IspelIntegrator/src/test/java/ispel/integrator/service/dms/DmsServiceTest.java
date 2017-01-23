@@ -34,6 +34,6 @@ public class DmsServiceTest {
         DMSextract dmsextract = dmsService.buildDMS("ZAK", "12140001", "17");
         StringWriter stringWriter = new StringWriter();
         dmsExtractMarshaller.marshal(dmsextract,new StreamResult(stringWriter));
-        Files.write(stringWriter.toString(), new File("d:/temp/nissan/order.xml"), Charsets.UTF_8);
+        Files.write(stringWriter.toString(), new File("c:/temp/nissan/order.xml"), Charsets.UTF_8);
     }
 }

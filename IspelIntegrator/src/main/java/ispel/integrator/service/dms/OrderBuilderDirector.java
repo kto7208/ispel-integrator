@@ -8,12 +8,10 @@ import ispel.integrator.domain.dms.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class OrderBuilderDirector {
@@ -118,7 +116,6 @@ public class OrderBuilderDirector {
 
         RepairOrders repairOrders = repairOrderBuilder.newInstance()
                 .withCustomerInfo(customerInfo)
-                .withEmployeeInfo(employeeInfo)
                 .withOrderInfo(orderInfo)
                 .withWorks(works)
                 .build();

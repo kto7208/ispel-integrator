@@ -51,7 +51,7 @@ public class DmsDaoTest {
     @Test
     @Rollback
     public void testGetEmployeeInfo() {
-        EmployeeInfo employeeInfo = dmsDao.getEmployeeInfo("felsoci");
+        EmployeeInfo employeeInfo = dmsDao.getEmployeeInfo("felsocx");
     }
 
     @Test

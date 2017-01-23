@@ -19,7 +19,7 @@ public class VehicleBuilder {
     private ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>() {
         @Override
         protected DateFormat initialValue() {
-            SimpleDateFormat df = new SimpleDateFormat("yyyymmdd");
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
             return df;
         }
     };
@@ -93,8 +93,9 @@ public class VehicleBuilder {
             vehicle.setVehicleUser(vehicleUser);
 
             VehicleOwner vehicleOwner = new VehicleOwner();
-            vehicleOwner.setSeeVehicleUser(new SeeVehicleUser());
+            vehicleOwner.setSeeVehicleUser(new SeeVehicleUserType());
 
+            vehicle.setVehicleOwner(vehicleOwner);
             vehicle.getJobReference().add(buildJobReference());
             vehicle.getPartsInvoiceLineOrServiceInvoiceLineOrOtherInvoiceLine().addAll(Arrays.asList(serviceInvoiceLines));
             vehicle.getPartsInvoiceLineOrServiceInvoiceLineOrOtherInvoiceLine().addAll(Arrays.asList(partsInvoiceLines));
@@ -127,10 +128,10 @@ public class VehicleBuilder {
 
         private Date buildEmissionDueDate() {
             try {
-                if (vehicleInfo.getDt_prod() != null &&
-                        vehicleInfo.getDt_prod().length() > 0 &&
-                        !"00000000".equals(vehicleInfo.getDt_prod())) {
-                    return dateFormat.get().parse(vehicleInfo.getDt_prod());
+                if (vehicleInfo.getDt_emis_nasl() != null &&
+                        vehicleInfo.getDt_emis_nasl().length() > 0 &&
+                        !"00000000".equals(vehicleInfo.getDt_emis_nasl())) {
+                    return dateFormat.get().parse(vehicleInfo.getDt_emis_nasl());
                 }
             } catch(ParseException e) {
                 throw new RuntimeException(e);

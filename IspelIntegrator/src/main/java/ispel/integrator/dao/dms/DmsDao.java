@@ -3,6 +3,7 @@ package ispel.integrator.dao.dms;
 import ispel.integrator.domain.dms.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -32,7 +33,10 @@ public class DmsDao {
     private static final String UPDATE_NISSAN_SITE_SEQUENCE_SQL = "update conf_ini set val=? where var='NISSAN_SITE_SEQUENCE'";
     private static final String GET_ICO_SQL = "select val from conf_ini where var='ICO'";
 
-    private static final String GET_ORDER_INFO_SQL = "select vfpd,skup_vfpd,kdy_uzav,typ_d,ci_reg,user_name,stav_tach,storno,forma_uhr,datum,reklam_c,ci_auto,celkem_sm from se_zakazky where zakazka=? and skupina=?";
+    private static final String GET_ORDER_INFO_SQL = "select s.vfpd,s.skup_vfpd,s.kdy_uzav_doklad,s.typ_d,s.ci_reg,s.user_name,s.stav_tach,s.storno,s.forma_uhr,s.datum,s.reklam_c,s.ci_auto,s.celkem_sm,svf.oznaceni oznaceni_svf, spd.oznaceni oznaceni_spd from se_zakazky s" +
+            " left outer join c_svf svf on svf.skvf=s.skup_vfpd" +
+            " left outer join c_spd spd on spd.skpd=s.skup_vfpd" +
+            " where zakazka=? and skupina=?";
 
     private static final String GET_CUSTOMER_INFO_SQL = "select typ,icdph,organizace,prijmeni,jmeno,titul,ulice,mesto,stat1,psc,email_souhlas,sms_souhlas,tel,sms,email,dt_nar from odber where ci_reg=?";
 
@@ -113,6 +117,8 @@ public class DmsDao {
                         orderInfo.setReklam_c(rs.getString(11));
                         orderInfo.setCi_auto(rs.getString(12));
                         orderInfo.setCelkem_sm(rs.getBigDecimal(13));
+                        orderInfo.setOznaceni_svf(rs.getString(14));
+                        orderInfo.setOznaceni_spd(rs.getString(15));
                         return orderInfo;
                     }
                 });
@@ -150,18 +156,22 @@ public class DmsDao {
 
     public EmployeeInfo getEmployeeInfo(final String employeeId) {
         logger.debug("uzivatelske_meno: " + employeeId);
-        return jdbcTemplate.queryForObject(GET_EMPLOYEE_INFO_SQL,
-                new Object[]{employeeId},
-                new RowMapper<EmployeeInfo>() {
-                    public EmployeeInfo mapRow(ResultSet rs, int arg1)
-                            throws SQLException {
-                        EmployeeInfo employeeInfo = new EmployeeInfo();
-                        employeeInfo.setUzivatelske_meno(employeeId);
-                        employeeInfo.setPrijmeni(rs.getString(1));
-                        employeeInfo.setJmeno(rs.getString(2));
-                        return employeeInfo;
-                    }
-                });
+        try {
+            return jdbcTemplate.queryForObject(GET_EMPLOYEE_INFO_SQL,
+                    new Object[]{employeeId},
+                    new RowMapper<EmployeeInfo>() {
+                        public EmployeeInfo mapRow(ResultSet rs, int arg1)
+                                throws SQLException {
+                            EmployeeInfo employeeInfo = new EmployeeInfo();
+                            employeeInfo.setUzivatelske_meno(employeeId);
+                            employeeInfo.setPrijmeni(rs.getString(1));
+                            employeeInfo.setJmeno(rs.getString(2));
+                            return employeeInfo;
+                        }
+                    });
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
     }
 
     public VehicleInfo getVehicleInfo(final String vehicleId) {
