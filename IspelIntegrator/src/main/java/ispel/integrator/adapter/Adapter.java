@@ -121,9 +121,8 @@ public class Adapter {
 				dos.write(sb.toString().getBytes());
 			} catch (Exception e1) {
 			}
-			logger.error(e);
-            e.printStackTrace();
-        } finally {
+			logger.error(e.getMessage(), e);
+		} finally {
 			try {
 				dos.flush();
 				dos.close();

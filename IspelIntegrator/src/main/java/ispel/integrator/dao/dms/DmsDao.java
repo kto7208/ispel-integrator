@@ -1,6 +1,7 @@
 package ispel.integrator.dao.dms;
 
 import ispel.integrator.domain.dms.*;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -17,6 +18,9 @@ import java.util.Map;
 
 @Repository
 public class DmsDao {
+
+    private static final Logger logger = Logger
+            .getLogger(DmsDao.class);
 
     private JdbcTemplate jdbcTemplate;
 
@@ -54,6 +58,7 @@ public class DmsDao {
 
 
     public String getGetFranchiseCode(String franchise) {
+        logger.debug("franchise: " + franchise);
         return jdbcTemplate.queryForObject(GET_FRANCHISE_CODE_SQL,
                 String.class, franchise.toLowerCase());
     }
@@ -85,6 +90,8 @@ public class DmsDao {
     }
 
     public OrderInfo getOrderInfo(final String documentNumber, final String documentGroup) {
+        logger.debug("zakazka: " + documentNumber);
+        logger.debug("skupina: " + documentGroup);
         return jdbcTemplate.queryForObject(GET_ORDER_INFO_SQL,
                 new Object[]{Integer.valueOf(documentNumber), Integer.valueOf(documentGroup)},
                 new RowMapper<OrderInfo>() {
@@ -112,6 +119,7 @@ public class DmsDao {
     }
 
     public CustomerInfo getCustomerInfo(final String customerId) {
+        logger.debug("ci_reg: " + customerId);
         return jdbcTemplate.queryForObject(GET_CUSTOMER_INFO_SQL,
                 new Object[]{Integer.valueOf(customerId)},
                 new RowMapper<CustomerInfo>() {
@@ -141,6 +149,7 @@ public class DmsDao {
     }
 
     public EmployeeInfo getEmployeeInfo(final String employeeId) {
+        logger.debug("uzivatelske_meno: " + employeeId);
         return jdbcTemplate.queryForObject(GET_EMPLOYEE_INFO_SQL,
                 new Object[]{employeeId},
                 new RowMapper<EmployeeInfo>() {
@@ -156,6 +165,7 @@ public class DmsDao {
     }
 
     public VehicleInfo getVehicleInfo(final String vehicleId) {
+        logger.debug("ci_auto: " + vehicleId);
         return jdbcTemplate.queryForObject(GET_VEHICLE_INFO_SQL,
                 new Object[]{Integer.valueOf(vehicleId)},
                 new RowMapper<VehicleInfo>() {
@@ -177,6 +187,8 @@ public class DmsDao {
     }
 
     public List<WorkInfo> getWorkInfoList(final String orderNumber, final String orderGroup) {
+        logger.debug("zakazka: " + orderNumber);
+        logger.debug("skupina: " + orderGroup);
         List<WorkInfo> works = new ArrayList<WorkInfo>();
         List<Map<String, Object>> rows =  jdbcTemplate.queryForList(GET_WORK_INFO_SQL,
                 new Object[]{Long.valueOf(orderNumber), Long.valueOf(orderGroup)});
@@ -201,6 +213,8 @@ public class DmsDao {
     }
 
     public List<PartInfo> getPartInfoList(final String orderNumber, final String orderGroup) {
+        logger.debug("zakazka: " + orderNumber);
+        logger.debug("skupina: " + orderGroup);
         List<PartInfo> parts = new ArrayList<PartInfo>();
         List<Map<String, Object>> rows =  jdbcTemplate.queryForList(GET_PART_INFO_SQL,
                 new Object[]{Long.valueOf(orderNumber), Long.valueOf(orderGroup)});
