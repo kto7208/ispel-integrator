@@ -23,6 +23,8 @@ public class WorkInfo {
     private String prijmeni;
     private String jmeno;
 
+    private String ostatni;
+
     public String getOrderGroup() {
         return orderGroup;
     }
@@ -125,5 +127,13 @@ public class WorkInfo {
 
     public void setJmeno(String jmeno) {
         this.jmeno = jmeno;
+    }
+
+    public String getOstatni() {
+        return ostatni;
+    }
+
+    public void setOstatni(String ostatni) {
+        this.ostatni = ostatni;
     }
 }

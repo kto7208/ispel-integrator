@@ -104,7 +104,9 @@ public class VehicleBuilder {
 
         private Date buildRegDate() {
             try {
-                if (vehicleInfo.getDt_prod() != null && vehicleInfo.getDt_prod().length() > 0) {
+                if (vehicleInfo.getDt_prod() != null &&
+                        vehicleInfo.getDt_prod().length() > 0 &&
+                        !"00000000".equals(vehicleInfo.getDt_prod())) {
                     return dateFormat.get().parse(vehicleInfo.getDt_prod());
                 }
             } catch(ParseException e) {

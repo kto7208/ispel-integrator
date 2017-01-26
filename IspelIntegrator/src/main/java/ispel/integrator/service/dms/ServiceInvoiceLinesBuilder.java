@@ -6,6 +6,7 @@ import ispel.integrator.domain.dms.WorkInfo;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,8 +42,12 @@ public class ServiceInvoiceLinesBuilder {
             }
 
             Map<Long, ServiceInvoiceLine> map = new HashMap<Long, ServiceInvoiceLine>();
+            List<ServiceInvoiceLine> lines = new ArrayList<ServiceInvoiceLine>();
             for (WorkInfo workInfo : works) {
-                ServiceInvoiceLine line =  map.get(workInfo.getPp_id());
+                ServiceInvoiceLine line = null;
+                if (!"A".equalsIgnoreCase(workInfo.getOstatni())) {
+                    line = map.get(workInfo.getPp_id());
+                }
                 if (line == null) {
                     line = new ServiceInvoiceLine();
                     line.setTotalPrice(BigDecimal.ZERO);
@@ -52,10 +57,11 @@ public class ServiceInvoiceLinesBuilder {
                     line.setQuantity(buildQuantity(workInfo));
                     line.setUnitCost(workInfo.getCena());
                     map.put(workInfo.getPp_id(), line);
+                    lines.add(line);
                 }
                 line.setTotalPrice(line.getTotalPrice().add(workInfo.getCenabdph()));
             }
-            return map.values().toArray(new ServiceInvoiceLine[map.size()]);
+            return lines.toArray(new ServiceInvoiceLine[lines.size()]);
         }
 
         private String buildType(WorkInfo workInfo) {

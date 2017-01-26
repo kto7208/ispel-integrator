@@ -36,4 +36,22 @@ public class DmsServiceTest {
         dmsExtractMarshaller.marshal(dmsextract,new StreamResult(stringWriter));
         Files.write(stringWriter.toString(), new File("c:/temp/nissan/order.xml"), Charsets.UTF_8);
     }
+
+    @Test
+    @Commit
+    public void testDmService2() throws Exception {
+        DMSextract dmsextract = dmsService.buildDMS("ZAK", "11150131", "16");
+        StringWriter stringWriter = new StringWriter();
+        dmsExtractMarshaller.marshal(dmsextract, new StreamResult(stringWriter));
+        Files.write(stringWriter.toString(), new File("c:/temp/nissan/order.xml"), Charsets.UTF_8);
+    }
+
+    @Test
+    @Commit
+    public void testDmService3() throws Exception {
+        DMSextract dmsextract = dmsService.buildDMS("ZAK", "10140148", "15");
+        StringWriter stringWriter = new StringWriter();
+        dmsExtractMarshaller.marshal(dmsextract, new StreamResult(stringWriter));
+        Files.write(stringWriter.toString(), new File("c:/temp/nissan/order.xml"), Charsets.UTF_8);
+    }
 }

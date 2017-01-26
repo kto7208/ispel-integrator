@@ -44,16 +44,17 @@ public class DmsDao {
 
     private static final String GET_VEHICLE_INFO_SQL = "select spz,vin,vyrobce,model,dt_prod,dt_stk_nasl,dt_emis_nasl,tel from se_auta where ci_auto=?";
 
-    private static final String GET_WORK_INFO_SQL = "select s.pracpoz,s.popis_pp,s.nh,s.opakovani,s.cena,s.cena_bdph,s.pp_id,s.procento,s.druh_pp,p.m_prijmeni,p.m_jmeno " +
+    private static final String GET_WORK_INFO_SQL = "select s.pracpoz,s.popis_pp,s.nh,s.opakovani,s.cena,s.cena_bdph,s.pp_id,s.procento,s.druh_pp,p.m_prijmeni,p.m_jmeno,s.ostatni " +
                                                     "from se_zprace s " +
                                                     "left join pe_pracovnici p on p.uzivatelske_meno=s.user_name " +
                                                     "where s.zakazka=? and s.skupina=?";
 
     private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad from se_zdily s " +
-                                                    "join mz_conf_sklad m on s.sklad=m.kod " +
-                                                    "join mz_sklad ms on ms.sklad=s.sklad and ms.katalog=s.katalog " +
+            "left outer join mz_conf_sklad m on s.sklad=m.kod " +
+            "left outer join mz_sklad ms on ms.sklad=s.sklad and ms.katalog=s.katalog " +
                                                     "where s.zakazka=? and s.skupina=?";
 
+    private static final String GET_DESCRIPTION_INFO_SQL = "select popis,poradi from se_popisopr where zakazka=? and skupina=? order by poradi asc";
 
     @Autowired
     public DmsDao(DataSource ds) {
@@ -217,6 +218,7 @@ public class DmsDao {
             workInfo.setDruh_pp((String) row.get("druh_pp"));
             workInfo.setPrijmeni((String) row.get("m_prijmeni"));
             workInfo.setJmeno((String) row.get("m_jmeno"));
+            workInfo.setOstatni((String) row.get("ostatni"));
             works.add(workInfo);
         }
         return works;
@@ -249,5 +251,23 @@ public class DmsDao {
         }
         return parts;
     }
+
+    public List<DescriptionInfo> getDescriptionInfoList(final String orderNumber, final String orderGroup) {
+        logger.debug("zakazka: " + orderNumber);
+        logger.debug("skupina: " + orderGroup);
+        List<DescriptionInfo> descriptions = new ArrayList<DescriptionInfo>();
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(GET_DESCRIPTION_INFO_SQL,
+                new Object[]{Long.valueOf(orderNumber), Long.valueOf(orderGroup)});
+        for (Map<String, Object> row : rows) {
+            DescriptionInfo descriptionInfo = new DescriptionInfo();
+            descriptionInfo.setDocumentGroup(orderGroup);
+            descriptionInfo.setDocumentNumber(orderNumber);
+            descriptionInfo.setPopis((String) row.get("popis"));
+            descriptionInfo.setPoradi((Long) row.get("poradi"));
+            descriptions.add(descriptionInfo);
+        }
+        return descriptions;
+    }
+
 
 }

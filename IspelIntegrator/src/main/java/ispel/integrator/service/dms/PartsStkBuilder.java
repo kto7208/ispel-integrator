@@ -67,7 +67,11 @@ public class PartsStkBuilder {
 
         private Date buildLastOutDate(PartInfo partInfo) {
             try {
-                return dateFormat.get().parse(partInfo.getDt_vydej());
+                if (partInfo.getDt_vydej() != null) {
+                    return dateFormat.get().parse(partInfo.getDt_vydej());
+                } else {
+                    return null;
+                }
             } catch(ParseException e) {
                 throw new RuntimeException(e);
             }
@@ -76,7 +80,11 @@ public class PartsStkBuilder {
 
         private Date buildLastInDate(PartInfo partInfo) {
             try {
-                return dateFormat.get().parse(partInfo.getDt_prijem());
+                if (partInfo.getDt_prijem() != null) {
+                    return dateFormat.get().parse(partInfo.getDt_prijem());
+                } else {
+                    return null;
+                }
             } catch(ParseException e) {
                 throw new RuntimeException(e);
             }

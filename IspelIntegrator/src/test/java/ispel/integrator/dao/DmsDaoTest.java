@@ -72,4 +72,16 @@ public class DmsDaoTest {
         List<PartInfo> list = dmsDao.getPartInfoList("12140001", "17");
     }
 
+    @Test
+    @Commit
+    public void testGetPartInfoList2() {
+        List<PartInfo> list = dmsDao.getPartInfoList("10140148", "15");
+    }
+
+    @Test
+    @Commit
+    public void testGetDescriptionInfoList() {
+        List<DescriptionInfo> list = dmsDao.getDescriptionInfoList("10140148", "15");
+    }
+
 }

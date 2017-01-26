@@ -3,18 +3,13 @@ package ispel.integrator.service.dms;
 import generated.LabourRecord;
 import generated.RepairOrder;
 import generated.RepairOrders;
-import ispel.integrator.domain.dms.CustomerInfo;
-import ispel.integrator.domain.dms.OrderInfo;
-import ispel.integrator.domain.dms.WorkInfo;
+import ispel.integrator.domain.dms.*;
 import org.springframework.stereotype.Component;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class RepairOrdersBuilder {
@@ -30,12 +25,19 @@ public class RepairOrdersBuilder {
 
         private CustomerInfo customerInfo;
         private OrderInfo orderInfo;
+        private EmployeeInfo employeeInfo;
         private List<WorkInfo> works;
+        private List<DescriptionInfo> descriptions;
 
         private Builder() {}
 
         public Builder withCustomerInfo(CustomerInfo customerInfo) {
             this.customerInfo = customerInfo;
+            return this;
+        }
+
+        public Builder withEmployeeInfo(EmployeeInfo employeeInfo) {
+            this.employeeInfo = employeeInfo;
             return this;
         }
 
@@ -49,6 +51,11 @@ public class RepairOrdersBuilder {
             return this;
         }
 
+        public Builder withDescriptions(List<DescriptionInfo> descriptions) {
+            this.descriptions = descriptions;
+            return this;
+        }
+
         public RepairOrders build() {
             if (orderInfo == null) {
                 throw new IllegalStateException("orderInfo is null");
@@ -59,30 +66,39 @@ public class RepairOrdersBuilder {
             if (customerInfo == null) {
                 throw new IllegalStateException("customerInfo is null");
             }
+            if (employeeInfo == null) {
+                throw new IllegalStateException("employeeInfo is null");
+            }
 
             RepairOrders repairOrders = new RepairOrders();
-            Map<Long, RepairOrder> map = new HashMap<Long,RepairOrder>();
+            RepairOrder repairOrder = new RepairOrder();
+            repairOrder.setId(buildId());
+            repairOrder.setStartDate(buildStartDate());
+            repairOrder.setEndDate(orderInfo.getKdyUzavDoklad());
+            repairOrder.setEmployee(buildEmployeeName());
+
+            Map<Long, LabourRecord> map = new HashMap<Long, LabourRecord>();
+            List<LabourRecord> labourRecords = new ArrayList<LabourRecord>();
             for (WorkInfo workInfo : works) {
-                RepairOrder repairOrder = map.get(workInfo.getPp_id());
-                if (repairOrder == null) {
-                    repairOrder = new RepairOrder();
-                    repairOrder.setId(buildId());
-                    repairOrder.setStartDate(buildStartDate());
-                    repairOrder.setEndDate(orderInfo.getKdyUzavDoklad());
-                    repairOrder.setEmployee(buildEmployee(workInfo));
-                    LabourRecord labourRecord = new LabourRecord();
-                    labourRecord.setType(buildType(workInfo));
-                    labourRecord.setIsMechanical(buildMechanical(workInfo));
-                    labourRecord.setIsBodyshop(buildBodyshop(workInfo));
-                    labourRecord.setIsElectrical(buildElectrical(workInfo));
-                    labourRecord.setCode(workInfo.getPracpoz());
-                    labourRecord.setQuantity(workInfo.getNh());
-                    repairOrder.getLabourRecord().add(labourRecord);
-                    repairOrder.setDescription(workInfo.getPopis_pp());
-                    map.put(workInfo.getPp_id(), repairOrder);
+                LabourRecord lr = null;
+                if (!"A".equalsIgnoreCase(workInfo.getOstatni())) {
+                    lr = map.get(workInfo.getPp_id());
+                }
+                if (lr == null) {
+                    lr = new LabourRecord();
+                    lr.setType(buildType(workInfo));
+                    lr.setIsMechanical(buildMechanical(workInfo));
+                    lr.setIsBodyshop(buildBodyshop(workInfo));
+                    lr.setIsElectrical(buildElectrical(workInfo));
+                    lr.setCode(workInfo.getPracpoz());
+                    lr.setQuantity(workInfo.getNh());
+                    map.put(workInfo.getPp_id(), lr);
+                    labourRecords.add(lr);
                 }
             }
-            repairOrders.getRepairOrder().addAll(map.values());
+            repairOrder.getLabourRecord().addAll(labourRecords);
+            repairOrder.setDescription(buildDescription());
+            repairOrders.getRepairOrder().add(repairOrder);
             return repairOrders;
         }
 
@@ -102,19 +118,16 @@ public class RepairOrdersBuilder {
             }
         }
 
-        private String buildEmployee(WorkInfo workInfo) {
-            WorkInfo selectedWork = workInfo;
-            for (WorkInfo work : works) {
-                if (selectedWork.getPp_id().equals(work.getPp_id()) &&
-                        work.getProcento() > selectedWork.getProcento()) {
-                    selectedWork = work;
-                }
+        private String buildEmployeeName() {
+            if (employeeInfo != null) {
+                return new StringBuilder()
+                        .append(this.employeeInfo.getPrijmeni())
+                        .append(" ")
+                        .append(this.employeeInfo.getJmeno())
+                        .toString();
+            } else {
+                return "";
             }
-            return new StringBuilder()
-                    .append(selectedWork.getPrijmeni())
-                    .append(" ")
-                    .append(selectedWork.getJmeno())
-                    .toString();
         }
 
         private String buildType(WorkInfo workInfo) {
@@ -153,6 +166,20 @@ public class RepairOrdersBuilder {
             } else {
                 return false;
             }
+        }
+
+        private String buildDescription() {
+            StringBuilder stringBuilder = new StringBuilder();
+            int len = descriptions.size();
+            int i = 0;
+            for (DescriptionInfo descriptionInfo : descriptions) {
+                stringBuilder.append(descriptionInfo.getPopis().trim());
+                if (i < len - 1) {
+                    stringBuilder.append(", ");
+                }
+                i++;
+            }
+            return stringBuilder.toString();
         }
     }
 

@@ -85,12 +85,12 @@ public class OrderBuilderDirector {
         VehicleInfo vehicleInfo = dmsDao.getVehicleInfo(orderInfo.getCi_auto());
         List<WorkInfo> works = dmsDao.getWorkInfoList(documentNumber, documentGroup);
         List<PartInfo> parts = dmsDao.getPartInfoList(documentNumber, documentGroup);
+        List<DescriptionInfo> descriptions = dmsDao.getDescriptionInfoList(documentNumber, documentGroup);
 
         PartsInvoiceLine[] partsInvoiceLines = partsInvoiceLinesBuilder.newInstance()
                 .withOrderInfo(orderInfo)
                 .withParts(parts)
                 .build();
-
 
         ServiceInvoiceLine[] serviceInvoiceLines = serviceInvoiceLinesBuilder.newInstance()
                 .withOrderInfo(orderInfo)
@@ -116,8 +116,10 @@ public class OrderBuilderDirector {
 
         RepairOrders repairOrders = repairOrderBuilder.newInstance()
                 .withCustomerInfo(customerInfo)
+                .withEmployeeInfo(employeeInfo)
                 .withOrderInfo(orderInfo)
                 .withWorks(works)
+                .withDescriptions(descriptions)
                 .build();
 
         PartsStk[] partsStks = partsStkBuilder.newInstance()

@@ -89,7 +89,7 @@ public class InvoiceBuilder {
             invoiceSummary.setInvoiceTotal(orderInfo.getCelkem_sm());
             invoiceSummary.setSubtotalLabourBody(subtotalLabourBody);
             invoiceSummary.setSubtotalLabourPaint(subtotalLabourPaint);
-            invoiceSummary.setSubtotalLabourBodyPaint(subtotalLabourBodyPaint);
+            invoiceSummary.setSubtotalLabourBodyPaint(null);
             invoiceSummary.setSubtotalLabourWkshp(subtotalLabourWkshp);
             invoiceSummary.setSubtotalPaintMaterial(subtotalPaintMaterial);
             invoiceSummary.setSubtotalParts(subtotalParts);
