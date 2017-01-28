@@ -24,6 +24,8 @@ public class WorkInfo {
     private String jmeno;
 
     private String ostatni;
+    private BigDecimal cena_jednotkova;
+    private String hlavna_pp;
 
     public String getOrderGroup() {
         return orderGroup;
@@ -135,5 +137,21 @@ public class WorkInfo {
 
     public void setOstatni(String ostatni) {
         this.ostatni = ostatni;
+    }
+
+    public BigDecimal getCena_jednotkova() {
+        return cena_jednotkova;
+    }
+
+    public void setCena_jednotkova(BigDecimal cena_jednotkova) {
+        this.cena_jednotkova = cena_jednotkova;
+    }
+
+    public String getHlavna_pp() {
+        return hlavna_pp;
+    }
+
+    public void setHlavna_pp(String hlavna_pp) {
+        this.hlavna_pp = hlavna_pp;
     }
 }

@@ -1,5 +1,6 @@
 package ispel.integrator.service.dms;
 
+import generated.MainOperationType;
 import generated.ServiceInvoiceLine;
 import ispel.integrator.domain.dms.OrderInfo;
 import ispel.integrator.domain.dms.WorkInfo;
@@ -56,6 +57,9 @@ public class ServiceInvoiceLinesBuilder {
                     line.setDescription(workInfo.getPopis_pp());
                     line.setQuantity(buildQuantity(workInfo));
                     line.setUnitCost(workInfo.getCena());
+                    line.setTotalPrice(workInfo.getCenabdph());
+                    line.setUnitListPrice(workInfo.getCena_jednotkova());
+                    line.setMainOperation(buildMainOperation(workInfo));
                     map.put(workInfo.getPp_id(), line);
                     lines.add(line);
                 }
@@ -76,6 +80,14 @@ public class ServiceInvoiceLinesBuilder {
 
         private BigDecimal buildQuantity(WorkInfo workInfo) {
             return workInfo.getNh().multiply(workInfo.getOpakovani());
+        }
+
+        private MainOperationType buildMainOperation(WorkInfo workInfo) {
+            if ("A".equalsIgnoreCase(workInfo.getHlavna_pp())) {
+                return MainOperationType.Y;
+            } else {
+                return MainOperationType.N;
+            }
         }
     }
 

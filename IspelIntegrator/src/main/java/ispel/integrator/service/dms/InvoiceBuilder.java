@@ -132,7 +132,11 @@ public class InvoiceBuilder {
 
         private boolean isInternal() {
             return ("VF".equalsIgnoreCase(orderInfo.getTypD())
+                    && orderInfo.getInterne() == 1) ||
+
+                    ("VF".equalsIgnoreCase(orderInfo.getTypD())
                     && orderInfo.getOznaceni_svf().toUpperCase().contains("INTERN")) ||
+
                     ("PD".equalsIgnoreCase(orderInfo.getTypD())
                             && orderInfo.getOznaceni_spd().toUpperCase().contains("INTERN"));
         }
@@ -142,6 +146,8 @@ public class InvoiceBuilder {
                 if (("KAR").equalsIgnoreCase(workInfo.getDruh_pp())) {
                     return true;
                 } else if (("LAK").equalsIgnoreCase(workInfo.getDruh_pp())) {
+                    return true;
+                } else if (("KLA").equalsIgnoreCase(workInfo.getDruh_pp())) {
                     return true;
                 }
             }
@@ -221,7 +227,8 @@ public class InvoiceBuilder {
         private BigDecimal buildSubtotalLabourBody() {
             BigDecimal subtotal = BigDecimal.ZERO;
             for (WorkInfo work : works) {
-                if ("KAR".equalsIgnoreCase(work.getDruh_pp())) {
+                if ("KAR".equalsIgnoreCase(work.getDruh_pp()) ||
+                        "KLA".equalsIgnoreCase(work.getDruh_pp())) {
                     subtotal = subtotal.add(work.getCenabdph());
                 }
             }
@@ -242,7 +249,8 @@ public class InvoiceBuilder {
             BigDecimal subtotal = BigDecimal.ZERO;
             for (WorkInfo work : works) {
                 if (!"LAK".equalsIgnoreCase(work.getDruh_pp()) &&
-                        !"KAR".equalsIgnoreCase(work.getDruh_pp())) {
+                        !"KAR".equalsIgnoreCase(work.getDruh_pp()) &&
+                        !"KLA".equalsIgnoreCase(work.getDruh_pp())) {
                     subtotal = subtotal.add(work.getCenabdph());
                 }
             }

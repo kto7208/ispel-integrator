@@ -25,6 +25,7 @@ public class OrderInfo {
 
     private String oznaceni_svf;
     private String oznaceni_spd;
+    private Integer interne;
 
 
     public String getDocumentGroup() {
@@ -161,5 +162,13 @@ public class OrderInfo {
 
     public void setOznaceni_spd(String oznaceni_spd) {
         this.oznaceni_spd = oznaceni_spd;
+    }
+
+    public Integer getInterne() {
+        return interne;
+    }
+
+    public void setInterne(Integer interne) {
+        this.interne = interne;
     }
 }

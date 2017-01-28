@@ -33,7 +33,7 @@ public class DmsDao {
     private static final String UPDATE_NISSAN_SITE_SEQUENCE_SQL = "update conf_ini set val=? where var='NISSAN_SITE_SEQUENCE'";
     private static final String GET_ICO_SQL = "select val from conf_ini where var='ICO'";
 
-    private static final String GET_ORDER_INFO_SQL = "select s.vfpd,s.skup_vfpd,s.kdy_uzav_doklad,s.typ_d,s.ci_reg,s.user_name,s.stav_tach,s.storno,s.forma_uhr,s.datum,s.reklam_c,s.ci_auto,s.celkem_sm,svf.oznaceni oznaceni_svf, spd.oznaceni oznaceni_spd from se_zakazky s" +
+    private static final String GET_ORDER_INFO_SQL = "select s.vfpd,s.skup_vfpd,s.kdy_uzav_doklad,s.typ_d,s.ci_reg,s.user_name,s.stav_tach,s.storno,s.forma_uhr,s.datum,s.reklam_c,s.ci_auto,s.celkem_sm,svf.oznaceni oznaceni_svf, spd.oznaceni oznaceni_spd,svf.interne from se_zakazky s" +
             " left outer join c_svf svf on svf.skvf=s.skup_vfpd" +
             " left outer join c_spd spd on spd.skpd=s.skup_vfpd" +
             " where zakazka=? and skupina=?";
@@ -44,12 +44,12 @@ public class DmsDao {
 
     private static final String GET_VEHICLE_INFO_SQL = "select spz,vin,vyrobce,model,dt_prod,dt_stk_nasl,dt_emis_nasl,tel from se_auta where ci_auto=?";
 
-    private static final String GET_WORK_INFO_SQL = "select s.pracpoz,s.popis_pp,s.nh,s.opakovani,s.cena,s.cena_bdph,s.pp_id,s.procento,s.druh_pp,p.m_prijmeni,p.m_jmeno,s.ostatni " +
+    private static final String GET_WORK_INFO_SQL = "select s.pracpoz,s.popis_pp,s.nh,s.opakovani,s.cena,s.cena_bdph,s.pp_id,s.procento,s.druh_pp,p.m_prijmeni,p.m_jmeno,s.ostatni,s.cena_jedn,s.hlavna_pp " +
                                                     "from se_zprace s " +
                                                     "left join pe_pracovnici p on p.uzivatelske_meno=s.user_name " +
                                                     "where s.zakazka=? and s.skupina=?";
 
-    private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad from se_zdily s " +
+    private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad,ms.cena_dopor from se_zdily s " +
             "left outer join mz_conf_sklad m on s.sklad=m.kod " +
             "left outer join mz_sklad ms on ms.sklad=s.sklad and ms.katalog=s.katalog " +
                                                     "where s.zakazka=? and s.skupina=?";
@@ -120,6 +120,7 @@ public class DmsDao {
                         orderInfo.setCelkem_sm(rs.getBigDecimal(13));
                         orderInfo.setOznaceni_svf(rs.getString(14));
                         orderInfo.setOznaceni_spd(rs.getString(15));
+                        orderInfo.setInterne(rs.getInt(16));
                         return orderInfo;
                     }
                 });
@@ -219,6 +220,8 @@ public class DmsDao {
             workInfo.setPrijmeni((String) row.get("m_prijmeni"));
             workInfo.setJmeno((String) row.get("m_jmeno"));
             workInfo.setOstatni((String) row.get("ostatni"));
+            workInfo.setCena_jednotkova((BigDecimal) row.get("cena_jedn"));
+            workInfo.setHlavna_pp((String) row.get("hlavna_pp"));
             works.add(workInfo);
         }
         return works;
@@ -247,6 +250,7 @@ public class DmsDao {
             partInfo.setDt_prijem((String) row.get("dt_prijem"));
             partInfo.setDruh_tovaru((String) row.get("druh_tovaru"));
             partInfo.setSklad((Long) row.get("sklad"));
+            partInfo.setCena_dopor((BigDecimal) row.get("cena_dopor"));
             parts.add(partInfo);
         }
         return parts;

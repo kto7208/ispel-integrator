@@ -23,6 +23,7 @@ public class PartInfo {
     private String druh_tovaru;
 
     private Long sklad;
+    private BigDecimal cena_dopor;
 
 
 
@@ -144,5 +145,13 @@ public class PartInfo {
 
     public void setSklad(Long sklad) {
         this.sklad = sklad;
+    }
+
+    public BigDecimal getCena_dopor() {
+        return cena_dopor;
+    }
+
+    public void setCena_dopor(BigDecimal cena_dopor) {
+        this.cena_dopor = cena_dopor;
     }
 }

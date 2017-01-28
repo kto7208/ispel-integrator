@@ -153,7 +153,8 @@ public class RepairOrdersBuilder {
 
         private boolean buildBodyshop(WorkInfo workInfo) {
             if ("KAR".equalsIgnoreCase(workInfo.getDruh_pp()) ||
-                    "LAK".equalsIgnoreCase(workInfo.getDruh_pp())) {
+                    "LAK".equalsIgnoreCase(workInfo.getDruh_pp()) ||
+                    "KLA".equalsIgnoreCase(workInfo.getDruh_pp())) {
                 return true;
             } else {
                 return false;

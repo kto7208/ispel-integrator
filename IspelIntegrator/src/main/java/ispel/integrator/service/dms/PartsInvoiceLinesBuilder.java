@@ -45,9 +45,9 @@ public class PartsInvoiceLinesBuilder {
                 part.setPartNumber(partInfo.getKatalog());
                 line.setPart(part);
                 line.setQuantity(partInfo.getMnozstvi());
-                line.setUnitCost(partInfo.getCena_skl());
+                line.setTotalCost(partInfo.getCena_skl().multiply(partInfo.getMnozstvi()));
                 line.setTotalPrice(partInfo.getCena_bdp());
-                line.setUnitListPrice(partInfo.getCena_prodej());
+                line.setTotalListPrice(partInfo.getCena_dopor().multiply(partInfo.getMnozstvi()));
                 lines.add(line);
             }
             return lines.toArray(new PartsInvoiceLine[lines.size()]);

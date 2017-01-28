@@ -85,9 +85,9 @@ public class VehicleBuilder {
             vehicleUser.setName(buildName());
             vehicleUser.setAddress(buildCustomerAddress());
             vehicleUser.setPostcode(customerInfo.getPsc());
-            vehicleUser.setPrivatePhone(customerInfo.getTel());
-            vehicleUser.setBusinessPhone(vehicleInfo.getTel());
-            vehicleUser.setMobilePhone(customerInfo.getSms());
+            vehicleUser.setPrivatePhone(buildPrivatePhone());
+            vehicleUser.setBusinessPhone(buildBusinessPhone());
+            vehicleUser.setMobilePhone(buildMobilePhone());
             vehicleUser.setEmail(customerInfo.getEmail());
             vehicleUser.setDateOfBirth(buildDateOfBirth());
             vehicle.setVehicleUser(vehicleUser);
@@ -176,6 +176,42 @@ public class VehicleBuilder {
                     .append("-")
                     .append(orderInfo.getDocumentGroup())
                     .toString();
+        }
+
+        private String buildPrivatePhone() {
+            if (customerInfo.getTel() != null && customerInfo.getTel().trim().length() > 0) {
+                return customerInfo.getTel().trim();
+            } else if (customerInfo.getSms() != null && customerInfo.getSms().trim().length() > 0) {
+                return customerInfo.getSms().trim();
+            } else if (vehicleInfo.getTel() != null && vehicleInfo.getTel().trim().length() > 0) {
+                return vehicleInfo.getTel().trim();
+            } else {
+                return null;
+            }
+        }
+
+        private String buildBusinessPhone() {
+            if (vehicleInfo.getTel() != null && vehicleInfo.getTel().trim().length() > 0) {
+                return vehicleInfo.getTel().trim();
+            } else if (customerInfo.getTel() != null && customerInfo.getTel().trim().length() > 0) {
+                return customerInfo.getTel().trim();
+            } else if (customerInfo.getSms() != null && customerInfo.getSms().trim().length() > 0) {
+                return customerInfo.getSms().trim();
+            } else {
+                return null;
+            }
+        }
+
+        private String buildMobilePhone() {
+            if (customerInfo.getSms() != null && customerInfo.getSms().trim().length() > 0) {
+                return customerInfo.getSms().trim();
+            } else if (customerInfo.getTel() != null && customerInfo.getTel().trim().length() > 0) {
+                return customerInfo.getTel().trim();
+            } else if (vehicleInfo.getTel() != null && vehicleInfo.getTel().trim().length() > 0) {
+                return vehicleInfo.getTel().trim();
+            } else {
+                return null;
+            }
         }
     }
 }
