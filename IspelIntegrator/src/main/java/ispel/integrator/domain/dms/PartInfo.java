@@ -24,6 +24,7 @@ public class PartInfo {
 
     private Long sklad;
     private BigDecimal cena_dopor;
+    private String ostatni;
 
 
 
@@ -153,5 +154,13 @@ public class PartInfo {
 
     public void setCena_dopor(BigDecimal cena_dopor) {
         this.cena_dopor = cena_dopor;
+    }
+
+    public String getOstatni() {
+        return ostatni;
+    }
+
+    public void setOstatni(String ostatni) {
+        this.ostatni = ostatni;
     }
 }

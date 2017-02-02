@@ -64,7 +64,7 @@ public class InvoiceBuilder {
 
             Customer customer = new Customer();
             customer.setAccount(this.customerInfo.getCi_reg());
-            customer.setType(this.customerInfo.getTyp());
+            customer.setType(buildCustomerType());
             customer.setVATNumber(this.customerInfo.getIcdph());
             customer.setName(buildName());
             customer.setAddress(buildCustomerAddress());
@@ -96,6 +96,18 @@ public class InvoiceBuilder {
             invoiceSummary.setSubtotalSubcontract(subtotalSubcontract);
             invoice.setInvoiceSummary(invoiceSummary);
             return invoice;
+        }
+
+        private String buildCustomerType() {
+            if ("0".equals(this.customerInfo.getTyp())) {
+                return "physical person";
+            } else if ("1".equals(customerInfo.getTyp())) {
+                return "legal entity";
+            } else if ("2".equals(customerInfo.getTyp())) {
+                return "self-employed person";
+            } else {
+                throw new IllegalStateException("wrong customer type");
+            }
         }
 
         private String buildId() {
@@ -197,7 +209,8 @@ public class InvoiceBuilder {
 
         private MarketingInformationType buildUseForMarketing() {
             if ("1".equalsIgnoreCase(this.customerInfo.getEmail_souhlas()) ||
-                    "1".equalsIgnoreCase(this.customerInfo.getSms_souhlas())) {
+                    "1".equalsIgnoreCase(this.customerInfo.getSms_souhlas()) ||
+                    "1".equalsIgnoreCase(customerInfo.getSouhlas())) {
                 return MarketingInformationType.Y;
             } else {
                 return MarketingInformationType.N;

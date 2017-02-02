@@ -91,7 +91,7 @@ public class RepairOrdersBuilder {
                     lr.setIsBodyshop(buildBodyshop(workInfo));
                     lr.setIsElectrical(buildElectrical(workInfo));
                     lr.setCode(workInfo.getPracpoz());
-                    lr.setQuantity(workInfo.getNh());
+                    lr.setQuantity(workInfo.getNh().multiply(workInfo.getOpakovani()));
                     map.put(workInfo.getPp_id(), lr);
                     labourRecords.add(lr);
                 }

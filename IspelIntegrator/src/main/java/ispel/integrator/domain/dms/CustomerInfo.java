@@ -19,6 +19,7 @@ public class CustomerInfo {
     private String sms;
     private String email;
     private String dat_nar;
+    private String souhlas;
 
     public String getCi_reg() {
         return ci_reg;
@@ -154,5 +155,13 @@ public class CustomerInfo {
 
     public void setDat_nar(String dat_nar) {
         this.dat_nar = dat_nar;
+    }
+
+    public String getSouhlas() {
+        return souhlas;
+    }
+
+    public void setSouhlas(String souhlas) {
+        this.souhlas = souhlas;
     }
 }

@@ -38,7 +38,7 @@ public class DmsDao {
             " left outer join c_spd spd on spd.skpd=s.skup_vfpd" +
             " where zakazka=? and skupina=?";
 
-    private static final String GET_CUSTOMER_INFO_SQL = "select typ,icdph,organizace,prijmeni,jmeno,titul,ulice,mesto,stat1,psc,email_souhlas,sms_souhlas,tel,sms,email,dt_nar from odber where ci_reg=?";
+    private static final String GET_CUSTOMER_INFO_SQL = "select typ,icdph,organizace,prijmeni,jmeno,titul,ulice,mesto,stat1,psc,email_souhlas,sms_souhlas,tel,sms,email,dt_nar,souhlas from odber where ci_reg=?";
 
     private static final String GET_EMPLOYEE_INFO_SQL = "select  m_prijmeni,m_jmeno from pe_pracovnici where uzivatelske_meno=?";
 
@@ -49,7 +49,7 @@ public class DmsDao {
                                                     "left join pe_pracovnici p on p.uzivatelske_meno=s.user_name " +
                                                     "where s.zakazka=? and s.skupina=?";
 
-    private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad,ms.cena_dopor from se_zdily s " +
+    private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad,ms.cena_dopor,s.ostatni from se_zdily s " +
             "left outer join mz_conf_sklad m on s.sklad=m.kod " +
             "left outer join mz_sklad ms on ms.sklad=s.sklad and ms.katalog=s.katalog " +
                                                     "where s.zakazka=? and s.skupina=?";
@@ -151,6 +151,7 @@ public class DmsDao {
                         customerInfo.setSms(rs.getString(14));
                         customerInfo.setEmail(rs.getString(15));
                         customerInfo.setDat_nar(rs.getString(16));
+                        customerInfo.setSouhlas(rs.getString(17));
                         return customerInfo;
                     }
                 });
@@ -251,6 +252,7 @@ public class DmsDao {
             partInfo.setDruh_tovaru((String) row.get("druh_tovaru"));
             partInfo.setSklad((Long) row.get("sklad"));
             partInfo.setCena_dopor((BigDecimal) row.get("cena_dopor"));
+            partInfo.setOstatni((String) row.get("ostatni"));
             parts.add(partInfo);
         }
         return parts;

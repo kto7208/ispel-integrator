@@ -59,6 +59,9 @@ public class OrderBuilderDirector {
     private ServiceInvoiceLinesBuilder serviceInvoiceLinesBuilder;
 
     @Autowired
+    private OtherInvoiceLinesBuilder otherInvoiceLinesBuilder;
+
+    @Autowired
     private PartsInvoiceLinesBuilder partsInvoiceLinesBuilder;
 
     @Autowired
@@ -97,12 +100,18 @@ public class OrderBuilderDirector {
                 .withWorks(works)
                 .build();
 
+        OtherInvoiceLine[] otherInvoiceLines = otherInvoiceLinesBuilder.newInstance()
+                .withOrderInfo(orderInfo)
+                .withWorks(works)
+                .build();
+
         Vehicle vehicle = vehicleBuilder.newInstance()
                 .withVehicleInfo(vehicleInfo)
                 .withCustomerInfo(customerInfo)
                 .withOrderInfo(orderInfo)
                 .withPartsInvoiceLines(partsInvoiceLines)
                 .withServiceInvoiceLines(serviceInvoiceLines)
+                .withOtherInvoiceLines(otherInvoiceLines)
                 .build();
 
         Invoice invoice = invoiceBuilder.newInstance()

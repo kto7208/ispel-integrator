@@ -32,6 +32,7 @@ public class VehicleBuilder {
 
         private ServiceInvoiceLine[] serviceInvoiceLines;
         private PartsInvoiceLine[] partsInvoiceLines;
+        private OtherInvoiceLine[] otherInvoiceLines;
 
         private VehicleInfo vehicleInfo;
         private OrderInfo orderInfo;
@@ -42,6 +43,11 @@ public class VehicleBuilder {
 
         public Builder withServiceInvoiceLines(ServiceInvoiceLine[] serviceInvoiceLines) {
             this.serviceInvoiceLines = serviceInvoiceLines;
+            return this;
+        }
+
+        public Builder withOtherInvoiceLines(OtherInvoiceLine[] otherInvoiceLines) {
+            this.otherInvoiceLines = otherInvoiceLines;
             return this;
         }
 
@@ -99,6 +105,7 @@ public class VehicleBuilder {
             vehicle.getJobReference().add(buildJobReference());
             vehicle.getPartsInvoiceLineOrServiceInvoiceLineOrOtherInvoiceLine().addAll(Arrays.asList(serviceInvoiceLines));
             vehicle.getPartsInvoiceLineOrServiceInvoiceLineOrOtherInvoiceLine().addAll(Arrays.asList(partsInvoiceLines));
+            vehicle.getPartsInvoiceLineOrServiceInvoiceLineOrOtherInvoiceLine().addAll(Arrays.asList(otherInvoiceLines));
             return vehicle;
         }
 
@@ -153,11 +160,15 @@ public class VehicleBuilder {
         }
 
         private String buildName() {
-            return new StringBuilder()
-                    .append(customerInfo.getPrijmeni())
-                    .append(" ")
-                    .append(customerInfo.getJmeno())
-                    .toString();
+            if (customerInfo.getOrganizace() != null && customerInfo.getOrganizace().length() > 0) {
+                return customerInfo.getOrganizace();
+            } else {
+                return new StringBuilder()
+                        .append(customerInfo.getPrijmeni())
+                        .append(" ")
+                        .append(customerInfo.getJmeno())
+                        .toString();
+            }
         }
 
         private Address buildCustomerAddress() {

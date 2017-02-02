@@ -1,7 +1,6 @@
 package ispel.integrator.service.dms;
 
-import generated.MainOperationType;
-import generated.ServiceInvoiceLine;
+import generated.OtherInvoiceLine;
 import ispel.integrator.domain.dms.OrderInfo;
 import ispel.integrator.domain.dms.WorkInfo;
 import org.springframework.stereotype.Component;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class ServiceInvoiceLinesBuilder {
+public class OtherInvoiceLinesBuilder {
 
     public class Builder {
 
@@ -23,33 +22,29 @@ public class ServiceInvoiceLinesBuilder {
         private Builder() {
         }
 
-        public Builder withWorks(List<WorkInfo> works) {
+        public OtherInvoiceLinesBuilder.Builder withWorks(List<WorkInfo> works) {
             this.works = works;
             return this;
         }
 
-        public Builder withOrderInfo(OrderInfo orderInfo) {
+        public OtherInvoiceLinesBuilder.Builder withOrderInfo(OrderInfo orderInfo) {
             this.orderInfo = orderInfo;
             return this;
         }
 
-
-        public ServiceInvoiceLine[] build() {
+        public OtherInvoiceLine[] build() {
             if (works == null) {
                 throw new IllegalStateException("works is null");
             }
             if (orderInfo == null) {
                 throw new IllegalStateException("orderInfo is null");
             }
-            Map<Long, ServiceInvoiceLine> map = new HashMap<Long, ServiceInvoiceLine>();
-            List<ServiceInvoiceLine> lines = new ArrayList<ServiceInvoiceLine>();
+            Map<Long, OtherInvoiceLine> map = new HashMap<Long, OtherInvoiceLine>();
+            List<OtherInvoiceLine> lines = new ArrayList<OtherInvoiceLine>();
             for (WorkInfo workInfo : works) {
-                ServiceInvoiceLine line = null;
-                if (!"A".equalsIgnoreCase(workInfo.getOstatni())) {
-                    line = map.get(workInfo.getPp_id());
-                }
-                if (line == null) {
-                    line = new ServiceInvoiceLine();
+                if ("A".equalsIgnoreCase(workInfo.getOstatni()) &&
+                        !"A".equalsIgnoreCase(workInfo.getHlavna_pp())) {
+                    OtherInvoiceLine line = new OtherInvoiceLine();
                     line.setTotalPrice(buildTotalPrice(workInfo));
                     line.setTotalCost(buildTotalCost(workInfo));
                     line.setTotalListPrice(buildTotalListPrice(workInfo));
@@ -57,36 +52,26 @@ public class ServiceInvoiceLinesBuilder {
                     line.setCode(workInfo.getPracpoz());
                     line.setDescription(workInfo.getPopis_pp());
                     line.setQuantity(buildQuantity(workInfo));
-                    line.setMainOperation(buildMainOperation(workInfo));
-                    map.put(workInfo.getPp_id(), line);
                     lines.add(line);
                 }
             }
-            return lines.toArray(new ServiceInvoiceLine[lines.size()]);
+            return lines.toArray(new OtherInvoiceLine[lines.size()]);
         }
 
         private String buildType(WorkInfo workInfo) {
             /*
-           if ("PP".equalsIgnoreCase(orderInfo.getForma_uhr())) {
-               return "invoice";
-           } else if ("A".equalsIgnoreCase(orderInfo.getStorno())){
-               return "return";
-           } else {
-               return "credit";
-           }
-           */
+            if ("PP".equalsIgnoreCase(orderInfo.getForma_uhr())) {
+                return "invoice";
+            } else if ("A".equalsIgnoreCase(orderInfo.getStorno())){
+                return "return";
+            } else {
+                return "credit";
+            }
+            */
             if ("A".equalsIgnoreCase(orderInfo.getStorno())) {
                 return "credit";
             } else {
                 return "invoice";
-            }
-        }
-
-        private MainOperationType buildMainOperation(WorkInfo workInfo) {
-            if ("A".equalsIgnoreCase(workInfo.getHlavna_pp())) {
-                return MainOperationType.Y;
-            } else {
-                return MainOperationType.N;
             }
         }
 
@@ -108,7 +93,7 @@ public class ServiceInvoiceLinesBuilder {
 
     }
 
-    public ServiceInvoiceLinesBuilder.Builder newInstance() {
+    public OtherInvoiceLinesBuilder.Builder newInstance() {
         return new Builder();
     }
 }

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ispel.integrator</groupId>
 	<artifactId>IspelIntegrator</artifactId>
-	<version>1.0.2</version>
+	<version>1.0.3</version>
 	<name>Ispel Integrator</name>
 	<description>Ispel WS Integration</description>
 

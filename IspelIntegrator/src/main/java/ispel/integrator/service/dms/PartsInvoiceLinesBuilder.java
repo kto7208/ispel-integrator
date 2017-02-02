@@ -6,6 +6,7 @@ import ispel.integrator.domain.dms.OrderInfo;
 import ispel.integrator.domain.dms.PartInfo;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,15 +46,31 @@ public class PartsInvoiceLinesBuilder {
                 part.setPartNumber(partInfo.getKatalog());
                 line.setPart(part);
                 line.setQuantity(partInfo.getMnozstvi());
-                line.setTotalCost(partInfo.getCena_skl().multiply(partInfo.getMnozstvi()));
+                line.setTotalCost(buildTotalCost(partInfo));
                 line.setTotalPrice(partInfo.getCena_bdp());
-                line.setTotalListPrice(partInfo.getCena_dopor().multiply(partInfo.getMnozstvi()));
+                line.setTotalListPrice(buildTotalListPrice(partInfo));
                 lines.add(line);
             }
             return lines.toArray(new PartsInvoiceLine[lines.size()]);
         }
 
+        private BigDecimal buildTotalCost(PartInfo partInfo) {
+            if ("A".equalsIgnoreCase(partInfo.getOstatni())) {
+                return partInfo.getCena_bdp().multiply(partInfo.getMnozstvi());
+            } else {
+                return partInfo.getCena_skl().multiply(partInfo.getMnozstvi());
+            }
+        }
+
+        private BigDecimal buildTotalListPrice(PartInfo partInfo) {
+            if ("A".equalsIgnoreCase(partInfo.getOstatni())) {
+                return partInfo.getCena_bdp().multiply(partInfo.getMnozstvi());
+            } else {
+                return partInfo.getCena_dopor().multiply(partInfo.getMnozstvi());
+            }
+        }
         private String buildType() {
+            /*
             if ("PP".equalsIgnoreCase(orderInfo.getForma_uhr())) {
                 return "invoice";
             } else if ("A".equalsIgnoreCase(orderInfo.getStorno())) {
@@ -61,6 +78,13 @@ public class PartsInvoiceLinesBuilder {
             } else {
                 return "credit";
             }
+            */
+            if ("A".equalsIgnoreCase(orderInfo.getStorno())) {
+                return "credit";
+            } else {
+                return "invoice";
+            }
+
         }
     }
 
