@@ -99,11 +99,11 @@ public class InvoiceBuilder {
         }
 
         private String buildCustomerType() {
-            if ("0".equals(this.customerInfo.getTyp())) {
+            if (Integer.valueOf("0").equals(customerInfo.getForma())) {
                 return "physical person";
-            } else if ("1".equals(customerInfo.getTyp())) {
+            } else if (Integer.valueOf("1").equals(customerInfo.getForma())) {
                 return "legal entity";
-            } else if ("2".equals(customerInfo.getTyp())) {
+            } else if (Integer.valueOf("2").equals(customerInfo.getForma())) {
                 return "self-employed person";
             } else {
                 throw new IllegalStateException("wrong customer type");

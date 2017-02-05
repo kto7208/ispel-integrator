@@ -20,6 +20,7 @@ public class CustomerInfo {
     private String email;
     private String dat_nar;
     private String souhlas;
+    private Integer forma;
 
     public String getCi_reg() {
         return ci_reg;
@@ -163,5 +164,13 @@ public class CustomerInfo {
 
     public void setSouhlas(String souhlas) {
         this.souhlas = souhlas;
+    }
+
+    public Integer getForma() {
+        return forma;
+    }
+
+    public void setForma(Integer forma) {
+        this.forma = forma;
     }
 }

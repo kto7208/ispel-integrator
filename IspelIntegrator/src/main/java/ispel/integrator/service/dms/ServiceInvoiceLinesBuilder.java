@@ -44,22 +44,27 @@ public class ServiceInvoiceLinesBuilder {
             Map<Long, ServiceInvoiceLine> map = new HashMap<Long, ServiceInvoiceLine>();
             List<ServiceInvoiceLine> lines = new ArrayList<ServiceInvoiceLine>();
             for (WorkInfo workInfo : works) {
-                ServiceInvoiceLine line = null;
-                if (!"A".equalsIgnoreCase(workInfo.getOstatni())) {
-                    line = map.get(workInfo.getPp_id());
-                }
-                if (line == null) {
-                    line = new ServiceInvoiceLine();
-                    line.setTotalPrice(buildTotalPrice(workInfo));
-                    line.setTotalCost(buildTotalCost(workInfo));
-                    line.setTotalListPrice(buildTotalListPrice(workInfo));
-                    line.setType(buildType(workInfo));
-                    line.setCode(workInfo.getPracpoz());
-                    line.setDescription(workInfo.getPopis_pp());
-                    line.setQuantity(buildQuantity(workInfo));
-                    line.setMainOperation(buildMainOperation(workInfo));
-                    map.put(workInfo.getPp_id(), line);
-                    lines.add(line);
+                if (!"A".equalsIgnoreCase(workInfo.getOstatni()) ||
+                        ("A".equalsIgnoreCase(workInfo.getOstatni()) &&
+                                "A".equalsIgnoreCase(workInfo.getVlastna_pp()))) {
+                    ServiceInvoiceLine line = null;
+                    if (!"A".equalsIgnoreCase(workInfo.getOstatni())) {
+                        line = map.get(workInfo.getPp_id());
+                    }
+                    if (line == null) {
+                        line = new ServiceInvoiceLine();
+                        line.setTotalPrice(BigDecimal.ZERO);
+                        line.setTotalCost(buildTotalCost(workInfo));
+                        line.setTotalListPrice(buildTotalListPrice(workInfo));
+                        line.setType(buildType(workInfo));
+                        line.setCode(workInfo.getPracpoz());
+                        line.setDescription(workInfo.getPopis_pp());
+                        line.setQuantity(buildQuantity(workInfo));
+                        line.setMainOperation(buildMainOperation(workInfo));
+                        map.put(workInfo.getPp_id(), line);
+                        lines.add(line);
+                    }
+                    line.setTotalPrice(line.getTotalPrice().add(workInfo.getCenabdph()));
                 }
             }
             return lines.toArray(new ServiceInvoiceLine[lines.size()]);
@@ -96,10 +101,6 @@ public class ServiceInvoiceLinesBuilder {
 
         private BigDecimal buildTotalCost(WorkInfo workInfo) {
             return workInfo.getCena().multiply(workInfo.getNh()).multiply(workInfo.getOpakovani());
-        }
-
-        private BigDecimal buildTotalPrice(WorkInfo workInfo) {
-            return workInfo.getCenabdph();
         }
 
         private BigDecimal buildTotalListPrice(WorkInfo workInfo) {

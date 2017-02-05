@@ -5,6 +5,7 @@ import generated.PtStk;
 import ispel.integrator.domain.dms.PartInfo;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -47,14 +48,27 @@ public class PartsStkBuilder {
                 }
                 PtStk ptStk = new PtStk();
                 ptStk.setNum(partInfo.getKatalog());
-                ptStk.setQty(partInfo.getPocet());
+                ptStk.setQty(buildQty(partInfo));
                 ptStk.setQtyOnOrder(partInfo.getMnozstvi());
                 ptStk.setLastOutDate(buildLastOutDate(partInfo));
                 ptStk.setLastInDate(buildLastInDate(partInfo));
-                ptStk.setUnitCost(partInfo.getCena_nakup());
+                ptStk.setUnitCost(buildUniCost(partInfo));
                 partsStk.getPtStk().add(ptStk);
             }
             return map.values().toArray(new PartsStk[partsStkList.size()]);
+        }
+
+        private BigDecimal buildUniCost(PartInfo partInfo) {
+            if ("A".equalsIgnoreCase(partInfo.getOstatni())) {
+                return partInfo.getCena_skl() == null || BigDecimal.ZERO.equals(partInfo.getCena_skl()) ?
+                        partInfo.getCena_prodej() : partInfo.getCena_skl();
+            }
+            return partInfo.getCena_nakup();
+        }
+
+        private BigDecimal buildQty(PartInfo partInfo) {
+            return partInfo.getPocet() == null ?
+                    BigDecimal.ZERO : partInfo.getPocet();
         }
 
         private String buildFranchiseName(PartInfo partInfo) {

@@ -56,7 +56,11 @@ public class PartsInvoiceLinesBuilder {
 
         private BigDecimal buildTotalCost(PartInfo partInfo) {
             if ("A".equalsIgnoreCase(partInfo.getOstatni())) {
-                return partInfo.getCena_bdp().multiply(partInfo.getMnozstvi());
+                if (BigDecimal.ZERO.equals(partInfo.getCena_skl())) {
+                    return partInfo.getCena_bdp();
+                } else {
+                    return partInfo.getCena_skl().multiply(partInfo.getMnozstvi());
+                }
             } else {
                 return partInfo.getCena_skl().multiply(partInfo.getMnozstvi());
             }
@@ -64,7 +68,7 @@ public class PartsInvoiceLinesBuilder {
 
         private BigDecimal buildTotalListPrice(PartInfo partInfo) {
             if ("A".equalsIgnoreCase(partInfo.getOstatni())) {
-                return partInfo.getCena_bdp().multiply(partInfo.getMnozstvi());
+                return partInfo.getCena_bdp();
             } else {
                 return partInfo.getCena_dopor().multiply(partInfo.getMnozstvi());
             }

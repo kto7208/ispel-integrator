@@ -38,13 +38,13 @@ public class DmsDao {
             " left outer join c_spd spd on spd.skpd=s.skup_vfpd" +
             " where zakazka=? and skupina=?";
 
-    private static final String GET_CUSTOMER_INFO_SQL = "select typ,icdph,organizace,prijmeni,jmeno,titul,ulice,mesto,stat1,psc,email_souhlas,sms_souhlas,tel,sms,email,dt_nar,souhlas from odber where ci_reg=?";
+    private static final String GET_CUSTOMER_INFO_SQL = "select typ,icdph,organizace,prijmeni,jmeno,titul,ulice,mesto,stat1,psc,email_souhlas,sms_souhlas,tel,sms,email,dt_nar,souhlas,forma from odber where ci_reg=?";
 
     private static final String GET_EMPLOYEE_INFO_SQL = "select  m_prijmeni,m_jmeno from pe_pracovnici where uzivatelske_meno=?";
 
     private static final String GET_VEHICLE_INFO_SQL = "select spz,vin,vyrobce,model,dt_prod,dt_stk_nasl,dt_emis_nasl,tel from se_auta where ci_auto=?";
 
-    private static final String GET_WORK_INFO_SQL = "select s.pracpoz,s.popis_pp,s.nh,s.opakovani,s.cena,s.cena_bdph,s.pp_id,s.procento,s.druh_pp,p.m_prijmeni,p.m_jmeno,s.ostatni,s.cena_jedn,s.hlavna_pp " +
+    private static final String GET_WORK_INFO_SQL = "select s.pracpoz,s.popis_pp,s.nh,s.opakovani,s.cena,s.cena_bdph,s.pp_id,s.procento,s.druh_pp,p.m_prijmeni,p.m_jmeno,s.ostatni,s.cena_jedn,s.hlavna_pp,s.vlastna_pp " +
                                                     "from se_zprace s " +
                                                     "left join pe_pracovnici p on p.uzivatelske_meno=s.user_name " +
                                                     "where s.zakazka=? and s.skupina=?";
@@ -152,6 +152,7 @@ public class DmsDao {
                         customerInfo.setEmail(rs.getString(15));
                         customerInfo.setDat_nar(rs.getString(16));
                         customerInfo.setSouhlas(rs.getString(17));
+                        customerInfo.setForma(rs.getInt(18));
                         return customerInfo;
                     }
                 });
@@ -223,6 +224,7 @@ public class DmsDao {
             workInfo.setOstatni((String) row.get("ostatni"));
             workInfo.setCena_jednotkova((BigDecimal) row.get("cena_jedn"));
             workInfo.setHlavna_pp((String) row.get("hlavna_pp"));
+            workInfo.setVlastna_pp((String) row.get("vlastna_pp"));
             works.add(workInfo);
         }
         return works;

@@ -43,7 +43,7 @@ public class OtherInvoiceLinesBuilder {
             List<OtherInvoiceLine> lines = new ArrayList<OtherInvoiceLine>();
             for (WorkInfo workInfo : works) {
                 if ("A".equalsIgnoreCase(workInfo.getOstatni()) &&
-                        !"A".equalsIgnoreCase(workInfo.getHlavna_pp())) {
+                        !"A".equalsIgnoreCase(workInfo.getVlastna_pp())) {
                     OtherInvoiceLine line = new OtherInvoiceLine();
                     line.setTotalPrice(buildTotalPrice(workInfo));
                     line.setTotalCost(buildTotalCost(workInfo));
