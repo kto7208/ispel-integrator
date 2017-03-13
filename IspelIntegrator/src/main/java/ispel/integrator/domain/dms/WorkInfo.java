@@ -163,4 +163,8 @@ public class WorkInfo {
     public void setVlastna_pp(String vlastna_pp) {
         this.vlastna_pp = vlastna_pp;
     }
+
+    public boolean isOther() {
+        return "A".equals(ostatni) && !"A".equalsIgnoreCase(vlastna_pp);
+    }
 }

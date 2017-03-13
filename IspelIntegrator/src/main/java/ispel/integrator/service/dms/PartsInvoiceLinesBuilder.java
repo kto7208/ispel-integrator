@@ -56,7 +56,7 @@ public class PartsInvoiceLinesBuilder {
 
         private BigDecimal buildTotalCost(PartInfo partInfo) {
             if ("A".equalsIgnoreCase(partInfo.getOstatni())) {
-                if (BigDecimal.ZERO.equals(partInfo.getCena_skl())) {
+                if (BigDecimal.ZERO.compareTo(partInfo.getCena_skl()) == 0) {
                     return partInfo.getCena_bdp();
                 } else {
                     return partInfo.getCena_skl().multiply(partInfo.getMnozstvi());

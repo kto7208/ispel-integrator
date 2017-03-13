@@ -60,7 +60,7 @@ public class PartsStkBuilder {
 
         private BigDecimal buildUniCost(PartInfo partInfo) {
             if ("A".equalsIgnoreCase(partInfo.getOstatni())) {
-                return partInfo.getCena_skl() == null || BigDecimal.ZERO.equals(partInfo.getCena_skl()) ?
+                return partInfo.getCena_skl() == null || BigDecimal.ZERO.compareTo(partInfo.getCena_skl()) == 0 ?
                         partInfo.getCena_prodej() : partInfo.getCena_skl();
             }
             return partInfo.getCena_nakup();
