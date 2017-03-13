@@ -68,12 +68,20 @@ public class OtherInvoiceLinesBuilder {
                 return "credit";
             }
             */
+            /*
             if ("A".equalsIgnoreCase(orderInfo.getStorno())) {
                 return "credit";
             } else {
                 return "invoice";
             }
+            */
+            if (workInfo.getCena().compareTo(BigDecimal.ZERO) >= 0) {
+                return "invoice";
+            } else {
+                return "credit";
+            }
         }
+
 
         private BigDecimal buildQuantity(WorkInfo workInfo) {
             return workInfo.getNh().multiply(workInfo.getOpakovani());

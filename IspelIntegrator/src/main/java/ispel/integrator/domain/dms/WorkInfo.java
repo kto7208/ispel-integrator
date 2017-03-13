@@ -167,4 +167,8 @@ public class WorkInfo {
     public boolean isOther() {
         return "A".equals(ostatni) && !"A".equalsIgnoreCase(vlastna_pp);
     }
+
+    public boolean isHlavna() {
+        return "A".equalsIgnoreCase(hlavna_pp);
+    }
 }

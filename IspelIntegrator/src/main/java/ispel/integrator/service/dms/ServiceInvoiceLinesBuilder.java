@@ -80,10 +80,17 @@ public class ServiceInvoiceLinesBuilder {
                return "credit";
            }
            */
+            /*
             if ("A".equalsIgnoreCase(orderInfo.getStorno())) {
                 return "credit";
             } else {
                 return "invoice";
+            }
+            */
+            if (workInfo.getCena().compareTo(BigDecimal.ZERO) >= 0) {
+                return "invoice";
+            } else {
+                return "credit";
             }
         }
 

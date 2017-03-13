@@ -38,7 +38,7 @@ public class PartsInvoiceLinesBuilder {
             List<PartsInvoiceLine> lines = new ArrayList<PartsInvoiceLine>();
             for (PartInfo partInfo : parts) {
                 PartsInvoiceLine line = new PartsInvoiceLine();
-                line.setType(buildType());
+                line.setType(buildType(partInfo));
                 Part part = new Part();
                 part.setFranchiseName(partInfo.getKatalog());
                 part.setFranchiseName(partInfo.getNazov_p1());
@@ -73,7 +73,8 @@ public class PartsInvoiceLinesBuilder {
                 return partInfo.getCena_dopor().multiply(partInfo.getMnozstvi());
             }
         }
-        private String buildType() {
+
+        private String buildType(PartInfo partInfo) {
             /*
             if ("PP".equalsIgnoreCase(orderInfo.getForma_uhr())) {
                 return "invoice";
@@ -83,12 +84,18 @@ public class PartsInvoiceLinesBuilder {
                 return "credit";
             }
             */
+            /*
             if ("A".equalsIgnoreCase(orderInfo.getStorno())) {
                 return "credit";
             } else {
                 return "invoice";
             }
-
+            */
+            if (partInfo.getCena_bdp().compareTo(BigDecimal.ZERO) >= 0) {
+                return "invoice";
+            } else {
+                return "credit";
+            }
         }
     }
 

@@ -47,12 +47,12 @@ public class DmsDao {
     private static final String GET_WORK_INFO_SQL = "select s.pracpoz,s.popis_pp,s.nh,s.opakovani,s.cena,s.cena_bdph,s.pp_id,s.procento,s.druh_pp,p.m_prijmeni,p.m_jmeno,s.ostatni,s.cena_jedn,s.hlavna_pp,s.vlastna_pp " +
                                                     "from se_zprace s " +
                                                     "left join pe_pracovnici p on p.uzivatelske_meno=s.user_name " +
-                                                    "where s.zakazka=? and s.skupina=?";
+            "where s.fakturovat=1 and s.zakazka=? and s.skupina=?";
 
     private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad,ms.cena_dopor,s.ostatni from se_zdily s " +
             "left outer join mz_conf_sklad m on s.sklad=m.kod " +
             "left outer join mz_sklad ms on ms.sklad=s.sklad and ms.katalog=s.katalog " +
-                                                    "where s.zakazka=? and s.skupina=?";
+            "where s.fakturovat=1 and s.zakazka=? and s.skupina=?";
 
     private static final String GET_DESCRIPTION_INFO_SQL = "select popis,poradi from se_popisopr where zakazka=? and skupina=? order by poradi asc";
 

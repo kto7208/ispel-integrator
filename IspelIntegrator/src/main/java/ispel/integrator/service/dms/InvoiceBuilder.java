@@ -155,11 +155,11 @@ public class InvoiceBuilder {
 
         private boolean isBodyshop() {
             for (WorkInfo workInfo : works) {
-                if (("KAR").equalsIgnoreCase(workInfo.getDruh_pp())) {
+                if (workInfo.isHlavna() && ("KAR").equalsIgnoreCase(workInfo.getDruh_pp())) {
                     return true;
-                } else if (("LAK").equalsIgnoreCase(workInfo.getDruh_pp())) {
+                } else if (workInfo.isHlavna() && ("LAK").equalsIgnoreCase(workInfo.getDruh_pp())) {
                     return true;
-                } else if (("KLA").equalsIgnoreCase(workInfo.getDruh_pp())) {
+                } else if (workInfo.isHlavna() && ("KLA").equalsIgnoreCase(workInfo.getDruh_pp())) {
                     return true;
                 }
             }
