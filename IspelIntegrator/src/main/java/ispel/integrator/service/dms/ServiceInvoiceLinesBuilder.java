@@ -87,7 +87,7 @@ public class ServiceInvoiceLinesBuilder {
                 return "invoice";
             }
             */
-            if (workInfo.getCena().compareTo(BigDecimal.ZERO) >= 0) {
+            if (workInfo.getCenabdph().compareTo(BigDecimal.ZERO) >= 0) {
                 return "invoice";
             } else {
                 return "credit";
