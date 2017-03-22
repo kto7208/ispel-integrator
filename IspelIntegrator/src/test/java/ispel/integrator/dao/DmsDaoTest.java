@@ -84,4 +84,10 @@ public class DmsDaoTest {
         List<DescriptionInfo> list = dmsDao.getDescriptionInfoList("10140148", "15");
     }
 
+    @Test
+    @Rollback
+    public void testGetSlipInfo() {
+        SlipInfo slipInfo = dmsDao.getSlipInfo("600001", "16");
+    }
+
 }

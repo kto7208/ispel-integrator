@@ -56,6 +56,10 @@ public class DmsDao {
 
     private static final String GET_DESCRIPTION_INFO_SQL = "select popis,poradi from se_popisopr where zakazka=? and skupina=? order by poradi asc";
 
+
+    private static final String GET_SLIP_INFO_SQL = "select vf_pd,skup_vfpd,dt_uzavreni,doklad_typ from mz_doklady " +
+            "where ci_dok=? and sklad=? and doklad='VYD'";
+
     @Autowired
     public DmsDao(DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
@@ -275,6 +279,27 @@ public class DmsDao {
             descriptions.add(descriptionInfo);
         }
         return descriptions;
+    }
+
+    public SlipInfo getSlipInfo(final String documentNumber, final String documentGroup) {
+        logger.debug("ci_dok: " + documentNumber);
+        logger.debug("sklad: " + documentGroup);
+        return jdbcTemplate.queryForObject(GET_SLIP_INFO_SQL,
+                new Object[]{Integer.valueOf(documentNumber), Integer.valueOf(documentGroup)},
+                new RowMapper<SlipInfo>() {
+                    public SlipInfo mapRow(ResultSet rs, int arg1)
+                            throws SQLException {
+                        SlipInfo slipInfo = new SlipInfo();
+                        slipInfo.setCidok(documentNumber);
+                        slipInfo.setSklad(documentGroup);
+                        slipInfo.setDoklad("VYD");
+                        slipInfo.setVfpd(String.valueOf(rs.getInt(1)));
+                        slipInfo.setSkupvfpd(rs.getString(2));
+                        slipInfo.setDtuzavreni(rs.getDate(3));
+                        slipInfo.setDoklad_typ(rs.getString(4));
+                        return slipInfo;
+                    }
+                });
     }
 
 
