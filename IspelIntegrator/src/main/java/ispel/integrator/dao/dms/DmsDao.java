@@ -57,9 +57,13 @@ public class DmsDao {
     private static final String GET_DESCRIPTION_INFO_SQL = "select popis,poradi from se_popisopr where zakazka=? and skupina=? order by poradi asc";
 
 
-    private static final String GET_SLIP_INFO_SQL = "select vf_pd,skup_vfpd,dt_uzavreni,doklad_typ from mz_doklady " +
+    private static final String GET_SLIP_INFO_SQL = "select vf_pd,skup_vfpd,dt_uzavreni,doklad_typ,ci_reg,user_name from mz_doklady " +
             "where ci_dok=? and sklad=? and doklad='VYD'";
 
+    private static final String GET_SLIP_PART_INFO_SQL = "select p.pocet,p.cena,p.celkem_pro,p.cena_prodej,s.druh_tovaru,p.katalog,s.pocet,s.dt_vydej,s.dt_prijem,s.cena_nakup from mz_pohyby p " +
+            "left outer join mz_sklad s on p.sklad=s.sklad " +
+            "where p.ci_dok=? and p.sklad=? and p.doklad='VYD'";
+    
     @Autowired
     public DmsDao(DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
@@ -281,25 +285,53 @@ public class DmsDao {
         return descriptions;
     }
 
-    public SlipInfo getSlipInfo(final String documentNumber, final String documentGroup) {
-        logger.debug("ci_dok: " + documentNumber);
-        logger.debug("sklad: " + documentGroup);
+    public SlipInfo getSlipInfo(final String ci_dok, final String sklad) {
+        logger.debug("ci_dok: " + ci_dok);
+        logger.debug("sklad: " + sklad);
         return jdbcTemplate.queryForObject(GET_SLIP_INFO_SQL,
-                new Object[]{Integer.valueOf(documentNumber), Integer.valueOf(documentGroup)},
+                new Object[]{Integer.valueOf(ci_dok), Integer.valueOf(sklad)},
                 new RowMapper<SlipInfo>() {
                     public SlipInfo mapRow(ResultSet rs, int arg1)
                             throws SQLException {
                         SlipInfo slipInfo = new SlipInfo();
-                        slipInfo.setCidok(documentNumber);
-                        slipInfo.setSklad(documentGroup);
+                        slipInfo.setCidok(ci_dok);
+                        slipInfo.setSklad(sklad);
                         slipInfo.setDoklad("VYD");
                         slipInfo.setVfpd(String.valueOf(rs.getInt(1)));
                         slipInfo.setSkupvfpd(rs.getString(2));
                         slipInfo.setDtuzavreni(rs.getDate(3));
                         slipInfo.setDoklad_typ(rs.getString(4));
+                        slipInfo.setCi_reg(String.valueOf(rs.getInt(5)));
+                        slipInfo.setUser_name(rs.getString(6));
                         return slipInfo;
                     }
                 });
+    }
+
+    public List<SlipPartInfo> getSlipPartInfoList(final String ci_dok, final String sklad) {
+        logger.debug("ci_dok: " + ci_dok);
+        logger.debug("sklad: " + sklad);
+        List<SlipPartInfo> parts = new ArrayList<SlipPartInfo>();
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(GET_SLIP_PART_INFO_SQL,
+                new Object[]{Long.valueOf(ci_dok), Long.valueOf(sklad)});
+        for (Map<String, Object> row : rows) {
+            SlipPartInfo slipPartInfo = new SlipPartInfo();
+            slipPartInfo.setSklad(sklad);
+            slipPartInfo.setCi_dok(ci_dok);
+            slipPartInfo.setPocet((BigDecimal) row.get("pocet"));
+            slipPartInfo.setCena((BigDecimal) row.get("cena"));
+            slipPartInfo.setCelkem_pro((BigDecimal) row.get("celkem_pro"));
+            slipPartInfo.setCena_prodej((BigDecimal) row.get("cena_prodej"));
+            slipPartInfo.setDruh_tovaru((String) row.get("druh_tovaru"));
+            slipPartInfo.setKatalog((String) row.get("katalog"));
+            slipPartInfo.setPocet((BigDecimal) row.get("pocet"));
+            slipPartInfo.setDt_vydej((String) row.get("dt_vydej"));
+            slipPartInfo.setDt_prijem((String) row.get("dt_prijem"));
+            slipPartInfo.setDruh_tovaru((String) row.get("druh_tovaru"));
+            slipPartInfo.setCena_nakup((BigDecimal) row.get("cena_nakup"));
+            parts.add(slipPartInfo);
+        }
+        return parts;
     }
 
 

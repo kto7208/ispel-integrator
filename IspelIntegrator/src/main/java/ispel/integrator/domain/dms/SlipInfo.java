@@ -11,6 +11,8 @@ public class SlipInfo {
     private String doklad;
     private String doklad_typ;
     private String cidok;
+    private String ci_reg;
+    private String user_name;
 
     public String getVfpd() {
         return vfpd;
@@ -66,5 +68,21 @@ public class SlipInfo {
 
     public void setCidok(String cidok) {
         this.cidok = cidok;
+    }
+
+    public String getCi_reg() {
+        return ci_reg;
+    }
+
+    public void setCi_reg(String ci_reg) {
+        this.ci_reg = ci_reg;
+    }
+
+    public String getUser_name() {
+        return user_name;
+    }
+
+    public void setUser_name(String user_name) {
+        this.user_name = user_name;
     }
 }

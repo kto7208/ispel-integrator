@@ -3,12 +3,17 @@ package ispel.integrator.service.dms;
 import generated.DMSextract;
 import ispel.integrator.dao.dms.DmsDao;
 import ispel.integrator.dao.dms.DmsSequenceService;
+import ispel.integrator.domain.dms.CustomerInfo;
+import ispel.integrator.domain.dms.EmployeeInfo;
+import ispel.integrator.domain.dms.SlipInfo;
+import ispel.integrator.domain.dms.SlipPartInfo;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Component
 public class SlipBuilderDirector {
@@ -77,7 +82,12 @@ public class SlipBuilderDirector {
         logger.debug("ico: " + ico);
     }
 
-    public DMSextract construct(String documentGroup, String documentNumber) {
+    public DMSextract construct(String sklad, String ci_dok) {
+        SlipInfo slipInfo = dmsDao.getSlipInfo(ci_dok, sklad);
+        CustomerInfo customerInfo = dmsDao.getCustomerInfo(slipInfo.getCi_reg());
+        EmployeeInfo employeeInfo = dmsDao.getEmployeeInfo(slipInfo.getUser_name());
+        List<SlipPartInfo> parts = dmsDao.getSlipPartInfoList(ci_dok, sklad);
+
 
 //        return  dmsBuilder.newInstance()
 //                .withSource(this.ico)

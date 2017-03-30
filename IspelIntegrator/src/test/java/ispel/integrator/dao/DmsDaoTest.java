@@ -90,4 +90,9 @@ public class DmsDaoTest {
         SlipInfo slipInfo = dmsDao.getSlipInfo("600001", "16");
     }
 
+    @Test
+    @Rollback
+    public void testGetSlipPartInfoList() {
+        List<SlipPartInfo> list = dmsDao.getSlipPartInfoList("600001", "16");
+    }
 }
