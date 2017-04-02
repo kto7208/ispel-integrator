@@ -1,10 +1,13 @@
 package ispel.integrator.service.dms;
 
+import generated.Part;
 import generated.PartsInvoiceLine;
 import ispel.integrator.domain.dms.OrderInfo;
 import ispel.integrator.domain.dms.SlipPartInfo;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -25,7 +28,33 @@ public class SlipPartsInvoiceLinesBuilder {
         }
 
         public PartsInvoiceLine[] build() {
-            return null;
+            if (parts == null) {
+                throw new IllegalStateException("parts is null");
+            }
+            List<PartsInvoiceLine> lines = new ArrayList<PartsInvoiceLine>();
+            for (SlipPartInfo partInfo : parts) {
+                PartsInvoiceLine line = new PartsInvoiceLine();
+                line.setType(buildType(partInfo));
+                Part part = new Part();
+                part.setFranchiseName(partInfo.getNazov_p1());
+                part.setPartNumber(partInfo.getKatalog());
+                part.setIsFranchise("A".equalsIgnoreCase(partInfo.getOriginal_nd()));
+                line.setPart(part);
+                line.setQuantity(partInfo.getPocet());
+                line.setUnitCost(partInfo.getCena());
+                line.setUnitListPrice(partInfo.getCena_prodej());
+                line.setTotalPrice(partInfo.getCelkem_pro());
+                lines.add(line);
+            }
+            return lines.toArray(new PartsInvoiceLine[lines.size()]);
+        }
+
+        private String buildType(SlipPartInfo slipPartInfo) {
+            if (slipPartInfo.getCena().compareTo(BigDecimal.ZERO) >= 0) {
+                return "invoice";
+            } else {
+                return "credit";
+            }
         }
     }
 

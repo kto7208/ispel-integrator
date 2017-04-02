@@ -60,8 +60,9 @@ public class DmsDao {
     private static final String GET_SLIP_INFO_SQL = "select vf_pd,skup_vfpd,dt_uzavreni,doklad_typ,ci_reg,user_name from mz_doklady " +
             "where ci_dok=? and sklad=? and doklad='VYD'";
 
-    private static final String GET_SLIP_PART_INFO_SQL = "select p.pocet,p.cena,p.celkem_pro,p.cena_prodej,s.druh_tovaru,p.katalog,s.pocet,s.dt_vydej,s.dt_prijem,s.cena_nakup from mz_pohyby p " +
+    private static final String GET_SLIP_PART_INFO_SQL = "select p.pocet,p.cena,p.celkem_pro,p.cena_prodej,s.druh_tovaru,p.katalog,s.pocet,s.dt_vydej,s.dt_prijem,s.cena_nakup,m.nazov_p1,m.original_nd from mz_pohyby p " +
             "left outer join mz_sklad s on p.sklad=s.sklad " +
+            "left outer join mz_conf_sklad m on p.sklad=m.kod " +
             "where p.ci_dok=? and p.sklad=? and p.doklad='VYD'";
     
     @Autowired
@@ -329,6 +330,8 @@ public class DmsDao {
             slipPartInfo.setDt_prijem((String) row.get("dt_prijem"));
             slipPartInfo.setDruh_tovaru((String) row.get("druh_tovaru"));
             slipPartInfo.setCena_nakup((BigDecimal) row.get("cena_nakup"));
+            slipPartInfo.setNazov_p1((String) row.get("nazov_p1"));
+            slipPartInfo.setOriginal_nd((String) row.get("original_nd"));
             parts.add(slipPartInfo);
         }
         return parts;

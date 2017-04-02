@@ -20,6 +20,8 @@ public class SlipPartInfo {
     private String dt_prijem;
 
     private BigDecimal cena_nakup;
+    private String nazov_p1;
+    private String original_nd;
 
 
     public String getSklad() {
@@ -116,5 +118,21 @@ public class SlipPartInfo {
 
     public void setCena_nakup(BigDecimal cena_nakup) {
         this.cena_nakup = cena_nakup;
+    }
+
+    public String getNazov_p1() {
+        return nazov_p1;
+    }
+
+    public void setNazov_p1(String nazov_p1) {
+        this.nazov_p1 = nazov_p1;
+    }
+
+    public String getOriginal_nd() {
+        return original_nd;
+    }
+
+    public void setOriginal_nd(String original_nd) {
+        this.original_nd = original_nd;
     }
 }
