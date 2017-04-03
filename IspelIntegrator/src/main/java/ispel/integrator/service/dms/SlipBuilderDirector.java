@@ -1,6 +1,8 @@
 package ispel.integrator.service.dms;
 
 import generated.DMSextract;
+import generated.PartsInvoiceLine;
+import generated.Vehicle;
 import ispel.integrator.dao.dms.DmsDao;
 import ispel.integrator.dao.dms.DmsSequenceService;
 import ispel.integrator.domain.dms.CustomerInfo;
@@ -55,7 +57,7 @@ public class SlipBuilderDirector {
     private InvoiceBuilder invoiceBuilder;
 
     @Autowired
-    private VehicleBuilder vehicleBuilder;
+    private SlipVehicleBuilder vehicleBuilder;
 
     @Autowired
     private ServiceInvoiceLinesBuilder serviceInvoiceLinesBuilder;
@@ -64,7 +66,7 @@ public class SlipBuilderDirector {
     private OtherInvoiceLinesBuilder otherInvoiceLinesBuilder;
 
     @Autowired
-    private PartsInvoiceLinesBuilder partsInvoiceLinesBuilder;
+    private SlipPartsInvoiceLinesBuilder partsInvoiceLinesBuilder;
 
     @Autowired
     private RepairOrdersBuilder repairOrderBuilder;
@@ -87,6 +89,14 @@ public class SlipBuilderDirector {
         CustomerInfo customerInfo = dmsDao.getCustomerInfo(slipInfo.getCi_reg());
         EmployeeInfo employeeInfo = dmsDao.getEmployeeInfo(slipInfo.getUser_name());
         List<SlipPartInfo> parts = dmsDao.getSlipPartInfoList(ci_dok, sklad);
+
+        PartsInvoiceLine[] partsInvoiceLines = partsInvoiceLinesBuilder.newInstance()
+                .withParts(parts)
+                .build();
+
+        Vehicle vehicle = vehicleBuilder.newInstance()
+                .withPartsInvoiceLines(partsInvoiceLines)
+                .build();
 
 
 //        return  dmsBuilder.newInstance()

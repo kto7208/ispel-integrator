@@ -3,7 +3,6 @@ package ispel.integrator.service.dms;
 import generated.PartsInvoiceLine;
 import generated.Vehicle;
 
-import javax.xml.bind.JAXBElement;
 import java.util.Arrays;
 
 public class SlipVehicleBuilder {
@@ -26,7 +25,8 @@ public class SlipVehicleBuilder {
 
         public Vehicle build() {
             Vehicle vehicle = new Vehicle();
-            vehicle.setIdentityNotKnown(new JAXBElement<String>(""));
+            // todo
+            //vehicle.setIdentityNotKnown(new JAXBElement<String>("",""));
             vehicle.getPartsInvoiceLineOrServiceInvoiceLineOrOtherInvoiceLine().addAll(Arrays.asList(partsInvoiceLines));
             return vehicle;
         }

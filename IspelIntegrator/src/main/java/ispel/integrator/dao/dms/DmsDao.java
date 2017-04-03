@@ -57,7 +57,8 @@ public class DmsDao {
     private static final String GET_DESCRIPTION_INFO_SQL = "select popis,poradi from se_popisopr where zakazka=? and skupina=? order by poradi asc";
 
 
-    private static final String GET_SLIP_INFO_SQL = "select vf_pd,skup_vfpd,dt_uzavreni,doklad_typ,ci_reg,user_name from mz_doklady " +
+    private static final String GET_SLIP_INFO_SQL = "select m.vf_pd,m.skup_vfpd,m.dt_uzavreni,m.doklad_typ,m.ci_reg,m.user_name,c.doklad from mz_doklady m " +
+            "left join c_cdd c on m.cis_pohybu=c.cpo " +
             "where ci_dok=? and sklad=? and doklad='VYD'";
 
     private static final String GET_SLIP_PART_INFO_SQL = "select p.pocet,p.cena,p.celkem_pro,p.cena_prodej,s.druh_tovaru,p.katalog,s.pocet,s.dt_vydej,s.dt_prijem,s.cena_nakup,m.nazov_p1,m.original_nd from mz_pohyby p " +
@@ -297,13 +298,13 @@ public class DmsDao {
                         SlipInfo slipInfo = new SlipInfo();
                         slipInfo.setCidok(ci_dok);
                         slipInfo.setSklad(sklad);
-                        slipInfo.setDoklad("VYD");
                         slipInfo.setVfpd(String.valueOf(rs.getInt(1)));
                         slipInfo.setSkupvfpd(rs.getString(2));
                         slipInfo.setDtuzavreni(rs.getDate(3));
                         slipInfo.setDoklad_typ(rs.getString(4));
                         slipInfo.setCi_reg(String.valueOf(rs.getInt(5)));
                         slipInfo.setUser_name(rs.getString(6));
+                        slipInfo.setDoklad(rs.getString(7));
                         return slipInfo;
                     }
                 });
