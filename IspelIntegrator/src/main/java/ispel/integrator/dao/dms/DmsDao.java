@@ -59,10 +59,10 @@ public class DmsDao {
 
     private static final String GET_SLIP_INFO_SQL = "select m.vf_pd,m.skup_vfpd,m.dt_uzavreni,m.doklad_typ,m.ci_reg,m.user_name,c.doklad from mz_doklady m " +
             "left join c_cdd c on m.cis_pohybu=c.cpo " +
-            "where ci_dok=? and sklad=? and doklad='VYD'";
+            "where m.ci_dok=? and m.sklad=? and m.doklad='VYD'";
 
     private static final String GET_SLIP_PART_INFO_SQL = "select p.pocet,p.cena,p.celkem_pro,p.cena_prodej,s.druh_tovaru,p.katalog,s.pocet,s.dt_vydej,s.dt_prijem,s.cena_nakup,m.nazov_p1,m.original_nd from mz_pohyby p " +
-            "left outer join mz_sklad s on p.sklad=s.sklad " +
+            "left outer join mz_sklad s on p.sklad=s.sklad and s.katalog=p.katalog " +
             "left outer join mz_conf_sklad m on p.sklad=m.kod " +
             "where p.ci_dok=? and p.sklad=? and p.doklad='VYD'";
     

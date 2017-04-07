@@ -2,9 +2,11 @@ package ispel.integrator.service.dms;
 
 import generated.PartsInvoiceLine;
 import generated.Vehicle;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 
+@Component
 public class SlipVehicleBuilder {
 
     public SlipVehicleBuilder.Builder newInstance() {

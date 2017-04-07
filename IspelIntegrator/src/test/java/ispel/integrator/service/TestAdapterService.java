@@ -60,4 +60,18 @@ public class TestAdapterService {
 
     }
 
+	@Test
+	public void submitSlipData() throws Exception {
+		ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
+
+		AdapterRequest request = AdapterRequest.getEmptyRequest();
+		request.setDocumentGroup("17");
+		request.setDocumentNumber("12140001");
+		request.setDocumentType("VYD");
+		request.setMethodName(AdapterRequest.MethodName.SubmitInvoiceData);
+		request.setDataSourceName("kto_1");
+
+		adapterService.submitInvoiceData(request);
+
+	}
 }

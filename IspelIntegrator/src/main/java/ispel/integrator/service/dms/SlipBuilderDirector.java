@@ -1,8 +1,7 @@
 package ispel.integrator.service.dms;
 
-import generated.DMSextract;
-import generated.PartsInvoiceLine;
-import generated.Vehicle;
+import com.google.common.collect.Sets;
+import generated.*;
 import ispel.integrator.dao.dms.DmsDao;
 import ispel.integrator.dao.dms.DmsSequenceService;
 import ispel.integrator.domain.dms.CustomerInfo;
@@ -54,25 +53,16 @@ public class SlipBuilderDirector {
     private DmsBuilder dmsBuilder;
 
     @Autowired
-    private InvoiceBuilder invoiceBuilder;
+    private SlipInvoiceBuilder invoiceBuilder;
 
     @Autowired
     private SlipVehicleBuilder vehicleBuilder;
 
     @Autowired
-    private ServiceInvoiceLinesBuilder serviceInvoiceLinesBuilder;
-
-    @Autowired
-    private OtherInvoiceLinesBuilder otherInvoiceLinesBuilder;
-
-    @Autowired
     private SlipPartsInvoiceLinesBuilder partsInvoiceLinesBuilder;
 
     @Autowired
-    private RepairOrdersBuilder repairOrderBuilder;
-
-    @Autowired
-    private PartsStkBuilder partsStkBuilder;
+    private SlipPartsStkBuilder partsStkBuilder;
 
     @PostConstruct
     private void postConstruct() {
@@ -98,22 +88,31 @@ public class SlipBuilderDirector {
                 .withPartsInvoiceLines(partsInvoiceLines)
                 .build();
 
+        Invoice invoice = invoiceBuilder.newInstance()
+                .withSlipInfo(slipInfo)
+                .withCustomerInfo(customerInfo)
+                .withEmployeeInfo(employeeInfo)
+                .withParts(parts)
+                .withVehicle(vehicle)
+                .build();
 
-//        return  dmsBuilder.newInstance()
-//                .withSource(this.ico)
-//                .withDmsSequence(this.dmsSequenceService.getDmsSourceSequenceNextVal())
-//                .withDmsVendor(this.vendor)
-//                .withDmsProductName(this.productName)
-//                .withDmsVersion(this.dmsVersion)
-//                .withSiteSequence(this.dmsSequenceService.getDmsSiteSequenceNextVal())
-//                .withCountry(this.country)
-//                .withCurrency(this.currency)
-//                .withFranchise(this.franchise)
-//                .withFranchiseCode(this.franchiseCode)
-//                .withInvoices(Sets.<Invoice>newHashSet(invoice))
-//                .withPartStks(Sets.<PartsStk>newHashSet(partsStks))
-//                .withRepairOrders(repairOrders)
-//                .build();
-        return null;
+        PartsStk[] partsStks = partsStkBuilder.newInstance()
+                .withParts(parts)
+                .build();
+
+        return dmsBuilder.newInstance()
+                .withSource(this.ico)
+                .withDmsSequence(this.dmsSequenceService.getDmsSourceSequenceNextVal())
+                .withDmsVendor(this.vendor)
+                .withDmsProductName(this.productName)
+                .withDmsVersion(this.dmsVersion)
+                .withSiteSequence(this.dmsSequenceService.getDmsSiteSequenceNextVal())
+                .withCountry(this.country)
+                .withCurrency(this.currency)
+                .withFranchise(this.franchise)
+                .withFranchiseCode(this.franchiseCode)
+                .withInvoices(Sets.<Invoice>newHashSet(invoice))
+                .withPartStks(Sets.<PartsStk>newHashSet(partsStks))
+                .build();
     }
 }

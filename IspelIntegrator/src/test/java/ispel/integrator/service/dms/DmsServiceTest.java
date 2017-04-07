@@ -54,4 +54,14 @@ public class DmsServiceTest {
         dmsExtractMarshaller.marshal(dmsextract, new StreamResult(stringWriter));
         Files.write(stringWriter.toString(), new File("c:/temp/nissan/order.xml"), Charsets.UTF_8);
     }
+
+    @Test
+    @Commit
+    public void testDmService4() throws Exception {
+        DMSextract dmsextract = dmsService.buildDMS("VYD", "600001", "16");
+        StringWriter stringWriter = new StringWriter();
+        dmsExtractMarshaller.marshal(dmsextract, new StreamResult(stringWriter));
+        Files.write(stringWriter.toString(), new File("c:/temp/nissan/slip-order.xml"), Charsets.UTF_8);
+    }
+
 }
