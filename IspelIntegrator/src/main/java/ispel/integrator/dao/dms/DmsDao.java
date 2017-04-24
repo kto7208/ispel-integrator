@@ -61,7 +61,7 @@ public class DmsDao {
             "left join c_cdd c on m.cis_pohybu=c.cpo " +
             "where m.ci_dok=? and m.sklad=? and m.doklad='VYD'";
 
-    private static final String GET_SLIP_PART_INFO_SQL = "select p.pocet,p.cena,p.celkem_pro,p.cena_prodej,s.druh_tovaru,p.katalog,s.pocet,s.dt_vydej,s.dt_prijem,s.cena_nakup,m.nazov_p1,m.original_nd from mz_pohyby p " +
+    private static final String GET_SLIP_PART_INFO_SQL = "select p.pocet p_pocet,p.cena,p.celkem_pro,p.cena_prodej,s.druh_tovaru,p.katalog,s.pocet s_pocet,s.dt_vydej,s.dt_prijem,s.cena_nakup,m.nazov_p1,m.original_nd from mz_pohyby p " +
             "left outer join mz_sklad s on p.sklad=s.sklad and s.katalog=p.katalog " +
             "left outer join mz_conf_sklad m on p.sklad=m.kod " +
             "where p.ci_dok=? and p.sklad=? and p.doklad='VYD'";
@@ -138,34 +138,39 @@ public class DmsDao {
 
     public CustomerInfo getCustomerInfo(final String customerId) {
         logger.debug("ci_reg: " + customerId);
-        return jdbcTemplate.queryForObject(GET_CUSTOMER_INFO_SQL,
-                new Object[]{Integer.valueOf(customerId)},
-                new RowMapper<CustomerInfo>() {
-                    public CustomerInfo mapRow(ResultSet rs, int arg1)
-                            throws SQLException {
-                        CustomerInfo customerInfo = new CustomerInfo();
-                        customerInfo.setCi_reg(customerId);
-                        customerInfo.setTyp(String.valueOf(rs.getInt(1)));
-                        customerInfo.setIcdph(rs.getString(2));
-                        customerInfo.setOrganizace(rs.getString(3));
-                        customerInfo.setPrijmeni(rs.getString(4));
-                        customerInfo.setJmeno(rs.getString(5));
-                        customerInfo.setTitul(rs.getString(6));
-                        customerInfo.setUlice(rs.getString(7));
-                        customerInfo.setMesto(rs.getString(8));
-                        customerInfo.setStat1(rs.getString(9));
-                        customerInfo.setPsc(rs.getString(10));
-                        customerInfo.setEmail_souhlas(rs.getString(11));
-                        customerInfo.setSms_souhlas(rs.getString(12));
-                        customerInfo.setTel(rs.getString(13));
-                        customerInfo.setSms(rs.getString(14));
-                        customerInfo.setEmail(rs.getString(15));
-                        customerInfo.setDat_nar(rs.getString(16));
-                        customerInfo.setSouhlas(rs.getString(17));
-                        customerInfo.setForma(rs.getInt(18));
-                        return customerInfo;
-                    }
-                });
+        try {
+            return jdbcTemplate.queryForObject(GET_CUSTOMER_INFO_SQL,
+                    new Object[]{Integer.valueOf(customerId)},
+                    new RowMapper<CustomerInfo>() {
+                        public CustomerInfo mapRow(ResultSet rs, int arg1)
+                                throws SQLException {
+                            CustomerInfo customerInfo = new CustomerInfo();
+                            customerInfo.setCi_reg(customerId);
+                            customerInfo.setTyp(String.valueOf(rs.getInt(1)));
+                            customerInfo.setIcdph(rs.getString(2));
+                            customerInfo.setOrganizace(rs.getString(3));
+                            customerInfo.setPrijmeni(rs.getString(4));
+                            customerInfo.setJmeno(rs.getString(5));
+                            customerInfo.setTitul(rs.getString(6));
+                            customerInfo.setUlice(rs.getString(7));
+                            customerInfo.setMesto(rs.getString(8));
+                            customerInfo.setStat1(rs.getString(9));
+                            customerInfo.setPsc(rs.getString(10));
+                            customerInfo.setEmail_souhlas(rs.getString(11));
+                            customerInfo.setSms_souhlas(rs.getString(12));
+                            customerInfo.setTel(rs.getString(13));
+                            customerInfo.setSms(rs.getString(14));
+                            customerInfo.setEmail(rs.getString(15));
+                            customerInfo.setDat_nar(rs.getString(16));
+                            customerInfo.setSouhlas(rs.getString(17));
+                            customerInfo.setForma(rs.getInt(18));
+                            return customerInfo;
+                        }
+                    });
+        } catch (EmptyResultDataAccessException e) {
+            logger.info("no customer info");
+            return null;
+        }
     }
 
     public EmployeeInfo getEmployeeInfo(final String employeeId) {
@@ -320,13 +325,13 @@ public class DmsDao {
             SlipPartInfo slipPartInfo = new SlipPartInfo();
             slipPartInfo.setSklad(sklad);
             slipPartInfo.setCi_dok(ci_dok);
-            slipPartInfo.setPocet((BigDecimal) row.get("pocet"));
+            slipPartInfo.setPocet((BigDecimal) row.get("p_pocet"));
             slipPartInfo.setCena((BigDecimal) row.get("cena"));
             slipPartInfo.setCelkem_pro((BigDecimal) row.get("celkem_pro"));
             slipPartInfo.setCena_prodej((BigDecimal) row.get("cena_prodej"));
             slipPartInfo.setDruh_tovaru((String) row.get("druh_tovaru"));
             slipPartInfo.setKatalog((String) row.get("katalog"));
-            slipPartInfo.setPocet((BigDecimal) row.get("pocet"));
+            slipPartInfo.setSklad_pocet((BigDecimal) row.get("s_pocet"));
             slipPartInfo.setDt_vydej((String) row.get("dt_vydej"));
             slipPartInfo.setDt_prijem((String) row.get("dt_prijem"));
             slipPartInfo.setDruh_tovaru((String) row.get("druh_tovaru"));

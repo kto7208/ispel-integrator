@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jaxb:bindings
         xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
-        xmlns:xs="http://www.w3.org/2001/XMLSchema"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
         xmlns:annox="http://annox.dev.java.net"
@@ -32,5 +31,16 @@
             </annox:annotate>
             <jaxb:class name="SeeVehicleUser"/>
         </jaxb:bindings>
+
+        <!--<jaxb:bindings node="xs:element[@name='Customer']">-->
+        <!--<jaxb:bindings node="//xs:element[@name='IdentityNotKnown']">-->
+        <!--<jaxb:property>-->
+        <!--<jaxb:baseType>-->
+        <!--<jaxb:javaType name="java.lang.String"/>-->
+        <!--</jaxb:baseType>-->
+        <!--</jaxb:property>-->
+        <!--</jaxb:bindings>-->
+        <!--</jaxb:bindings>-->
+
     </jaxb:bindings>
 </jaxb:bindings>

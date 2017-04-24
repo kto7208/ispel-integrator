@@ -57,6 +57,10 @@ public class InvoiceBuilder {
         }
 
         public Invoice build() {
+            if (customerInfo == null) {
+                throw new IllegalStateException("customerInfo null");
+            }
+
             Invoice invoice = new Invoice();
             invoice.setId(buildId());
             invoice.setDate(orderInfo.getKdyUzavDoklad());

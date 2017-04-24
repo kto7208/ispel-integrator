@@ -28,7 +28,7 @@ public class SlipVehicleBuilder {
         public Vehicle build() {
             Vehicle vehicle = new Vehicle();
             // todo
-            //vehicle.setIdentityNotKnown(new JAXBElement<String>("",""));
+            vehicle.setIdentityNotKnown("");
             vehicle.getPartsInvoiceLineOrServiceInvoiceLineOrOtherInvoiceLine().addAll(Arrays.asList(partsInvoiceLines));
             return vehicle;
         }

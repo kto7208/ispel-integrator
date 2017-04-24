@@ -41,8 +41,8 @@ public class SlipPartsInvoiceLinesBuilder {
                 part.setIsFranchise("A".equalsIgnoreCase(partInfo.getOriginal_nd()));
                 line.setPart(part);
                 line.setQuantity(partInfo.getPocet());
-                line.setUnitCost(partInfo.getCena());
-                line.setUnitListPrice(partInfo.getCena_prodej());
+                line.setTotalCost(partInfo.getCena().multiply(partInfo.getPocet()));
+                line.setTotalListPrice(partInfo.getCena_prodej().multiply(partInfo.getPocet()));
                 line.setTotalPrice(partInfo.getCelkem_pro());
                 lines.add(line);
             }

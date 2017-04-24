@@ -65,8 +65,7 @@ public class SlipInvoiceBuilder {
                 customer.setPostcode(this.customerInfo.getPsc());
                 customer.setUseForMarketing(buildUseForMarketing());
             } else {
-                // todo
-                //customer.setIdentityNotKnown();
+                customer.setIdentityNotKnown("");
             }
             invoice.setCustomer(customer);
             invoice.setEmployee(buildEmployeeName());
