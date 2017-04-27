@@ -43,6 +43,8 @@ public class OrderBuilderDirector {
 
     private String ico;
 
+    private boolean nissanPartsOnly;
+
     @Autowired
     private DmsSequenceService dmsSequenceService;
 
@@ -70,6 +72,7 @@ public class OrderBuilderDirector {
     @Autowired
     private PartsStkBuilder partsStkBuilder;
 
+
     @PostConstruct
     private void postConstruct() {
         franchiseCode = dmsDao.getGetFranchiseCode(franchise);
@@ -78,6 +81,8 @@ public class OrderBuilderDirector {
         logger.debug("dmsVersion: " + dmsVersion);
         ico = dmsDao.getIco();
         logger.debug("ico: " + ico);
+        nissanPartsOnly = dmsDao.getNissanPartsOnly();
+        logger.debug("nissanPartsOnly: " + nissanPartsOnly);
     }
 
 

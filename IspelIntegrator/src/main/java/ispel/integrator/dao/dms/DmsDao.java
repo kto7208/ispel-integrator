@@ -27,6 +27,7 @@ public class DmsDao {
 
     private static final String GET_FRANCHISE_CODE_SQL = "select dealer_cislo from komunik_conf where lower(nazov)=?";
     private static final String GET_DMS_VERSION_SQL = "select val from conf_ini where var='DMS_VERSION'";
+    private static final String GET_NISSAN_PARTS_ONLY_SQL = "select val from conf_ini where var='NISSAN_PARTS_ONLY'";
     private static final String GET_NISSAN_SOURCE_SEQUENCE_SQL = "select val from conf_ini where var='NISSAN_SOURCE_SEQUENCE'";
     private static final String GET_NISSAN_SITE_SEQUENCE_SQL = "select val from conf_ini where var='NISSAN_SITE_SEQUENCE'";
     private static final String UPDATE_NISSAN_SOURCE_SEQUENCE_SQL = "update conf_ini set val=? where var='NISSAN_SOURCE_SEQUENCE'";
@@ -82,6 +83,17 @@ public class DmsDao {
         return jdbcTemplate.queryForObject(GET_DMS_VERSION_SQL,
                 String.class);
     }
+
+    public boolean getNissanPartsOnly() {
+        String n = jdbcTemplate.queryForObject(GET_NISSAN_PARTS_ONLY_SQL,
+                String.class);
+        if ("ANO".equalsIgnoreCase(n)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     public BigInteger getDmsSourceSequenceNextVal() {
         String sequence = jdbcTemplate.queryForObject(GET_NISSAN_SOURCE_SEQUENCE_SQL,
