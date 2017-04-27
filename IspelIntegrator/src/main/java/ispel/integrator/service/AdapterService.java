@@ -10,4 +10,6 @@ public interface AdapterService {
 	Result verifyCar(AdapterRequest request);
 
 	Result submitInvoiceData(AdapterRequest request);
+
+	Result importSZV(AdapterRequest request);
 }

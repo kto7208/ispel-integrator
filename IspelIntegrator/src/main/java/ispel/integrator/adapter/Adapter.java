@@ -66,7 +66,6 @@ public class Adapter {
 			}
 		}
 		logger.info("Adapter finished");
-
 	}
 
 	public void stop() {
@@ -104,7 +103,10 @@ public class Adapter {
 			case SubmitInvoiceData:
 				result = service.submitInvoiceData(request);
 				break;
-			default:
+                case ImportSZV:
+                    result = service.importSZV(request);
+                    break;
+                default:
 				throw new IllegalStateException("wrong method name: " + request.getMethodName());
 			} // switch
 

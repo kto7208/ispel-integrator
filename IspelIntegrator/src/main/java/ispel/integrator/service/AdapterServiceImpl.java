@@ -159,6 +159,16 @@ public class AdapterServiceImpl implements AdapterService {
 		return result;
 	}
 
+    public Result importSZV(AdapterRequest request) {
+        String documentGroup = request.getDocumentGroup();
+        String documentNumber = request.getDocumentNumber();
+        String documentType = request.getDocumentType();
+
+        //todo
+        Result result = Result.getInstance(request);
+        return result;
+    }
+
 	private String getFileName(DMSextract dmsExtract) {
 		return new StringBuilder()
 				.append("order")
