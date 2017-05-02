@@ -5,9 +5,15 @@ import com.google.common.io.Files;
 import generated.DMSextract;
 import ispel.integrator.adapter.AdapterRequest;
 import ispel.integrator.adapter.Result;
+import ispel.integrator.dao.dms.DmsDao;
 import ispel.integrator.domain.CarInfo;
+import ispel.integrator.domain.dms.OrderInfo;
+import ispel.integrator.domain.dms.PartInfo;
+import ispel.integrator.domain.dms.VehicleInfo;
+import ispel.integrator.domain.dms.WorkInfo;
 import ispel.integrator.service.dms.DmsService;
 import ispel.integrator.utils.ResponseResolver;
+import localhost.ImportSZV;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
@@ -24,6 +30,7 @@ import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.List;
 
 @Service
 public class AdapterServiceImpl implements AdapterService {
@@ -44,6 +51,12 @@ public class AdapterServiceImpl implements AdapterService {
 	@Autowired
 	private WebServiceTemplate ispelService;
 
+    @Autowired
+    private WebServiceTemplate ispelSzwService;
+
+    @Autowired
+    private DmsDao dmsDao
+
 	@Autowired
 	private CarService carService;
 
@@ -59,6 +72,12 @@ public class AdapterServiceImpl implements AdapterService {
 
 	@Autowired
 	private DmsService dmsService;
+
+    @Autowired
+    private DmsDao dmsDao;
+
+    @Autowired
+    private ImportSzvBuilder importSzvBuilder;
 
 	private String irisUser;
 	private String irisPwd;
@@ -100,8 +119,8 @@ public class AdapterServiceImpl implements AdapterService {
 		return result;
 	}
 
-	public Result verifyCar(AdapterRequest request) {
-		CarInfo carInfo = carService.getCarInfoById(request.getCarId());
+    public Result verifyCar(AdapterRequest request) {
+        CarInfo carInfo = carService.getCarInfoById(request.getCarId());
 
 		VerifyCarRequest req = new VerifyCarRequest.Builder()
 				.vin(carInfo.getVinString()).ecv(carInfo.getEcvString())
@@ -162,9 +181,20 @@ public class AdapterServiceImpl implements AdapterService {
     public Result importSZV(AdapterRequest request) {
         String documentGroup = request.getDocumentGroup();
         String documentNumber = request.getDocumentNumber();
-        String documentType = request.getDocumentType();
 
-        //todo
+        OrderInfo orderInfo = dmsDao.getOrderInfo(documentNumber, documentGroup);
+        VehicleInfo vehicleInfo = dmsDao.getVehicleInfo(orderInfo.getCi_auto());
+        List<WorkInfo> works = dmsDao.getWorkInfoList(documentNumber, documentGroup);
+        List<PartInfo> parts = dmsDao.getPartInfoList(documentNumber, documentGroup);
+
+        ImportSZV importSZV = importSzvBuilder.newInstance()
+                .withOrder(orderInfo)
+                .withVehicle(vehicleInfo)
+                .withParts(parts)
+                .withWorks(works)
+                .build();
+
+        ispelSzwService.sendAndReceive()
         Result result = Result.getInstance(request);
         return result;
     }

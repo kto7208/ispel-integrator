@@ -31,16 +31,5 @@
             </annox:annotate>
             <jaxb:class name="SeeVehicleUser"/>
         </jaxb:bindings>
-
-        <!--<jaxb:bindings node="xs:element[@name='Customer']">-->
-        <!--<jaxb:bindings node="//xs:element[@name='IdentityNotKnown']">-->
-        <!--<jaxb:property>-->
-        <!--<jaxb:baseType>-->
-        <!--<jaxb:javaType name="java.lang.String"/>-->
-        <!--</jaxb:baseType>-->
-        <!--</jaxb:property>-->
-        <!--</jaxb:bindings>-->
-        <!--</jaxb:bindings>-->
-
     </jaxb:bindings>
 </jaxb:bindings>

@@ -124,6 +124,39 @@
 							</plugins>
 						</configuration>
 					</execution>
+                    <execution>
+                        <id>ispel-szv</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <schemaLanguage>WSDL</schemaLanguage>
+                            <specVersion>2.1</specVersion>
+                            <schemaDirectory>${project.basedir}/src/main/resources/wsdl</schemaDirectory>
+                            <schemaIncludes>
+                                <!--<include>*.xsd</include>-->
+                                <include>*.wsdl</include>
+                            </schemaIncludes>
+                            <bindingDirectory>${project.basedir}/src/main/resources/wsdl</bindingDirectory>
+                            <bindingIncludes>
+                                <include>*.xjb</include>
+                            </bindingIncludes>
+                            <generateDirectory>${project.build.directory}/generated-sources/ispelszv</generateDirectory>
+                            <removeOldOutput>false</removeOldOutput>
+                            <addCompileSourceRoot>true</addCompileSourceRoot>
+                            <args>
+                                <arg>-Xannotate</arg>
+                            </args>
+                            <plugins>
+                                <plugin>
+                                    <groupId>org.jvnet.jaxb2_commons</groupId>
+                                    <artifactId>jaxb2-basics-annotate</artifactId>
+                                    <version>0.6.3</version>
+                                </plugin>
+                            </plugins>
+                        </configuration>
+                    </execution>
 				</executions>
 			</plugin>
 		</plugins>

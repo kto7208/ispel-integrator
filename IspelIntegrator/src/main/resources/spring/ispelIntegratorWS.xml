@@ -48,5 +48,20 @@
 		</property>
 		<property name="defaultUri" value="${ispel.ws.uri}" />
 	</bean>
-	
+
+    <bean id="ispelSzvWSTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
+        <constructor-arg ref="messageFactory"/>
+        <property name="messageSender">
+            <bean class="org.springframework.ws.transport.http.HttpComponentsMessageSender">
+                <!-- 				<property name="httpClient" ref="httpClient" /> -->
+                <property name="credentials">
+                    <bean class="org.apache.http.auth.UsernamePasswordCredentials">
+                        <constructor-arg value="${ispel.szv.user}:${ispel.szv.password}"/>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+        <property name="defaultUri" value="${ispel.szv.ws.uri}"/>
+    </bean>
+
 </beans>

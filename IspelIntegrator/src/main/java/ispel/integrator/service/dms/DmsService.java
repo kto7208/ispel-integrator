@@ -39,7 +39,7 @@ public class DmsService {
         } else {
             throw new IllegalStateException("wrong documentType: " + documentType);
         }
-
         return dmsExtract;
     }
 }
+
