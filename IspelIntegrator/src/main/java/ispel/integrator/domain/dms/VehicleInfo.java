@@ -1,7 +1,5 @@
 package ispel.integrator.domain.dms;
 
-import java.util.Date;
-
 public class VehicleInfo {
 
     private String ci_auto;
@@ -14,6 +12,13 @@ public class VehicleInfo {
     private String dt_stk_nasl;
     private String dt_emis_nasl;
     private String tel;
+    private Integer rok;
+    private String dt_vyroby;
+    private String typ_vozidla;
+    private String barva;
+    private String barva_nazev;
+    private String popis;
+
 
     public String getSpz() {
         return spz;
@@ -85,5 +90,53 @@ public class VehicleInfo {
 
     public void setCi_auto(String ci_auto) {
         this.ci_auto = ci_auto;
+    }
+
+    public Integer getRok() {
+        return rok;
+    }
+
+    public void setRok(Integer rok) {
+        this.rok = rok;
+    }
+
+    public String getDt_vyroby() {
+        return dt_vyroby;
+    }
+
+    public void setDt_vyroby(String dt_vyroby) {
+        this.dt_vyroby = dt_vyroby;
+    }
+
+    public String getTyp_vozidla() {
+        return typ_vozidla;
+    }
+
+    public void setTyp_vozidla(String typ_vozidla) {
+        this.typ_vozidla = typ_vozidla;
+    }
+
+    public String getBarva() {
+        return barva;
+    }
+
+    public void setBarva(String barva) {
+        this.barva = barva;
+    }
+
+    public String getBarva_nazev() {
+        return barva_nazev;
+    }
+
+    public void setBarva_nazev(String barva_nazev) {
+        this.barva_nazev = barva_nazev;
+    }
+
+    public String getPopis() {
+        return popis;
+    }
+
+    public void setPopis(String popis) {
+        this.popis = popis;
     }
 }

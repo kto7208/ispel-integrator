@@ -43,14 +43,14 @@ public class DmsDao {
 
     private static final String GET_EMPLOYEE_INFO_SQL = "select  m_prijmeni,m_jmeno from pe_pracovnici where uzivatelske_meno=?";
 
-    private static final String GET_VEHICLE_INFO_SQL = "select spz,vin,vyrobce,model,dt_prod,dt_stk_nasl,dt_emis_nasl,tel from se_auta where ci_auto=?";
+    private static final String GET_VEHICLE_INFO_SQL = "select spz,vin,vyrobce,model,dt_prod,dt_stk_nasl,dt_emis_nasl,tel,rok,dt_vyroby,typ_vozidla,barva,barva_nazev,popis from se_auta where ci_auto=?";
 
     private static final String GET_WORK_INFO_SQL = "select s.pracpoz,s.popis_pp,s.nh,s.opakovani,s.cena,s.cena_bdph,s.pp_id,s.procento,s.druh_pp,p.m_prijmeni,p.m_jmeno,s.ostatni,s.cena_jedn,s.hlavna_pp,s.vlastna_pp " +
                                                     "from se_zprace s " +
                                                     "left join pe_pracovnici p on p.uzivatelske_meno=s.user_name " +
             "where s.fakturovat=1 and s.zakazka=? and s.skupina=?";
 
-    private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad,ms.cena_dopor,s.ostatni from se_zdily s " +
+    private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad,ms.cena_dopor,s.ostatni,s.nazev from se_zdily s " +
             "left outer join mz_conf_sklad m on s.sklad=m.kod " +
             "left outer join mz_sklad ms on ms.sklad=s.sklad and ms.katalog=s.katalog " +
             "where s.fakturovat=1 and s.zakazka=? and s.skupina=?";
@@ -222,6 +222,12 @@ public class DmsDao {
                         vehicleInfo.setDt_stk_nasl(rs.getString(6));
                         vehicleInfo.setDt_emis_nasl(rs.getString(7));
                         vehicleInfo.setTel(rs.getString(8));
+                        vehicleInfo.setRok(rs.getInt(9));
+                        vehicleInfo.setDt_vyroby(rs.getString(10));
+                        vehicleInfo.setTyp_vozidla(rs.getString(11));
+                        vehicleInfo.setBarva(rs.getString(12));
+                        vehicleInfo.setBarva_nazev(rs.getString(13));
+                        vehicleInfo.setPopis(rs.getString(14));
                         return vehicleInfo;
                     }
                 });
@@ -282,6 +288,7 @@ public class DmsDao {
             partInfo.setSklad((Long) row.get("sklad"));
             partInfo.setCena_dopor((BigDecimal) row.get("cena_dopor"));
             partInfo.setOstatni((String) row.get("ostatni"));
+            partInfo.setNazev((String) row.get("nazev"));
             parts.add(partInfo);
         }
         return parts;

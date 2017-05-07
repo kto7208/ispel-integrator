@@ -26,6 +26,7 @@ public class PartInfo {
     private BigDecimal cena_dopor;
     private String ostatni;
 
+    private String nazev;
 
 
     public String getOrderNumber() {
@@ -162,5 +163,13 @@ public class PartInfo {
 
     public void setOstatni(String ostatni) {
         this.ostatni = ostatni;
+    }
+
+    public String getNazev() {
+        return nazev;
+    }
+
+    public void setNazev(String nazev) {
+        this.nazev = nazev;
     }
 }

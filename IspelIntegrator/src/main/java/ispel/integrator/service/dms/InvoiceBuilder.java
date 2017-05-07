@@ -22,6 +22,7 @@ public class InvoiceBuilder {
         private EmployeeInfo employeeInfo;
         private List<WorkInfo> works;
         private List<PartInfo> parts;
+        private String organizace;
 
         private Builder() {
         }
@@ -55,6 +56,7 @@ public class InvoiceBuilder {
             this.parts = parts;
             return this;
         }
+
 
         public Invoice build() {
             if (customerInfo == null) {

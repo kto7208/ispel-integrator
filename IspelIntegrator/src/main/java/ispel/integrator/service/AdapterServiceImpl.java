@@ -14,12 +14,14 @@ import ispel.integrator.domain.dms.WorkInfo;
 import ispel.integrator.service.dms.DmsService;
 import ispel.integrator.utils.ResponseResolver;
 import localhost.ImportSZV;
+import localhost.ImportSZVResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
@@ -49,13 +51,12 @@ public class AdapterServiceImpl implements AdapterService {
 	private LogService logService;
 
 	@Autowired
+	@Qualifier("ispelWSTemplate")
 	private WebServiceTemplate ispelService;
 
     @Autowired
-    private WebServiceTemplate ispelSzwService;
-
-    @Autowired
-    private DmsDao dmsDao
+	@Qualifier("ispelSzvWSTemplate")
+	private WebServiceTemplate ispelSzvService;
 
 	@Autowired
 	private CarService carService;
@@ -194,7 +195,9 @@ public class AdapterServiceImpl implements AdapterService {
                 .withWorks(works)
                 .build();
 
-        ispelSzwService.sendAndReceive()
+		ImportSZVResponse response = (ImportSZVResponse) ispelSzvService
+				.marshalSendAndReceive((ImportSZV) importSZV);
+
         Result result = Result.getInstance(request);
         return result;
     }
