@@ -1,18 +1,22 @@
 package ispel.integrator.dao.dms;
 
 import ispel.integrator.domain.dms.*;
+import ispel.integrator.service.ServiceCallTimestampHolder;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -66,7 +70,8 @@ public class DmsDao {
             "left outer join mz_sklad s on p.sklad=s.sklad and s.katalog=p.katalog " +
             "left outer join mz_conf_sklad m on p.sklad=m.kod " +
             "where p.ci_dok=? and p.sklad=? and p.doklad='VYD'";
-    
+
+    private static final String UPDATE_ORDER_SQL = "update se_zakazky set write_time=?,web_processed=? where zakazka=? and skupina=?";
     @Autowired
     public DmsDao(DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
@@ -362,5 +367,20 @@ public class DmsDao {
         return parts;
     }
 
+    public void updateOrder(final String orderNumber, final String orderGroup) {
+        jdbcTemplate.update(UPDATE_ORDER_SQL,
+                new PreparedStatementSetter() {
+
+                    public void setValues(PreparedStatement ps)
+                            throws SQLException {
+                        ps.setTimestamp(1, new Timestamp(
+                                ServiceCallTimestampHolder.getAsLong()));
+                        ps.setString(2, "A");
+                        ps.setInt(3, Integer.valueOf(orderNumber).intValue());
+                        ps.setInt(4, Integer.valueOf(orderGroup).intValue());
+                    }
+
+                });
+    }
 
 }

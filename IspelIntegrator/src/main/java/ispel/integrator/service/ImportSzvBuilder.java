@@ -7,10 +7,22 @@ import ispel.integrator.domain.dms.WorkInfo;
 import localhost.*;
 import org.springframework.stereotype.Component;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @Component
 public class ImportSzvBuilder {
+
+    private ThreadLocal<DateFormat> dateFormat = new ThreadLocal<DateFormat>() {
+        @Override
+        protected DateFormat initialValue() {
+            SimpleDateFormat df = new SimpleDateFormat("yyyyMMdd");
+            return df;
+        }
+    };
 
     public ImportSzvBuilder.Builder newInstance() {
         return new Builder();
@@ -94,9 +106,22 @@ public class ImportSzvBuilder {
             vozidlo.setKategoria(vehicleInfo.getTyp_vozidla());
             vozidlo.setFarba(buildFarba());
             vozidlo.setSpecifikacia(vehicleInfo.getPopis());
-            vozidlo.setDatumPredaja(null);
+            vozidlo.setDatumPredaja(buildDatumPredaja());
             vozidlo.setTachometer(orderInfo.getStav_tach());
             return vozidlo;
+        }
+
+        private Date buildDatumPredaja() {
+            try {
+                if (vehicleInfo.getDt_prod() != null &&
+                        vehicleInfo.getDt_prod().length() > 0 &&
+                        !"00000000".equals(vehicleInfo.getDt_prod())) {
+                    return dateFormat.get().parse(vehicleInfo.getDt_prod());
+                }
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            return null;
         }
 
         private int buildRokVyroby() {

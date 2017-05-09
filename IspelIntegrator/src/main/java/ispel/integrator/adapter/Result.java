@@ -13,6 +13,8 @@ public class Result {
 	private String methodName;
 	private int carId;
 	private int processed;
+    private int orderNumber;
+    private int orderGroup;
 
 	public static Result getInstance(AdapterRequest request) {
 		return new Result(request);
@@ -23,7 +25,11 @@ public class Result {
 		this.methodName = adapterRequest.getMethodName().name();
 		this.carId = Integer.valueOf((adapterRequest.getCarId() == null) ? "0" : adapterRequest.getCarId());
 		this.dataSourceName = adapterRequest.getDataSourceName();
-	}
+        this.orderNumber = adapterRequest.getDocumentNumber() != null ?
+                Integer.valueOf(adapterRequest.getDocumentNumber()) : 0;
+        this.orderGroup = adapterRequest.getDocumentGroup() != null ?
+                Integer.valueOf(adapterRequest.getDocumentGroup()) : 0;
+    }
 
 	public String getXmlInput() {
 		return xmlInput;
@@ -77,4 +83,11 @@ public class Result {
 		this.xmlOutput = xmlOutput;
 	}
 
+    public int getOrderNumber() {
+        return orderNumber;
+    }
+
+    public int getOrderGroup() {
+        return orderGroup;
+    }
 }

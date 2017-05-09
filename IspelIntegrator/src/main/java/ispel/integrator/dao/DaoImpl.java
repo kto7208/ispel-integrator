@@ -5,22 +5,20 @@ import ispel.integrator.adapter.Result;
 import ispel.integrator.domain.CarDetail;
 import ispel.integrator.domain.CarInfo;
 import ispel.integrator.service.ServiceCallTimestampHolder;
-
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
-
-import javax.sql.DataSource;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
+
+import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
 
 
 
@@ -41,8 +39,8 @@ public class DaoImpl implements Dao {
 
 	private static final String INSERT_CAR_DETAIL_SQL = "insert into se_auta_ws (write_time, ci_auto,typ_inf,info) values(?,?,?,?)";
 
-	private static final String LOG_RESULT_SQL = "insert into se_auta_ws_log (write_time, method_name,url,processed,ci_auto,err_text,xml_input,xml_output,db_datasource) "
-			+ "values(?,?,?,?,?,?,?,?,?)";
+	private static final String LOG_RESULT_SQL = "insert into se_auta_ws_log (write_time, method_name,url,processed,ci_auto,zakazka,skupina,err_text,xml_input,xml_output,db_datasource) "
+			+ "values(?,?,?,?,?,?,?,?,?,?,?)";
 
 	private static final String UPDATE_CAR_INFO_SQL = "update se_auta set write_time=?,dt_stk=?,dt_stk_nasl=?,dt_emis=?,dt_emis_nasl=?,"
 			+ "dt_ko=?,km_stk=?,km_emis=?,km_ko=?,dt_overenievozidla=?,dt_getvinexpert=?  where ci_auto=?";
@@ -68,10 +66,12 @@ public class DaoImpl implements Dao {
 				ps.setString(3, result.getUrl());
 				ps.setInt(4, result.getProcessed());
 				ps.setInt(5, result.getCarId());
-				ps.setString(6, result.getErrorText());
-				ps.setString(7, result.getXmlInput());
-				ps.setString(8, result.getXmlOutput());
-				ps.setString(9, result.getDataSourceName());
+				ps.setInt(6, result.getOrderNumber());
+				ps.setInt(7, result.getOrderGroup());
+				ps.setString(8, result.getErrorText());
+				ps.setString(9, result.getXmlInput());
+				ps.setString(10, result.getXmlOutput());
+				ps.setString(11, result.getDataSourceName());
 			}
 		});
 	}

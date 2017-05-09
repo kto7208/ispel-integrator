@@ -55,8 +55,8 @@ public class AdapterServiceImpl implements AdapterService {
 	private WebServiceTemplate ispelService;
 
     @Autowired
-	@Qualifier("ispelSzvWSTemplate")
-	private WebServiceTemplate ispelSzvService;
+    @Qualifier("importSzvWSTemplate")
+    private WebServiceTemplate importSzvService;
 
 	@Autowired
 	private CarService carService;
@@ -79,6 +79,15 @@ public class AdapterServiceImpl implements AdapterService {
 
     @Autowired
     private ImportSzvBuilder importSzvBuilder;
+
+    @Autowired
+    private ImportSzvService importSZVService;
+
+    @Autowired
+    private Jaxb2Marshaller importSzvMarshallerFormattedOutput;
+
+    @Autowired
+    private ImportSzvResultBuilder importSzvResultBuilder;
 
 	private String irisUser;
 	private String irisPwd;
@@ -180,13 +189,13 @@ public class AdapterServiceImpl implements AdapterService {
 	}
 
     public Result importSZV(AdapterRequest request) {
-        String documentGroup = request.getDocumentGroup();
-        String documentNumber = request.getDocumentNumber();
+        String orderGroup = request.getDocumentGroup();
+        String orderNumber = request.getDocumentNumber();
 
-        OrderInfo orderInfo = dmsDao.getOrderInfo(documentNumber, documentGroup);
+        OrderInfo orderInfo = dmsDao.getOrderInfo(orderNumber, orderGroup);
         VehicleInfo vehicleInfo = dmsDao.getVehicleInfo(orderInfo.getCi_auto());
-        List<WorkInfo> works = dmsDao.getWorkInfoList(documentNumber, documentGroup);
-        List<PartInfo> parts = dmsDao.getPartInfoList(documentNumber, documentGroup);
+        List<WorkInfo> works = dmsDao.getWorkInfoList(orderNumber, orderGroup);
+        List<PartInfo> parts = dmsDao.getPartInfoList(orderNumber, orderGroup);
 
         ImportSZV importSZV = importSzvBuilder.newInstance()
                 .withOrder(orderInfo)
@@ -195,10 +204,36 @@ public class AdapterServiceImpl implements AdapterService {
                 .withWorks(works)
                 .build();
 
-		ImportSZVResponse response = (ImportSZVResponse) ispelSzvService
-				.marshalSendAndReceive((ImportSZV) importSZV);
+        Result result = null;
+        ImportSzvResultBuilder.Builder builder = importSzvResultBuilder.newInstance()
+                .withAdapterRequest(request)
+                .withImportSZV(importSZV);
+        try {
+            ImportSZVResponse response = (ImportSZVResponse) importSzvService
+                    .marshalSendAndReceive((ImportSZV) importSZV);
 
-        Result result = Result.getInstance(request);
+            result = builder
+                    .withImportSZVResponse(response)
+                    .build();
+        } catch (Exception e) {
+            logger.error(e);
+            if (result == null) {
+                result = builder.build();
+            }
+            result.setProcessed(Result.UNPROCESSED);
+            result.setErrorText(e.getMessage());
+        }
+
+        if (result.getProcessed() == Result.PROCESSED) {
+            importSZVService.updateOrder(orderNumber, orderGroup);
+        }
+
+        try {
+            logService.logResult(result);
+        } catch (Exception e) {
+            logger.error("Log result error.");
+            logger.error(e);
+        }
         return result;
     }
 
@@ -212,6 +247,12 @@ public class AdapterServiceImpl implements AdapterService {
 				.append(".xml")
 				.toString();
 	}
+
+    private String marshal(Object o) {
+        StringWriter sw = new StringWriter();
+        importSzvMarshallerFormattedOutput.marshal(o, new StreamResult(sw));
+        return sw.toString();
+    }
 
 	public String getIrisUser() {
 		return irisUser;

@@ -49,8 +49,10 @@
 		<property name="defaultUri" value="${ispel.ws.uri}" />
 	</bean>
 
-    <bean id="ispelSzvWSTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
+    <bean id="importSzvWSTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
         <constructor-arg ref="messageFactory"/>
+        <property name="marshaller" ref="importSzvMarshaller"></property>
+        <property name="unmarshaller" ref="importSzvMarshaller"></property>
         <property name="messageSender">
             <bean class="org.springframework.ws.transport.http.HttpComponentsMessageSender">
                 <!-- 				<property name="httpClient" ref="httpClient" /> -->
@@ -62,6 +64,30 @@
             </bean>
         </property>
         <property name="defaultUri" value="${ispel.szv.ws.uri}"/>
+    </bean>
+
+
+    <bean id="importSzvJaxbContext" class="javax.xml.bind.JAXBContext"
+          factory-method="newInstance">
+        <constructor-arg index="0" value="localhost"/>
+    </bean>
+
+    <bean id="importSzvMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="contextPath" value="localhost"/>
+    </bean>
+
+    <bean id="importSzvMarshallerFormattedOutput" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="contextPath" value="localhost"/>
+        <property name="marshallerProperties">
+            <map>
+                <entry>
+                    <key>
+                        <util:constant static-field="javax.xml.bind.Marshaller.JAXB_FORMATTED_OUTPUT"/>
+                    </key>
+                    <value type="java.lang.Boolean">true</value>
+                </entry>
+            </map>
+        </property>
     </bean>
 
 </beans>

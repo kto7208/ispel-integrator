@@ -72,6 +72,20 @@ public class TestAdapterService {
 		request.setDataSourceName("kto_1");
 
 		adapterService.submitInvoiceData(request);
-
 	}
+
+	@Test
+	public void importSZV() throws Exception {
+		ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
+
+		AdapterRequest request = AdapterRequest.getEmptyRequest();
+		request.setDocumentGroup("17");
+		request.setDocumentNumber("12140001");
+		request.setDocumentType("ZAK");
+		request.setMethodName(AdapterRequest.MethodName.ImportSZV);
+		request.setDataSourceName("kto_1");
+
+		adapterService.importSZV(request);
+	}
+
 }
