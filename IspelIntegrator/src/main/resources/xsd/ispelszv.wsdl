@@ -1,7 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
                   xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
                   xmlns:tns="http://localhost/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://localhost/">
+                  targetNamespace="http://localhost/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
     <wsdl:types>
         <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/">
             <s:element name="ImportSZV">
@@ -16,6 +17,8 @@
                     <s:element minOccurs="0" maxOccurs="1" name="Zakazka_Vozidlo" type="tns:Vozidlo"/>
                     <s:element minOccurs="0" maxOccurs="1" name="Zakazka_Praca" type="tns:ArrayOfPraca"/>
                     <s:element minOccurs="0" maxOccurs="1" name="Zakazka_Material" type="tns:ArrayOfMaterial"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="WsUser" type="s:string"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="WsPassword" type="s:string"/>
                     <s:element minOccurs="0" maxOccurs="1" name="IU" type="s:string"/>
                     <s:element minOccurs="0" maxOccurs="1" name="nazov_servis_bazar" type="s:string"/>
                     <s:element minOccurs="0" maxOccurs="1" name="cislo_zakazka" type="s:string"/>

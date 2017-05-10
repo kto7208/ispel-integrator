@@ -75,9 +75,9 @@ public class OrderBuilderDirector {
 
     @PostConstruct
     private void postConstruct() {
-        franchiseCode = dmsDao.getGetFranchiseCode(franchise);
+        franchiseCode = dmsDao.getFranchiseCode(franchise);
         logger.debug("franchise: " + franchise);
-        dmsVersion = dmsDao.getGetDmsVersion();
+        dmsVersion = dmsDao.getDmsVersion();
         logger.debug("dmsVersion: " + dmsVersion);
         ico = dmsDao.getIco();
         logger.debug("ico: " + ico);

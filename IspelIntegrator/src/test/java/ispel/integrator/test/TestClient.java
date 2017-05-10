@@ -90,4 +90,25 @@ public class TestClient {
         System.out.println("received: " + str);
 
     }
+
+    @Test
+    public void importSZV() throws Exception {
+        Socket s = new Socket("localhost", 6900);
+        InputStream is = new BufferedInputStream(s.getInputStream(), 48);
+        OutputStream os = new BufferedOutputStream(s.getOutputStream(), 48);
+        StringBuilder sb = new StringBuilder()
+                .append("300")
+                .append("kto_1                         ")
+                .append("ZAK")
+                .append("0010140148")
+                .append("15");
+        os.write(sb.toString().getBytes("UTF-8"), 0, 48);
+
+        os.flush();
+        byte[] frame = new byte[1024];
+        is.read(frame, 0, 1024);
+        String str = new String(frame);
+        System.out.println("received: " + str);
+    }
+
 }

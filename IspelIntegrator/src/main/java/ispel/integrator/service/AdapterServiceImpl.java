@@ -67,8 +67,14 @@ public class AdapterServiceImpl implements AdapterService {
 	@Value("${ispel.dms.directory}")
 	private String dmsDirectory;
 
-	@Autowired
-	private Jaxb2Marshaller dmsExtractMarshaller;
+    @Value("${ispel.szv.user}")
+    private String wsUser;
+
+    @Value("${ispel.szv.password}")
+    private String wsPassword;
+
+    @Autowired
+    private Jaxb2Marshaller dmsExtractMarshaller;
 
 
 	@Autowired
@@ -196,12 +202,17 @@ public class AdapterServiceImpl implements AdapterService {
         VehicleInfo vehicleInfo = dmsDao.getVehicleInfo(orderInfo.getCi_auto());
         List<WorkInfo> works = dmsDao.getWorkInfoList(orderNumber, orderGroup);
         List<PartInfo> parts = dmsDao.getPartInfoList(orderNumber, orderGroup);
+        String organizace = dmsDao.getOrganizace();
 
         ImportSZV importSZV = importSzvBuilder.newInstance()
                 .withOrder(orderInfo)
                 .withVehicle(vehicleInfo)
                 .withParts(parts)
                 .withWorks(works)
+                .withOrganizace(organizace)
+                .withWsUser(wsUser)
+                .withWsPassword(wsPassword)
+                .withUser("gerow")
                 .build();
 
         Result result = null;

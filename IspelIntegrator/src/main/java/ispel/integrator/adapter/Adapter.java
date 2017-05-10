@@ -168,6 +168,16 @@ public class Adapter {
                         .append(ServiceCallTimestampHolder.getAsDateTime())
                         .append(result.getErrorText());
             }
+        } else if (MethodName.ImportSZV.equals(request.getMethodName())) {
+            if (result.getErrorText() == null
+                    || result.getErrorText().isEmpty()) {
+                reply.append("OK").append(
+                        ServiceCallTimestampHolder.getAsDateTime());
+            } else {
+                reply.append("ER")
+                        .append(ServiceCallTimestampHolder.getAsDateTime())
+                        .append(result.getErrorText());
+            }
         } else {
             ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
             reply.append("ER")

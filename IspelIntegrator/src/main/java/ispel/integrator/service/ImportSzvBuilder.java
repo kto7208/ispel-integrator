@@ -36,6 +36,8 @@ public class ImportSzvBuilder {
         private List<PartInfo> parts;
         private String organizace;
         private String user;
+        private String wsUser;
+        private String wsPassword;
 
         private Builder() {
         }
@@ -50,6 +52,11 @@ public class ImportSzvBuilder {
             return this;
         }
 
+        public ImportSzvBuilder.Builder withOrganizace(String organizace) {
+            this.organizace = organizace;
+            return this;
+        }
+
         public ImportSzvBuilder.Builder withWorks(List<WorkInfo> works) {
             this.works = works;
             return this;
@@ -60,16 +67,20 @@ public class ImportSzvBuilder {
             return this;
         }
 
-        public ImportSzvBuilder.Builder withOrganizace(String organizace) {
-            this.organizace = organizace;
-            return this;
-        }
-
         public ImportSzvBuilder.Builder withUser(String user) {
             this.user = user;
             return this;
         }
 
+        public ImportSzvBuilder.Builder withWsUser(String wsUser) {
+            this.wsUser = wsUser;
+            return this;
+        }
+
+        public ImportSzvBuilder.Builder withWsPassword(String wsPasword) {
+            this.wsPassword = wsPassword;
+            return this;
+        }
 
         public ImportSZV build() {
             Vozidlo vozidlo = buildVozidlo();
@@ -86,7 +97,8 @@ public class ImportSzvBuilder {
             zakazka.setCisloZakazka(buildCisloZakazka());
             zakazka.setCenaZakazka(orderInfo.getCelkem_sm().doubleValue());
             zakazka.setDatumZakazka(orderInfo.getKdyUzavDoklad());
-
+            zakazka.setWsUser(wsUser);
+            zakazka.setWsPassword(wsPassword);
             ImportSZV importSZV = new ImportSZV();
             importSZV.setZakazka(zakazka);
             return importSZV;
@@ -164,7 +176,7 @@ public class ImportSzvBuilder {
             ArrayOfMaterial arrayOfMaterial = new ArrayOfMaterial();
             for (PartInfo part : parts) {
                 Material material = new Material();
-                material.setNazovMaterial(part.getNazov_p1());
+                material.setNazovMaterial(part.getNazev());
                 material.setCenaMaterial(part.getCena_bdp().doubleValue());
                 material.setMnozstvoMaterial(part.getMnozstvi().doubleValue());
                 material.setKatalogCislo(part.getKatalog());

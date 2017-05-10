@@ -49,8 +49,8 @@ public class ImportSzvResultBuilder {
             }
             if (importSZVResponse == null) {
                 result.setProcessed(Result.UNPROCESSED);
-            } else if ("Zápis prebehol úspešne".equals(importSZVResponse.getImportSZVResult())) {
-                result.setProcessed(Result.UNPROCESSED);
+            } else if (importSZVResponse.getImportSZVResult().contains("Zápis prebehol úspešne")) {
+                result.setProcessed(Result.PROCESSED);
                 result.setXmlOutput(marshal(importSZVResponse));
             } else {
                 result.setProcessed(Result.UNPROCESSED);
