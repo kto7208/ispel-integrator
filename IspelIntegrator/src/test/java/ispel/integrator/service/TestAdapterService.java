@@ -23,7 +23,7 @@ public class TestAdapterService {
 		ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
 
 		AdapterRequest request = AdapterRequest.getEmptyRequest();
-		request.setCarId("1");
+		request.setCarId("1118");
 		request.setMethodName(AdapterRequest.MethodName.GetVinExpert);
 		request.setDataSourceName("kto_1");
 
@@ -37,7 +37,7 @@ public class TestAdapterService {
 		ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
 
 		AdapterRequest request = AdapterRequest.getEmptyRequest();
-		request.setCarId("2");
+		request.setCarId("1118");
 		request.setMethodName(AdapterRequest.MethodName.VerifyCar);
 		request.setDataSourceName("kto_1");
 

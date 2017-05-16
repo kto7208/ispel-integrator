@@ -3,11 +3,11 @@ package ispel.integrator.service;
 
 import ispel.integrator.adapter.AdapterRequest;
 import ispel.integrator.adapter.Result;
-import localhost.ImportSZV;
-import localhost.ImportSZVResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Component;
+import sk.iris.rpzv.ImportSZV;
+import sk.iris.rpzv.ImportSZVResponse;
 
 import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
@@ -49,12 +49,13 @@ public class ImportSzvResultBuilder {
             }
             if (importSZVResponse == null) {
                 result.setProcessed(Result.UNPROCESSED);
-            } else if (importSZVResponse.getImportSZVResult().contains("Zápis prebehol úspešne")) {
+            } else if (importSZVResponse.getImportSZVResult().getErrorId().value().equals("OK")) {
                 result.setProcessed(Result.PROCESSED);
                 result.setXmlOutput(marshal(importSZVResponse));
             } else {
                 result.setProcessed(Result.UNPROCESSED);
-                result.setErrorText(importSZVResponse.getImportSZVResult());
+                result.setErrorText(importSZVResponse.getImportSZVResult().getErrorId().value() + " " +
+                        importSZVResponse.getImportSZVResult().getDescription());
                 result.setXmlOutput(marshal(importSZVResponse));
             }
             return result;

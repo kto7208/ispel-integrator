@@ -4,8 +4,8 @@ import ispel.integrator.domain.dms.OrderInfo;
 import ispel.integrator.domain.dms.PartInfo;
 import ispel.integrator.domain.dms.VehicleInfo;
 import ispel.integrator.domain.dms.WorkInfo;
-import localhost.*;
 import org.springframework.stereotype.Component;
+import sk.iris.rpzv.*;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -77,7 +77,7 @@ public class ImportSzvBuilder {
             return this;
         }
 
-        public ImportSzvBuilder.Builder withWsPassword(String wsPasword) {
+        public ImportSzvBuilder.Builder withWsPassword(String wsPassword) {
             this.wsPassword = wsPassword;
             return this;
         }

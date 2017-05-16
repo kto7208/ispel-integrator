@@ -1,19 +1,17 @@
 package ispel.integrator.service;
 
-import java.util.List;
-
 import ispel.integrator.adapter.AdapterRequest;
 import ispel.integrator.dao.Dao;
 import ispel.integrator.domain.CarDetail;
 import ispel.integrator.domain.CarInfo;
-
-import org.apache.activemq.util.StringArrayConverter;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -60,7 +58,6 @@ public class CarServiceImpl implements CarService {
 		return dao.getCarInfoById(id);
 	}
 
-	@Transactional(value = "txMgr")
 	public void processGetVinExpert(CarInfo carInfo, Document vinExpertResult) {
 		dateKmHolder.reset();
 		CarDetail detail = carInfo.getDetail(CarDetail.Type.VinInfo);
@@ -78,7 +75,7 @@ public class CarServiceImpl implements CarService {
 		dao.persistCarInfo(carInfo, AdapterRequest.MethodName.GetVinExpert);
 	}
 
-	@Transactional(value = "txMgr")
+	@Transactional
 	public void processVerifyCar(CarInfo carInfo, Document verifyCarResult) {
 		dateKmHolder.reset();
 		Element root = verifyCarResult.getRootElement();

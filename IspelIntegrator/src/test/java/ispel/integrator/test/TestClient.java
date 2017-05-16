@@ -17,7 +17,7 @@ public class TestClient {
         OutputStream os = new BufferedOutputStream(s.getOutputStream(), 48);
         StringBuilder sb = new StringBuilder()
                 .append("010")
-                .append("0000000001")
+                .append("0000001118")
                 .append("kto_1                         ")
                 .append("        ");
         os.write(sb.toString().getBytes("UTF-8"), 0, 48);
@@ -36,7 +36,7 @@ public class TestClient {
         OutputStream os = new BufferedOutputStream(s.getOutputStream(), 48);
         StringBuilder sb = new StringBuilder()
                 .append("020")
-                .append("0000000002")
+                .append("0000001118")
                 .append("kto_1                         ")
                 .append("     ");
         os.write(sb.toString().getBytes("UTF-8"), 0, 48);
@@ -97,7 +97,7 @@ public class TestClient {
         InputStream is = new BufferedInputStream(s.getInputStream(), 48);
         OutputStream os = new BufferedOutputStream(s.getOutputStream(), 48);
         StringBuilder sb = new StringBuilder()
-                .append("300")
+                .append("030")
                 .append("kto_1                         ")
                 .append("ZAK")
                 .append("0010140148")

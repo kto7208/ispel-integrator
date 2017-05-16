@@ -72,7 +72,7 @@ public class DmsDao {
             "left outer join mz_conf_sklad m on p.sklad=m.kod " +
             "where p.ci_dok=? and p.sklad=? and p.doklad='VYD'";
 
-    private static final String UPDATE_ORDER_SQL = "update se_zakazky set write_time=?,web_processed=? where zakazka=? and skupina=?";
+    private static final String UPDATE_ORDER_SQL = "update se_zakazky set write_time=?,ispel_processed=? where zakazka=? and skupina=?";
     @Autowired
     public DmsDao(DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
@@ -376,7 +376,6 @@ public class DmsDao {
     public void updateOrder(final String orderNumber, final String orderGroup) {
         jdbcTemplate.update(UPDATE_ORDER_SQL,
                 new PreparedStatementSetter() {
-
                     public void setValues(PreparedStatement ps)
                             throws SQLException {
                         ps.setTimestamp(1, new Timestamp(

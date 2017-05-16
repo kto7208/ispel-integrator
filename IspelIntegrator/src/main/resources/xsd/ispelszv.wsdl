@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
                   xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
-                  xmlns:tns="http://localhost/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
-                  targetNamespace="http://localhost/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+                  xmlns:tns="http://rpzv.iris.sk/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" targetNamespace="http://rpzv.iris.sk/">
     <wsdl:types>
-        <s:schema elementFormDefault="qualified" targetNamespace="http://localhost/">
+        <s:schema elementFormDefault="qualified" targetNamespace="http://rpzv.iris.sk/">
             <s:element name="ImportSZV">
                 <s:complexType>
                     <s:sequence>
@@ -80,10 +79,64 @@
             <s:element name="ImportSZVResponse">
                 <s:complexType>
                     <s:sequence>
-                        <s:element minOccurs="0" maxOccurs="1" name="ImportSZVResult" type="s:string"/>
+                        <s:element minOccurs="0" maxOccurs="1" name="ImportSZVResult" type="tns:Msg"/>
                     </s:sequence>
                 </s:complexType>
             </s:element>
+            <s:complexType name="Msg">
+                <s:complexContent mixed="false">
+                    <s:extension base="tns:MsgErr">
+                        <s:sequence>
+                            <s:element minOccurs="0" maxOccurs="1" name="VINexpertRes" type="tns:VinExpertRes"/>
+                            <s:element minOccurs="1" maxOccurs="1" name="KMKontrolaMsg" type="tns:KMKontrolaMsg"/>
+                        </s:sequence>
+                    </s:extension>
+                </s:complexContent>
+            </s:complexType>
+            <s:complexType name="MsgErr">
+                <s:sequence>
+                    <s:element minOccurs="1" maxOccurs="1" name="ErrorId" type="tns:ErrorMsg"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="Description" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="ErrorMsg">
+                <s:restriction base="s:string">
+                    <s:enumeration value="OK"/>
+                    <s:enumeration value="Error"/>
+                    <s:enumeration value="VinexpertErr"/>
+                    <s:enumeration value="ChybneVstupneParametre"/>
+                    <s:enumeration value="Neautorizovanypristup"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:complexType name="VinExpertRes">
+                <s:sequence>
+                    <s:element minOccurs="1" maxOccurs="1" name="VINexpertMsg" type="tns:VINexpertMsg"/>
+                    <s:element minOccurs="0" maxOccurs="1" name="VINexpertErr" type="s:string"/>
+                </s:sequence>
+            </s:complexType>
+            <s:simpleType name="VINexpertMsg">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Komplet"/>
+                    <s:enumeration value="Ciastocny"/>
+                    <s:enumeration value="Chybovy"/>
+                    <s:enumeration value="Nedostupny"/>
+                    <s:enumeration value="VinNemaPozadovanuDlzku"/>
+                    <s:enumeration value="VINNepovoleneZnaky"/>
+                    <s:enumeration value="ChybneWMI"/>
+                    <s:enumeration value="Nedekodovane"/>
+                </s:restriction>
+            </s:simpleType>
+            <s:simpleType name="KMKontrolaMsg">
+                <s:restriction base="s:string">
+                    <s:enumeration value="Nekontrolovane"/>
+                    <s:enumeration value="HodnotaJeVIntervale"/>
+                    <s:enumeration value="NedostatokUdajov"/>
+                    <s:enumeration value="PovolenyPokles"/>
+                    <s:enumeration value="EvidencnaChyba"/>
+                    <s:enumeration value="NeumernyRozdiel"/>
+                    <s:enumeration value="NeprimeranyStavNaVek"/>
+                </s:restriction>
+            </s:simpleType>
         </s:schema>
     </wsdl:types>
     <wsdl:message name="ImportSZVSoapIn">
@@ -101,7 +154,7 @@
     <wsdl:binding name="WS_zakazkySoap" type="tns:WS_zakazkySoap">
         <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
         <wsdl:operation name="ImportSZV">
-            <soap:operation soapAction="http://localhost/ImportSZV" style="document"/>
+            <soap:operation soapAction="http://rpzv.iris.sk/ImportSZV" style="document"/>
             <wsdl:input>
                 <soap:body use="literal"/>
             </wsdl:input>
@@ -113,7 +166,7 @@
     <wsdl:binding name="WS_zakazkySoap12" type="tns:WS_zakazkySoap">
         <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
         <wsdl:operation name="ImportSZV">
-            <soap12:operation soapAction="http://localhost/ImportSZV" style="document"/>
+            <soap12:operation soapAction="http://rpzv.iris.sk/ImportSZV" style="document"/>
             <wsdl:input>
                 <soap12:body use="literal"/>
             </wsdl:input>

@@ -69,15 +69,15 @@
 
     <bean id="importSzvJaxbContext" class="javax.xml.bind.JAXBContext"
           factory-method="newInstance">
-        <constructor-arg index="0" value="localhost"/>
+        <constructor-arg index="0" value="sk.iris.rpzv"/>
     </bean>
 
     <bean id="importSzvMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-        <property name="contextPath" value="localhost"/>
+        <property name="contextPath" value="sk.iris.rpzv"/>
     </bean>
 
     <bean id="importSzvMarshallerFormattedOutput" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
-        <property name="contextPath" value="localhost"/>
+        <property name="contextPath" value="sk.iris.rpzv"/>
         <property name="marshallerProperties">
             <map>
                 <entry>

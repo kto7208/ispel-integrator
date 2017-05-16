@@ -13,8 +13,6 @@ import ispel.integrator.domain.dms.VehicleInfo;
 import ispel.integrator.domain.dms.WorkInfo;
 import ispel.integrator.service.dms.DmsService;
 import ispel.integrator.utils.ResponseResolver;
-import localhost.ImportSZV;
-import localhost.ImportSZVResponse;
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.jdom2.Document;
@@ -26,6 +24,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.oxm.jaxb.Jaxb2Marshaller;
 import org.springframework.stereotype.Service;
 import org.springframework.ws.client.core.WebServiceTemplate;
+import sk.iris.rpzv.ImportSZV;
+import sk.iris.rpzv.ImportSZVResponse;
 
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
@@ -67,11 +67,11 @@ public class AdapterServiceImpl implements AdapterService {
 	@Value("${ispel.dms.directory}")
 	private String dmsDirectory;
 
-    @Value("${ispel.szv.user}")
-    private String wsUser;
+	@Value("${ispel.szv.ws.user}")
+	private String wsUser;
 
-    @Value("${ispel.szv.password}")
-    private String wsPassword;
+	@Value("${ispel.szv.ws.password}")
+	private String wsPassword;
 
     @Autowired
     private Jaxb2Marshaller dmsExtractMarshaller;
