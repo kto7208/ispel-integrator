@@ -55,7 +55,7 @@ public class DmsDao {
                                                     "left join pe_pracovnici p on p.uzivatelske_meno=s.user_name " +
             "where s.fakturovat=1 and s.zakazka=? and s.skupina=?";
 
-    private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad,ms.cena_dopor,s.ostatni,s.nazev from se_zdily s " +
+    private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad,ms.cena_dopor,s.ostatni,s.nazev,m.tlac_1 from se_zdily s " +
             "left outer join mz_conf_sklad m on s.sklad=m.kod " +
             "left outer join mz_sklad ms on ms.sklad=s.sklad and ms.katalog=s.katalog " +
             "where s.fakturovat=1 and s.zakazka=? and s.skupina=?";
@@ -300,6 +300,7 @@ public class DmsDao {
             partInfo.setCena_dopor((BigDecimal) row.get("cena_dopor"));
             partInfo.setOstatni((String) row.get("ostatni"));
             partInfo.setNazev((String) row.get("nazev"));
+            partInfo.setTlac_1((Long) row.get("tlac_1"));
             parts.add(partInfo);
         }
         return parts;
