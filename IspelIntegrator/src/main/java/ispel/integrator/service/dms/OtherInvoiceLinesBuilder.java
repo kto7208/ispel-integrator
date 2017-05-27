@@ -88,7 +88,8 @@ public class OtherInvoiceLinesBuilder {
         }
 
         private BigDecimal buildTotalCost(WorkInfo workInfo) {
-            return workInfo.getCena().multiply(workInfo.getNh()).multiply(workInfo.getOpakovani());
+            //return workInfo.getCena().multiply(workInfo.getNh()).multiply(workInfo.getOpakovani());
+            return BigDecimal.ZERO;
         }
 
         private BigDecimal buildTotalPrice(WorkInfo workInfo) {

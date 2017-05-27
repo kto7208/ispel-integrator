@@ -27,6 +27,8 @@ public class WorkInfo {
     private BigDecimal cena_jednotkova;
     private String hlavna_pp;
     private String vlastna_pp;
+    private String saga1;
+
 
     public String getOrderGroup() {
         return orderGroup;
@@ -170,5 +172,13 @@ public class WorkInfo {
 
     public boolean isHlavna() {
         return "A".equalsIgnoreCase(hlavna_pp);
+    }
+
+    public String getSaga1() {
+        return saga1;
+    }
+
+    public void setSaga1(String saga1) {
+        this.saga1 = saga1;
     }
 }

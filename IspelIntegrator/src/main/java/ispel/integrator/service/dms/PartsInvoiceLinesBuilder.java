@@ -40,8 +40,7 @@ public class PartsInvoiceLinesBuilder {
                 PartsInvoiceLine line = new PartsInvoiceLine();
                 line.setType(buildType(partInfo));
                 Part part = new Part();
-                part.setFranchiseName(partInfo.getKatalog());
-                part.setFranchiseName(partInfo.getNazov_p1());
+                part.setFranchiseName(buildFranchiseName(partInfo));
                 part.setIsFranchise("A".equalsIgnoreCase(partInfo.getOriginal_nd()));
                 part.setPartNumber(partInfo.getKatalog());
                 line.setPart(part);
@@ -52,6 +51,14 @@ public class PartsInvoiceLinesBuilder {
                 lines.add(line);
             }
             return lines.toArray(new PartsInvoiceLine[lines.size()]);
+        }
+
+        private String buildFranchiseName(PartInfo partInfo) {
+            if (partInfo.isNissan()) {
+                return "nissan";
+            } else {
+                return "other";
+            }
         }
 
         private BigDecimal buildTotalCost(PartInfo partInfo) {

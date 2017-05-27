@@ -24,6 +24,7 @@ public class PartsStkBuilder {
         };
 
         private List<PartInfo> parts;
+        private boolean nissanPartsOnly;
 
         private Builder() {
         }
@@ -33,11 +34,19 @@ public class PartsStkBuilder {
             return this;
         }
 
+        public Builder withNissanPartsOnly(boolean nissanPartsOnly) {
+            this.nissanPartsOnly = nissanPartsOnly;
+            return this;
+        }
+
         public PartsStk[] build() {
             long time = System.currentTimeMillis();
             List<PartsStk> partsStkList = new ArrayList<PartsStk>();
             Map<Long, PartsStk> map = new HashMap<Long, PartsStk>();
             for (PartInfo partInfo : parts) {
+                if (nissanPartsOnly && !partInfo.isNissan()) {
+                    continue;
+                }
                 PartsStk partsStk = map.get(partInfo.getSklad());
                 if (partsStk == null) {
                     partsStk = new PartsStk();
@@ -72,10 +81,10 @@ public class PartsStkBuilder {
         }
 
         private String buildFranchiseName(PartInfo partInfo) {
-            if (partInfo.getNazov_p1() != null && partInfo.getNazov_p1().length() > 0) {
-                return partInfo.getNazov_p1();
-            } else {
+            if (partInfo.isNissan()) {
                 return "nissan";
+            } else {
+                return "other";
             }
         }
 

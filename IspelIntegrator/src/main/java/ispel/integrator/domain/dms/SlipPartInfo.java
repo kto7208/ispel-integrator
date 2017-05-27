@@ -22,7 +22,7 @@ public class SlipPartInfo {
     private BigDecimal cena_nakup;
     private String nazov_p1;
     private String original_nd;
-
+    private Long tlac_1;
 
     public String getSklad() {
         return sklad;
@@ -134,5 +134,21 @@ public class SlipPartInfo {
 
     public void setOriginal_nd(String original_nd) {
         this.original_nd = original_nd;
+    }
+
+    public Long getTlac_1() {
+        return tlac_1;
+    }
+
+    public void setTlac_1(Long tlac_1) {
+        this.tlac_1 = tlac_1;
+    }
+
+    public boolean isNissan() {
+        if (tlac_1 == 21) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -133,13 +133,23 @@ public class RepairOrdersBuilder {
         private String buildType(WorkInfo workInfo) {
             if (orderInfo.getReklam_c() != null && orderInfo.getReklam_c().length() > 0
                     && Integer.valueOf(orderInfo.getReklam_c()) > 0) {
-                return "W";
+
+                if ("G".equalsIgnoreCase(workInfo.getSaga1())) {
+                    return "P";
+                } else {
+                    return "W";
+                }
+
             } else if (workInfo.getPopis_pp() != null &&
                         (workInfo.getPopis_pp().toLowerCase().contains("prehl") ||
                                 workInfo.getPopis_pp().toLowerCase().contains("prohl"))) {
+
                 return "S";
+
             } else {
+
                 return "R";
+
             }
         }
 

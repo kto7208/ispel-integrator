@@ -50,9 +50,10 @@ public class DmsDao {
 
     private static final String GET_VEHICLE_INFO_SQL = "select spz,vin,vyrobce,model,dt_prod,dt_stk_nasl,dt_emis_nasl,tel,rok,dt_vyroby,typ_vozidla,barva,barva_nazev,popis from se_auta where ci_auto=?";
 
-    private static final String GET_WORK_INFO_SQL = "select s.pracpoz,s.popis_pp,s.nh,s.opakovani,s.cena,s.cena_bdph,s.pp_id,s.procento,s.druh_pp,p.m_prijmeni,p.m_jmeno,s.ostatni,s.cena_jedn,s.hlavna_pp,s.vlastna_pp " +
+    private static final String GET_WORK_INFO_SQL = "select s.pracpoz,s.popis_pp,s.nh,s.opakovani,s.cena,s.cena_bdph,s.pp_id,s.procento,s.druh_pp,p.m_prijmeni,p.m_jmeno,s.ostatni,s.cena_jedn,s.hlavna_pp,s.vlastna_pp,r.saga1 " +
                                                     "from se_zprace s " +
                                                     "left join pe_pracovnici p on p.uzivatelske_meno=s.user_name " +
+            "left join reklamace r on r.skupina=s.skupina and r.zakazka=s.zakazka " +
             "where s.fakturovat=1 and s.zakazka=? and s.skupina=?";
 
     private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad,ms.cena_dopor,s.ostatni,s.nazev,m.tlac_1 from se_zdily s " +
@@ -67,7 +68,7 @@ public class DmsDao {
             "left join c_cdd c on m.cis_pohybu=c.cpo " +
             "where m.ci_dok=? and m.sklad=? and m.doklad='VYD'";
 
-    private static final String GET_SLIP_PART_INFO_SQL = "select p.pocet p_pocet,p.cena,p.celkem_pro,p.cena_prodej,s.druh_tovaru,p.katalog,s.pocet s_pocet,s.dt_vydej,s.dt_prijem,s.cena_nakup,m.nazov_p1,m.original_nd from mz_pohyby p " +
+    private static final String GET_SLIP_PART_INFO_SQL = "select p.pocet p_pocet,p.cena,p.celkem_pro,p.cena_prodej,s.druh_tovaru,p.katalog,s.pocet s_pocet,s.dt_vydej,s.dt_prijem,s.cena_nakup,m.nazov_p1,m.original_nd,m.tlac_1 from mz_pohyby p " +
             "left outer join mz_sklad s on p.sklad=s.sklad and s.katalog=p.katalog " +
             "left outer join mz_conf_sklad m on p.sklad=m.kod " +
             "where p.ci_dok=? and p.sklad=? and p.doklad='VYD'";
@@ -269,6 +270,7 @@ public class DmsDao {
             workInfo.setCena_jednotkova((BigDecimal) row.get("cena_jedn"));
             workInfo.setHlavna_pp((String) row.get("hlavna_pp"));
             workInfo.setVlastna_pp((String) row.get("vlastna_pp"));
+            workInfo.setSaga1((String) row.get("saga1"));
             works.add(workInfo);
         }
         return works;
@@ -369,6 +371,7 @@ public class DmsDao {
             slipPartInfo.setCena_nakup((BigDecimal) row.get("cena_nakup"));
             slipPartInfo.setNazov_p1((String) row.get("nazov_p1"));
             slipPartInfo.setOriginal_nd((String) row.get("original_nd"));
+            slipPartInfo.setTlac_1((Long) row.get("tlac_1"));
             parts.add(slipPartInfo);
         }
         return parts;
