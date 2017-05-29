@@ -98,6 +98,7 @@ public class OrderBuilderDirector {
         PartsInvoiceLine[] partsInvoiceLines = partsInvoiceLinesBuilder.newInstance()
                 .withOrderInfo(orderInfo)
                 .withParts(parts)
+                .withNissanPartsOnly(nissanPartsOnly)
                 .build();
 
         ServiceInvoiceLine[] serviceInvoiceLines = serviceInvoiceLinesBuilder.newInstance()
@@ -138,6 +139,7 @@ public class OrderBuilderDirector {
 
         PartsStk[] partsStks = partsStkBuilder.newInstance()
                 .withParts(parts)
+                .withNissanPartsOnly(nissanPartsOnly)
                 .build();
 
         return  dmsBuilder.newInstance()
@@ -156,5 +158,4 @@ public class OrderBuilderDirector {
                    .withRepairOrders(repairOrders)
                    .build();
     }
-
 }

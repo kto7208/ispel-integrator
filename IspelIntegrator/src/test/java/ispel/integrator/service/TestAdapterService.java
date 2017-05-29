@@ -65,8 +65,8 @@ public class TestAdapterService {
 		ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
 
 		AdapterRequest request = AdapterRequest.getEmptyRequest();
-		request.setDocumentGroup("17");
-		request.setDocumentNumber("12140001");
+		request.setDocumentGroup("16");
+		request.setDocumentNumber("0000600001");
 		request.setDocumentType("VYD");
 		request.setMethodName(AdapterRequest.MethodName.SubmitInvoiceData);
 		request.setDataSourceName("kto_1");

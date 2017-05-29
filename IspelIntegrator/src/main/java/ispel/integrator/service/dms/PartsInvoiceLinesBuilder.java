@@ -17,8 +17,14 @@ public class PartsInvoiceLinesBuilder {
 
         private List<PartInfo> parts;
         private OrderInfo orderInfo;
+        private boolean nissanPartsOnly;
 
         private Builder() {
+        }
+
+        public Builder withNissanPartsOnly(boolean nissanPartsOnly) {
+            this.nissanPartsOnly = nissanPartsOnly;
+            return this;
         }
 
         public Builder withOrderInfo(OrderInfo orderInfo) {
@@ -37,6 +43,9 @@ public class PartsInvoiceLinesBuilder {
             }
             List<PartsInvoiceLine> lines = new ArrayList<PartsInvoiceLine>();
             for (PartInfo partInfo : parts) {
+                if (nissanPartsOnly && !partInfo.isNissan()) {
+                    continue;
+                }
                 PartsInvoiceLine line = new PartsInvoiceLine();
                 line.setType(buildType(partInfo));
                 Part part = new Part();
