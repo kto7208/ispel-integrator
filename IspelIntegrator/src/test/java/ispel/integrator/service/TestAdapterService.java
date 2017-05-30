@@ -46,8 +46,8 @@ public class TestAdapterService {
 	}
 
     @Test
-    public void submitInvoiceData() throws Exception {
-        ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
+	public void submitOrderData() throws Exception {
+		ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
 
         AdapterRequest request = AdapterRequest.getEmptyRequest();
         request.setDocumentGroup("17");

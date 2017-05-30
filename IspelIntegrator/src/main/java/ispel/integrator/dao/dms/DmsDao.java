@@ -73,7 +73,7 @@ public class DmsDao {
             "left outer join mz_conf_sklad m on p.sklad=m.kod " +
             "where p.ci_dok=? and p.sklad=? and p.doklad='VYD'";
 
-    private static final String UPDATE_ORDER_SQL = "update se_zakazky set write_time=?,ispel_processed=? where zakazka=? and skupina=?";
+    private static final String UPDATE_ORDER_SQL = "update se_zakazky set write_time=?,nissan_processed=? where zakazka=? and skupina=?";
     @Autowired
     public DmsDao(DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);

@@ -96,9 +96,7 @@ public class OrderBuilderDirector {
         List<DescriptionInfo> descriptions = dmsDao.getDescriptionInfoList(documentNumber, documentGroup);
 
         PartsInvoiceLine[] partsInvoiceLines = partsInvoiceLinesBuilder.newInstance()
-                .withOrderInfo(orderInfo)
                 .withParts(parts)
-                .withNissanPartsOnly(nissanPartsOnly)
                 .build();
 
         ServiceInvoiceLine[] serviceInvoiceLines = serviceInvoiceLinesBuilder.newInstance()
@@ -130,6 +128,7 @@ public class OrderBuilderDirector {
                 .build();
 
         RepairOrders repairOrders = repairOrderBuilder.newInstance()
+                .withNissanPartsOnly(nissanPartsOnly)
                 .withCustomerInfo(customerInfo)
                 .withEmployeeInfo(employeeInfo)
                 .withOrderInfo(orderInfo)

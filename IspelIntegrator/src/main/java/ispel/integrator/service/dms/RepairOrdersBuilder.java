@@ -28,8 +28,14 @@ public class RepairOrdersBuilder {
         private EmployeeInfo employeeInfo;
         private List<WorkInfo> works;
         private List<DescriptionInfo> descriptions;
+        private boolean nissanPartsOnly;
 
         private Builder() {}
+
+        public Builder withNissanPartsOnly(boolean nissanPartsOnly) {
+            this.nissanPartsOnly = nissanPartsOnly;
+            return this;
+        }
 
         public Builder withCustomerInfo(CustomerInfo customerInfo) {
             this.customerInfo = customerInfo;
@@ -80,6 +86,9 @@ public class RepairOrdersBuilder {
             Map<Long, LabourRecord> map = new HashMap<Long, LabourRecord>();
             List<LabourRecord> labourRecords = new ArrayList<LabourRecord>();
             for (WorkInfo workInfo : works) {
+                if (nissanPartsOnly && workInfo.isOther()) {
+                    continue;
+                }
                 LabourRecord lr = null;
                 if (!"A".equalsIgnoreCase(workInfo.getOstatni())) {
                     lr = map.get(workInfo.getPp_id());

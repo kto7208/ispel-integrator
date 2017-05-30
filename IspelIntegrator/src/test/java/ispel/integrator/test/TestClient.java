@@ -50,7 +50,7 @@ public class TestClient {
     }
 
     @Test
-    public void submitInvoiceData() throws Exception {
+    public void submitOrderData() throws Exception {
         Socket s = new Socket("localhost", 6900);
         InputStream is = new BufferedInputStream(s.getInputStream(), 48);
         OutputStream os = new BufferedOutputStream(s.getOutputStream(), 48);

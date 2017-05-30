@@ -2,7 +2,6 @@ package ispel.integrator.service.dms;
 
 import generated.Part;
 import generated.PartsInvoiceLine;
-import ispel.integrator.domain.dms.OrderInfo;
 import ispel.integrator.domain.dms.PartInfo;
 import org.springframework.stereotype.Component;
 
@@ -16,20 +15,8 @@ public class PartsInvoiceLinesBuilder {
     public class Builder {
 
         private List<PartInfo> parts;
-        private OrderInfo orderInfo;
-        private boolean nissanPartsOnly;
 
         private Builder() {
-        }
-
-        public Builder withNissanPartsOnly(boolean nissanPartsOnly) {
-            this.nissanPartsOnly = nissanPartsOnly;
-            return this;
-        }
-
-        public Builder withOrderInfo(OrderInfo orderInfo) {
-            this.orderInfo = orderInfo;
-            return this;
         }
 
         public Builder withParts(List<PartInfo> parts) {
@@ -43,9 +30,6 @@ public class PartsInvoiceLinesBuilder {
             }
             List<PartsInvoiceLine> lines = new ArrayList<PartsInvoiceLine>();
             for (PartInfo partInfo : parts) {
-                if (nissanPartsOnly && !partInfo.isNissan()) {
-                    continue;
-                }
                 PartsInvoiceLine line = new PartsInvoiceLine();
                 line.setType(buildType(partInfo));
                 Part part = new Part();
