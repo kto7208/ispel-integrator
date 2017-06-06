@@ -75,6 +75,18 @@ public class TestAdapterService {
 	}
 
 	@Test
+	public void submitMultipleData() throws Exception {
+		ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
+
+		AdapterRequest request = AdapterRequest.getEmptyRequest();
+		request.setDocumentType("ZAK");
+		request.setMethodName(AdapterRequest.MethodName.SubmitMultipleInvoiceData);
+		request.setDataSourceName("kto_1");
+
+		adapterService.submitMultipleInvoiceData(request);
+	}
+
+	@Test
 	public void importSZV() throws Exception {
 		ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
 

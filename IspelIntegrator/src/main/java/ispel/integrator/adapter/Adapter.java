@@ -103,8 +103,11 @@ public class Adapter {
 			case SubmitInvoiceData:
 				result = service.submitInvoiceData(request);
 				break;
-                case ImportSZV:
-                    result = service.importSZV(request);
+				case SubmitMultipleInvoiceData:
+					result = service.submitMultipleInvoiceData(request);
+					break;
+				case ImportSZV:
+					result = service.importSZV(request);
                     break;
                 default:
 				throw new IllegalStateException("wrong method name: " + request.getMethodName());
@@ -178,8 +181,18 @@ public class Adapter {
                         .append(ServiceCallTimestampHolder.getAsDateTime())
                         .append(result.getErrorText());
             }
-        } else {
-            ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
+		} else if (MethodName.SubmitMultipleInvoiceData.equals(request.getMethodName())) {
+			if (result.getErrorText() == null
+					|| result.getErrorText().isEmpty()) {
+				reply.append("OK").append(
+						ServiceCallTimestampHolder.getAsDateTime());
+			} else {
+				reply.append("ER")
+						.append(ServiceCallTimestampHolder.getAsDateTime())
+						.append(result.getErrorText());
+			}
+		} else {
+			ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
             reply.append("ER")
                     .append(ServiceCallTimestampHolder.getAsDateTime())
                     .append("Unknown request method");

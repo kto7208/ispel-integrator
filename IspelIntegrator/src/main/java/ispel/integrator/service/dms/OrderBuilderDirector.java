@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class OrderBuilderDirector {
@@ -156,5 +158,70 @@ public class OrderBuilderDirector {
                    .withPartStks(Sets.<PartsStk>newHashSet(partsStks))
                    .withRepairOrders(repairOrders)
                    .build();
+    }
+
+    public DMSextract constructMultiple() {
+        DMSextract dms = null;
+        List<OrderKey> keys = dmsDao.getOrdersForMultipleProcessing();
+        for (OrderKey key : keys) {
+            DMSextract d = construct(String.valueOf(key.getSkupina()), String.valueOf(key.getZakazka()));
+            if (dms == null) {
+                dms = d;
+            } else {
+                addInvoice(dms, d);
+                addRepairOrder(dms, d);
+                addPartsStk(dms, d);
+            }
+            dmsDao.updateOrder(String.valueOf(key.getZakazka()), String.valueOf(key.getSkupina()));
+        }
+        return dms;
+    }
+
+    private void addInvoice(DMSextract dms, DMSextract invDms) {
+        dms.getSite().get(0).getTransactions().getInvoice().add(
+                invDms.getSite().get(0).getTransactions().getInvoice().get(0));
+    }
+
+    private void addRepairOrder(DMSextract dms, DMSextract invDms) {
+        dms.getSite().get(0).getRepairOrders().getRepairOrder().addAll(
+                invDms.getSite().get(0).getRepairOrders().getRepairOrder());
+    }
+
+    private void addPartsStk(DMSextract dms, DMSextract invDms) {
+        Set<String> parts = new HashSet<String>();
+        for (PartsStk partsStk : invDms.getSite().get(0).getPartsStk()) {
+            PartsStk p = getPartsStk(dms, partsStk);
+            if (p == null) {
+                dms.getSite().get(0).getPartsStk().add(partsStk);
+            } else {
+                addPtStk(p, partsStk);
+            }
+        }
+    }
+
+    private PartsStk getPartsStk(DMSextract dms, PartsStk partsStk) {
+        for (PartsStk p : dms.getSite().get(0).getPartsStk()) {
+            if (p.getWarehouse().equals(partsStk.getWarehouse())) {
+                return p;
+            }
+        }
+        return null;
+    }
+
+    private void addPtStk(PartsStk p, PartsStk partsStk) {
+        for (PtStk ptStk : partsStk.getPtStk()) {
+            if (!hasPtStk(p, ptStk)) {
+                p.getPtStk().add(ptStk);
+            }
+        }
+    }
+
+    private boolean hasPtStk(PartsStk partsStk, PtStk ptStk) {
+        for (PtStk p : partsStk.getPtStk()) {
+            if (p.getNum().equals(ptStk.getNum())) {
+                return true;
+            }
+        }
+        return false;
     }
 }

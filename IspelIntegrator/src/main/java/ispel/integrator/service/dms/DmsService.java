@@ -41,5 +41,21 @@ public class DmsService {
         }
         return dmsExtract;
     }
+
+    @Transactional
+    public DMSextract buildDMSMultiple(String documentType) {
+        if (documentType == null) {
+            throw new IllegalArgumentException("documentType is null");
+        }
+        DMSextract dmsExtract = null;
+        if ("VYD".equals(documentType)) {
+            dmsExtract = slipBuilderDirector.constructMultiple();
+        } else if ("ZAK".equals(documentType)) {
+            dmsExtract = orderBuilderDirector.constructMultiple();
+        } else {
+            throw new IllegalStateException("wrong documentType: " + documentType);
+        }
+        return dmsExtract;
+    }
 }
 

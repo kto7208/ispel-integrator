@@ -11,5 +11,7 @@ public interface AdapterService {
 
 	Result submitInvoiceData(AdapterRequest request);
 
+    Result submitMultipleInvoiceData(AdapterRequest request);
+
 	Result importSZV(AdapterRequest request);
 }

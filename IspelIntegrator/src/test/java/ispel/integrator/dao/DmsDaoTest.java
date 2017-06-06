@@ -95,4 +95,11 @@ public class DmsDaoTest {
     public void testGetSlipPartInfoList() {
         List<SlipPartInfo> list = dmsDao.getSlipPartInfoList("600001", "16");
     }
+
+    @Test
+    @Rollback
+    public void testGetOrdersForMultipleProcessing() {
+        List<OrderKey> list = dmsDao.getOrdersForMultipleProcessing();
+    }
+
 }

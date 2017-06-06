@@ -115,4 +115,8 @@ public class SlipBuilderDirector {
                 .withPartStks(Sets.<PartsStk>newHashSet(partsStks))
                 .build();
     }
+
+    public DMSextract constructMultiple() {
+        return null;
+    }
 }

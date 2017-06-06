@@ -56,7 +56,7 @@ public class DmsDao {
             "left join reklamace r on r.skupina=s.skupina and r.zakazka=s.zakazka " +
             "where s.fakturovat=1 and s.zakazka=? and s.skupina=?";
 
-    private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad,ms.cena_dopor,s.ostatni,s.nazev,m.tlac_1 from se_zdily s " +
+    private static final String GET_PART_INFO_SQL = "select s.katalog,m.nazov_p1,m.original_nd,s.mnozstvi,s.cena_skl,s.cena_bdp,s.cena_prodej,ms.cena_nakup,ms.pocet,ms.dt_vydej,ms.dt_prijem,ms.druh_tovaru,s.sklad,ms.cena_dopor,s.ostatni,s.nazev,m.tlac_sklad from se_zdily s " +
             "left outer join mz_conf_sklad m on s.sklad=m.kod " +
             "left outer join mz_sklad ms on ms.sklad=s.sklad and ms.katalog=s.katalog " +
             "where s.fakturovat=1 and s.zakazka=? and s.skupina=?";
@@ -68,12 +68,16 @@ public class DmsDao {
             "left join c_cdd c on m.cis_pohybu=c.cpo " +
             "where m.ci_dok=? and m.sklad=? and m.doklad='VYD'";
 
-    private static final String GET_SLIP_PART_INFO_SQL = "select p.pocet p_pocet,p.cena,p.celkem_pro,p.cena_prodej,s.druh_tovaru,p.katalog,s.pocet s_pocet,s.dt_vydej,s.dt_prijem,s.cena_nakup,m.nazov_p1,m.original_nd,m.tlac_1 from mz_pohyby p " +
+    private static final String GET_SLIP_PART_INFO_SQL = "select p.pocet p_pocet,p.cena,p.celkem_pro,p.cena_prodej,s.druh_tovaru,p.katalog,s.pocet s_pocet,s.dt_vydej,s.dt_prijem,s.cena_nakup,m.nazov_p1,m.original_nd,m.tlac_sklad from mz_pohyby p " +
             "left outer join mz_sklad s on p.sklad=s.sklad and s.katalog=p.katalog " +
             "left outer join mz_conf_sklad m on p.sklad=m.kod " +
             "where p.ci_dok=? and p.sklad=? and p.doklad='VYD'";
 
     private static final String UPDATE_ORDER_SQL = "update se_zakazky set write_time=?,nissan_processed=? where zakazka=? and skupina=?";
+
+    private static final String GET_ORDERS_SQL = "select s.zakazka,s.SKUPINA from se_zakazky s " +
+            "left join se_skupz sz on s.SKUPINA=sz.SKUPINA where sz.TLAC_TYP=21 AND s.STAV='U' and s.NISSAN_PROCESSED='N'";
+
     @Autowired
     public DmsDao(DataSource ds) {
         this.jdbcTemplate = new JdbcTemplate(ds);
@@ -302,7 +306,7 @@ public class DmsDao {
             partInfo.setCena_dopor((BigDecimal) row.get("cena_dopor"));
             partInfo.setOstatni((String) row.get("ostatni"));
             partInfo.setNazev((String) row.get("nazev"));
-            partInfo.setTlac_1((Long) row.get("tlac_1"));
+            partInfo.setTlac_sklad((Long) row.get("tlac_sklad"));
             parts.add(partInfo);
         }
         return parts;
@@ -371,7 +375,7 @@ public class DmsDao {
             slipPartInfo.setCena_nakup((BigDecimal) row.get("cena_nakup"));
             slipPartInfo.setNazov_p1((String) row.get("nazov_p1"));
             slipPartInfo.setOriginal_nd((String) row.get("original_nd"));
-            slipPartInfo.setTlac_1((Long) row.get("tlac_1"));
+            slipPartInfo.setTlac_sklad((Long) row.get("tlac_sklad"));
             parts.add(slipPartInfo);
         }
         return parts;
@@ -392,4 +396,15 @@ public class DmsDao {
                 });
     }
 
+    public List<OrderKey> getOrdersForMultipleProcessing() {
+        List<OrderKey> keys = new ArrayList<OrderKey>();
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(GET_ORDERS_SQL);
+        for (Map<String, Object> row : rows) {
+            OrderKey key = new OrderKey();
+            key.setZakazka((Long) row.get("zakazka"));
+            key.setSkupina((Integer) row.get("skupina"));
+            keys.add(key);
+        }
+        return keys;
+    }
 }

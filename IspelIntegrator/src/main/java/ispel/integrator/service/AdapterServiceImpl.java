@@ -173,7 +173,6 @@ public class AdapterServiceImpl implements AdapterService {
 
 
 	public Result submitInvoiceData(AdapterRequest request) {
-
 		String documentGroup = request.getDocumentGroup();
 		String documentNumber = request.getDocumentNumber();
 		String documentType = request.getDocumentType();
@@ -193,6 +192,24 @@ public class AdapterServiceImpl implements AdapterService {
 		Result result = Result.getInstance(request);
 		return result;
 	}
+
+    public Result submitMultipleInvoiceData(AdapterRequest request) {
+        String documentType = request.getDocumentType();
+        DMSextract dmsExtract = dmsService.buildDMSMultiple(documentType);
+        if (dmsExtract != null) {
+            StringWriter stringWriter = new StringWriter();
+            dmsExtractMarshaller.marshal(dmsExtract, new StreamResult(stringWriter));
+            try {
+                Files.write(stringWriter.toString(),
+                        FileUtils.getFile(dmsDirectory, getFileNameMultiple()),
+                        Charsets.UTF_8);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        Result result = Result.getInstance(request);
+        return result;
+    }
 
     public Result importSZV(AdapterRequest request) {
         String orderGroup = request.getDocumentGroup();
@@ -258,6 +275,17 @@ public class AdapterServiceImpl implements AdapterService {
 				.append(".xml")
 				.toString();
 	}
+
+    private String getFileNameMultiple() {
+        return new StringBuilder()
+                .append("orders")
+                .append("-")
+                .append(ServiceCallTimestampHolder.getAsYYMMDD())
+                .append("-")
+                .append(ServiceCallTimestampHolder.getAsHHMMSS())
+                .append(".xml")
+                .toString();
+    }
 
     private String marshal(Object o) {
         StringWriter sw = new StringWriter();

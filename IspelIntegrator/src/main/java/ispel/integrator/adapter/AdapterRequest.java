@@ -60,12 +60,16 @@ public class AdapterRequest {
 			req.documentType = s.substring(33,36).trim();
 			req.documentNumber = s.substring(36,46).trim();
 			req.documentGroup = s.substring(46,48).trim();
-        } else if ("030".equals(s.substring(0, 3))) {
-            req.methodName = MethodName.ImportSZV;
+		} else if ("030".equals(s.substring(0, 3))) {
+			req.methodName = MethodName.ImportSZV;
 			req.dataSourceName = s.substring(3, 33).trim();
 			req.documentType = s.substring(33, 36).trim();
 			req.documentNumber = s.substring(36, 46).trim();
 			req.documentGroup = s.substring(46, 48).trim();
+		} else if ("120".equals(s.substring(0, 3))) {
+			req.methodName = MethodName.SubmitMultipleInvoiceData;
+			req.dataSourceName = s.substring(3, 33).trim();
+			req.documentType = s.substring(33, 36).trim();
 		}
 		log.debug(req);
 		return req;

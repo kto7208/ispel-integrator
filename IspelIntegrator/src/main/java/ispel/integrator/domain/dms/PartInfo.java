@@ -27,7 +27,7 @@ public class PartInfo {
     private String ostatni;
 
     private String nazev;
-    private Long tlac_1;
+    private Long tlac_sklad;
 
 
     public String getOrderNumber() {
@@ -177,14 +177,14 @@ public class PartInfo {
     public boolean isNissan() {
         if ("A".equalsIgnoreCase(ostatni)) {
             return false;
-        } else if (tlac_1 != 21) {
+        } else if (tlac_sklad != 21) {
             return false;
         } else {
             return true;
         }
     }
 
-    public void setTlac_1(Long tlac_1) {
-        this.tlac_1 = tlac_1;
+    public void setTlac_sklad(Long tlac_sklad) {
+        this.tlac_sklad = tlac_sklad;
     }
 }
