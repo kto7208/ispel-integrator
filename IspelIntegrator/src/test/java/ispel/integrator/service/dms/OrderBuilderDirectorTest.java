@@ -19,7 +19,7 @@ public class OrderBuilderDirectorTest {
     @Test
     @Commit
     public void testConstruct() {
-        orderBuilderDirector.construct("17","12140001");
+        orderBuilderDirector.construct("17", "12140001", null, null);
     }
 
     @Test

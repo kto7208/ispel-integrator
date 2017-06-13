@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -88,7 +89,7 @@ public class OrderBuilderDirector {
     }
 
 
-    public DMSextract construct(String documentGroup, String documentNumber) {
+    public DMSextract construct(String documentGroup, String documentNumber, BigInteger siteSequence, BigInteger sourceSequence) {
         OrderInfo orderInfo = dmsDao.getOrderInfo(documentNumber, documentGroup);
         CustomerInfo customerInfo = dmsDao.getCustomerInfo(orderInfo.getCi_reg());
         EmployeeInfo employeeInfo = dmsDao.getEmployeeInfo(orderInfo.getUserName());
@@ -145,11 +146,13 @@ public class OrderBuilderDirector {
 
         return  dmsBuilder.newInstance()
                    .withSource(this.ico)
-                   .withDmsSequence(this.dmsSequenceService.getDmsSourceSequenceNextVal())
+                .withDmsSequence(sourceSequence == null ?
+                        this.dmsSequenceService.getDmsSourceSequenceNextVal() : sourceSequence)
                    .withDmsVendor(this.vendor)
                    .withDmsProductName(this.productName)
                    .withDmsVersion(this.dmsVersion)
-                   .withSiteSequence(this.dmsSequenceService.getDmsSiteSequenceNextVal())
+                .withSiteSequence(siteSequence == null ?
+                        this.dmsSequenceService.getDmsSiteSequenceNextVal() : siteSequence)
                    .withCountry(this.country)
                    .withCurrency(this.currency)
                    .withFranchise(this.franchise)
@@ -163,8 +166,11 @@ public class OrderBuilderDirector {
     public DMSextract constructMultiple() {
         DMSextract dms = null;
         List<OrderKey> keys = dmsDao.getOrdersForMultipleProcessing();
+        BigInteger siteSequence = this.dmsSequenceService.getDmsSiteSequenceNextVal();
+        BigInteger sourceSequence = this.dmsSequenceService.getDmsSourceSequenceNextVal();
         for (OrderKey key : keys) {
-            DMSextract d = construct(String.valueOf(key.getSkupina()), String.valueOf(key.getZakazka()));
+            DMSextract d = construct(String.valueOf(key.getSkupina()), String.valueOf(key.getZakazka()),
+                    siteSequence, sourceSequence);
             if (dms == null) {
                 dms = d;
             } else {

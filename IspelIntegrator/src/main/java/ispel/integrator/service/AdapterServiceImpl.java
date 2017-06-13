@@ -29,6 +29,7 @@ import sk.iris.rpzv.ImportSZVResponse;
 
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -180,34 +181,58 @@ public class AdapterServiceImpl implements AdapterService {
 		DMSextract dmsExtract = dmsService.buildDMS(documentType, documentNumber, documentGroup);
 		StringWriter stringWriter = new StringWriter();
 		dmsExtractMarshaller.marshal(dmsExtract, new StreamResult(stringWriter));
-
-		try {
-			Files.write(stringWriter.toString(),
-					FileUtils.getFile(dmsDirectory, getFileName(dmsExtract)),
-					Charsets.UTF_8);
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-
-		Result result = Result.getInstance(request);
-		return result;
+        Result result = Result.getInstance(request);
+        String sendResult = null;
+        try {
+            File f = FileUtils.getFile(dmsDirectory, getFileName(dmsExtract));
+            Files.write(stringWriter.toString(),
+                    f,
+                    Charsets.UTF_8);
+            result.setXmlInput(stringWriter.toString());
+            sendResult = dmsService.sendData(f);
+            result.setXmlOutput(sendResult);
+        } catch (IOException e) {
+            logger.error(e);
+            result.setProcessed(Result.UNPROCESSED);
+            result.setErrorText(e.getMessage());
+        }
+        try {
+            logService.logResult(result);
+        } catch (Exception e) {
+            logger.error("Log result error.");
+            logger.error(e);
+        }
+        return result;
 	}
 
     public Result submitMultipleInvoiceData(AdapterRequest request) {
         String documentType = request.getDocumentType();
         DMSextract dmsExtract = dmsService.buildDMSMultiple(documentType);
+        Result result = Result.getInstance(request);
         if (dmsExtract != null) {
             StringWriter stringWriter = new StringWriter();
             dmsExtractMarshaller.marshal(dmsExtract, new StreamResult(stringWriter));
+            String sendResult = null;
             try {
+                File f = FileUtils.getFile(dmsDirectory, getFileNameMultiple());
                 Files.write(stringWriter.toString(),
-                        FileUtils.getFile(dmsDirectory, getFileNameMultiple()),
+                        f,
                         Charsets.UTF_8);
+                result.setXmlInput(stringWriter.toString());
+                sendResult = dmsService.sendData(f);
+                result.setXmlOutput(sendResult);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                logger.error(e);
+                result.setProcessed(Result.UNPROCESSED);
+                result.setErrorText(e.getMessage());
             }
         }
-        Result result = Result.getInstance(request);
+        try {
+            logService.logResult(result);
+        } catch (Exception e) {
+            logger.error("Log result error.");
+            logger.error(e);
+        }
         return result;
     }
 
