@@ -25,7 +25,7 @@ public class OrderBuilderDirectorTest {
     @Test
     @Commit
     public void testConstructMultiple() {
-        orderBuilderDirector.constructMultiple();
+        orderBuilderDirector.constructMultiple(null);
     }
 
 }

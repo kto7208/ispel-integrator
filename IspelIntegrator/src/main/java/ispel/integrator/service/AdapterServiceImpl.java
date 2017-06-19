@@ -7,10 +7,7 @@ import ispel.integrator.adapter.AdapterRequest;
 import ispel.integrator.adapter.Result;
 import ispel.integrator.dao.dms.DmsDao;
 import ispel.integrator.domain.CarInfo;
-import ispel.integrator.domain.dms.OrderInfo;
-import ispel.integrator.domain.dms.PartInfo;
-import ispel.integrator.domain.dms.VehicleInfo;
-import ispel.integrator.domain.dms.WorkInfo;
+import ispel.integrator.domain.dms.*;
 import ispel.integrator.service.dms.DmsService;
 import ispel.integrator.utils.ResponseResolver;
 import org.apache.commons.io.FileUtils;
@@ -191,10 +188,11 @@ public class AdapterServiceImpl implements AdapterService {
             result.setXmlInput(stringWriter.toString());
             sendResult = dmsService.sendData(f);
             result.setXmlOutput(sendResult);
+            dmsService.updateOrder(documentGroup, documentNumber);
         } catch (IOException e) {
             logger.error(e);
             result.setProcessed(Result.UNPROCESSED);
-            result.setErrorText(e.getMessage());
+            result.setErrorText(e.getClass().getCanonicalName() + " " + e.getMessage());
         }
         try {
             logService.logResult(result);
@@ -207,7 +205,8 @@ public class AdapterServiceImpl implements AdapterService {
 
     public Result submitMultipleInvoiceData(AdapterRequest request) {
         String documentType = request.getDocumentType();
-        DMSextract dmsExtract = dmsService.buildDMSMultiple(documentType);
+        List<OrderKey> keys = dmsService.getOrdersForMultipleProcessing();
+        DMSextract dmsExtract = dmsService.buildDMSMultiple(documentType, keys);
         Result result = Result.getInstance(request);
         if (dmsExtract != null) {
             StringWriter stringWriter = new StringWriter();
@@ -221,10 +220,11 @@ public class AdapterServiceImpl implements AdapterService {
                 result.setXmlInput(stringWriter.toString());
                 sendResult = dmsService.sendData(f);
                 result.setXmlOutput(sendResult);
+                dmsService.updateOrders(keys);
             } catch (IOException e) {
                 logger.error(e);
                 result.setProcessed(Result.UNPROCESSED);
-                result.setErrorText(e.getMessage());
+                result.setErrorText(e.getClass().getCanonicalName() + " " + e.getMessage());
             }
         }
         try {

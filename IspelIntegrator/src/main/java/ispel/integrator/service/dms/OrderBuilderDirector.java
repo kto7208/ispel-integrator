@@ -163,9 +163,8 @@ public class OrderBuilderDirector {
                    .build();
     }
 
-    public DMSextract constructMultiple() {
+    public DMSextract constructMultiple(List<OrderKey> keys) {
         DMSextract dms = null;
-        List<OrderKey> keys = dmsDao.getOrdersForMultipleProcessing();
         BigInteger siteSequence = this.dmsSequenceService.getDmsSiteSequenceNextVal();
         BigInteger sourceSequence = this.dmsSequenceService.getDmsSourceSequenceNextVal();
         for (OrderKey key : keys) {
@@ -178,7 +177,6 @@ public class OrderBuilderDirector {
                 addRepairOrder(dms, d);
                 addPartsStk(dms, d);
             }
-            dmsDao.updateOrder(String.valueOf(key.getZakazka()), String.valueOf(key.getSkupina()));
         }
         return dms;
     }

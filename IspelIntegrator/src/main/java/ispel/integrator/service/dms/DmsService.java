@@ -1,6 +1,8 @@
 package ispel.integrator.service.dms;
 
 import generated.DMSextract;
+import ispel.integrator.dao.dms.DmsDao;
+import ispel.integrator.domain.dms.OrderKey;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -21,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 @Service
 public class DmsService {
@@ -42,6 +45,9 @@ public class DmsService {
 
     @Value("${ispel.dms.pwd}")
     private String pwd;
+
+    @Autowired
+    private DmsDao dmsDao;
 
     @Transactional(readOnly = true)
     public DMSextract buildDMS(String documentType, String documentNumber, String documentGroup) {
@@ -67,15 +73,19 @@ public class DmsService {
     }
 
     @Transactional
-    public DMSextract buildDMSMultiple(String documentType) {
+    public DMSextract buildDMSMultiple(String documentType, List<OrderKey> keys) {
         if (documentType == null) {
             throw new IllegalArgumentException("documentType is null");
         }
+        if (keys == null) {
+            throw new IllegalArgumentException("keys is null");
+        }
+
         DMSextract dmsExtract = null;
         if ("VYD".equals(documentType)) {
             dmsExtract = slipBuilderDirector.constructMultiple();
         } else if ("ZAK".equals(documentType)) {
-            dmsExtract = orderBuilderDirector.constructMultiple();
+            dmsExtract = orderBuilderDirector.constructMultiple(keys);
         } else {
             throw new IllegalStateException("wrong documentType: " + documentType);
         }
@@ -110,6 +120,26 @@ public class DmsService {
         logger.debug("send result: " + result);
         client.close();
         return result.toString();
+    }
+
+    @Transactional
+    public void updateOrder(String skupina, String zakazka) {
+        dmsDao.updateOrder(zakazka, skupina);
+    }
+
+    @Transactional
+    public void updateOrders(List<OrderKey> keys) {
+        if (keys == null) {
+            throw new IllegalArgumentException("keys is null");
+        }
+        for (OrderKey key : keys) {
+            dmsDao.updateOrder(String.valueOf(key.getZakazka()), String.valueOf(key.getSkupina()));
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public List<OrderKey> getOrdersForMultipleProcessing() {
+        return dmsDao.getOrdersForMultipleProcessing();
     }
 }
 
