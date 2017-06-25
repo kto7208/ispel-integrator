@@ -27,7 +27,6 @@ import sk.iris.rpzv.ImportSZVResponse;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.List;
@@ -189,8 +188,8 @@ public class AdapterServiceImpl implements AdapterService {
             sendResult = dmsService.sendData(f);
             result.setXmlOutput(sendResult);
             dmsService.updateOrder(documentGroup, documentNumber);
-        } catch (IOException e) {
-            logger.error(e);
+		} catch (Exception e) {
+			logger.error(e);
             result.setProcessed(Result.UNPROCESSED);
             result.setErrorText(e.getClass().getCanonicalName() + " " + e.getMessage());
         }
@@ -221,8 +220,8 @@ public class AdapterServiceImpl implements AdapterService {
                 sendResult = dmsService.sendData(f);
                 result.setXmlOutput(sendResult);
                 dmsService.updateOrders(keys);
-            } catch (IOException e) {
-                logger.error(e);
+			} catch (Exception e) {
+				logger.error(e);
                 result.setProcessed(Result.UNPROCESSED);
                 result.setErrorText(e.getClass().getCanonicalName() + " " + e.getMessage());
             }

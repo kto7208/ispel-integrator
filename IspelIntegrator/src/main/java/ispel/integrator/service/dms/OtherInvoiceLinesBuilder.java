@@ -75,7 +75,7 @@ public class OtherInvoiceLinesBuilder {
                 return "invoice";
             }
             */
-            if (workInfo.getCena().compareTo(BigDecimal.ZERO) >= 0) {
+            if (workInfo.getCenabdph().compareTo(BigDecimal.ZERO) >= 0) {
                 return "invoice";
             } else {
                 return "credit";
@@ -88,7 +88,7 @@ public class OtherInvoiceLinesBuilder {
         }
 
         private BigDecimal buildTotalCost(WorkInfo workInfo) {
-            //return workInfo.getCena().multiply(workInfo.getNh()).multiply(workInfo.getOpakovani());
+            //return workInfo.getCena().abs().multiply(workInfo.getNh()).multiply(workInfo.getOpakovani());
             return BigDecimal.ZERO;
         }
 

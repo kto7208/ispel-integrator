@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
@@ -92,7 +91,7 @@ public class DmsService {
         return dmsExtract;
     }
 
-    public String sendData(File file) throws IOException {
+    public String sendData(File file) throws Exception {
         CloseableHttpClient client = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(sendUrl);
         FileBody fileBody = new FileBody(file, ContentType.APPLICATION_XML);
@@ -117,9 +116,17 @@ public class DmsService {
         while ((line = rd.readLine()) != null) {
             result.append(line);
         }
-        logger.debug("send result: " + result);
         client.close();
-        return result.toString();
+        logger.debug("send result: " + result);
+        return validateResult(result.toString());
+    }
+
+    private String validateResult(String result) throws Exception {
+        if (result.contains("<Success Message")) {
+            return result;
+        } else {
+            throw new Exception(result);
+        }
     }
 
     @Transactional
