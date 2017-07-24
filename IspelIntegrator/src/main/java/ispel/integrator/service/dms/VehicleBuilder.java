@@ -78,7 +78,7 @@ public class VehicleBuilder {
             vehicle.setManufacturer(this.vehicleInfo.getVyrobce());
             vehicle.setModel(this.vehicleInfo.getModel());
             Odometer odometer = new Odometer();
-            odometer.setKilometres(new BigInteger(this.orderInfo.getStav_tach()));
+            odometer.setKilometres(buildKilometers());
             vehicle.setOdometer(odometer);
             vehicle.setRegDate(buildRegDate());
             vehicle.setTechTestDueDate(buildTechTestDueDate());
@@ -107,6 +107,15 @@ public class VehicleBuilder {
             vehicle.getPartsInvoiceLineOrServiceInvoiceLineOrOtherInvoiceLine().addAll(Arrays.asList(partsInvoiceLines));
             vehicle.getPartsInvoiceLineOrServiceInvoiceLineOrOtherInvoiceLine().addAll(Arrays.asList(otherInvoiceLines));
             return vehicle;
+        }
+
+        private BigInteger buildKilometers() {
+            BigInteger kilometers = new BigInteger(this.orderInfo.getStav_tach());
+            if (kilometers.compareTo(BigInteger.ZERO) <= 0) {
+                return BigInteger.ONE;
+            } else {
+                return kilometers;
+            }
         }
 
         private Date buildRegDate() {
