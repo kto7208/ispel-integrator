@@ -39,7 +39,7 @@ public class PartsInvoiceLinesBuilder {
                 line.setPart(part);
                 line.setQuantity(partInfo.getMnozstvi());
                 line.setTotalCost(buildTotalCost(partInfo));
-                line.setTotalPrice(partInfo.getCena_bdp());
+                line.setTotalPrice(partInfo.getCena_bdp().abs());
                 line.setTotalListPrice(buildTotalListPrice(partInfo));
                 lines.add(line);
             }
@@ -57,20 +57,20 @@ public class PartsInvoiceLinesBuilder {
         private BigDecimal buildTotalCost(PartInfo partInfo) {
             if ("A".equalsIgnoreCase(partInfo.getOstatni())) {
                 if (BigDecimal.ZERO.compareTo(partInfo.getCena_skl()) == 0) {
-                    return partInfo.getCena_bdp();
+                    return partInfo.getCena_bdp().abs();
                 } else {
-                    return partInfo.getCena_skl().multiply(partInfo.getMnozstvi());
+                    return partInfo.getCena_skl().multiply(partInfo.getMnozstvi()).abs();
                 }
             } else {
-                return partInfo.getCena_skl().multiply(partInfo.getMnozstvi());
+                return partInfo.getCena_skl().multiply(partInfo.getMnozstvi()).abs();
             }
         }
 
         private BigDecimal buildTotalListPrice(PartInfo partInfo) {
             if ("A".equalsIgnoreCase(partInfo.getOstatni())) {
-                return partInfo.getCena_bdp();
+                return partInfo.getCena_bdp().abs();
             } else {
-                return partInfo.getCena_dopor().multiply(partInfo.getMnozstvi());
+                return partInfo.getCena_dopor().multiply(partInfo.getMnozstvi()).abs();
             }
         }
 

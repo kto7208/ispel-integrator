@@ -64,7 +64,7 @@ public class ServiceInvoiceLinesBuilder {
                         map.put(workInfo.getPp_id(), line);
                         lines.add(line);
                     }
-                    line.setTotalPrice(line.getTotalPrice().add(workInfo.getCenabdph()));
+                    line.setTotalPrice(line.getTotalPrice().add(workInfo.getCenabdph().abs()).abs());
                 }
             }
             return lines.toArray(new ServiceInvoiceLine[lines.size()]);
@@ -103,16 +103,19 @@ public class ServiceInvoiceLinesBuilder {
         }
 
         private BigDecimal buildQuantity(WorkInfo workInfo) {
-            return workInfo.getNh().multiply(workInfo.getOpakovani());
+            return workInfo.getNh().multiply(workInfo.getOpakovani()).abs();
         }
 
         private BigDecimal buildTotalCost(WorkInfo workInfo) {
-            //return workInfo.getCena().multiply(workInfo.getNh()).multiply(workInfo.getOpakovani());
+            //return workInfo.getCena().multiply(workInfo.getNh()).multiply(workInfo.getOpakovani()).abs();
             return BigDecimal.ZERO;
         }
 
         private BigDecimal buildTotalListPrice(WorkInfo workInfo) {
-            return workInfo.getCena_jednotkova().multiply(workInfo.getOpakovani()).multiply(workInfo.getNh());
+            return workInfo.getCena_jednotkova()
+                    .multiply(workInfo.getOpakovani())
+                    .multiply(workInfo.getNh())
+                    .abs();
         }
 
     }

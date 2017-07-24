@@ -187,7 +187,8 @@ public class AdapterServiceImpl implements AdapterService {
             result.setXmlInput(stringWriter.toString());
             sendResult = dmsService.sendData(f);
             result.setXmlOutput(sendResult);
-            dmsService.updateOrder(documentGroup, documentNumber);
+			validateResult(sendResult);
+			dmsService.updateOrder(documentGroup, documentNumber);
 		} catch (Exception e) {
 			logger.error(e);
             result.setProcessed(Result.UNPROCESSED);
@@ -219,7 +220,8 @@ public class AdapterServiceImpl implements AdapterService {
                 result.setXmlInput(stringWriter.toString());
                 sendResult = dmsService.sendData(f);
                 result.setXmlOutput(sendResult);
-                dmsService.updateOrders(keys);
+				validateResult(sendResult);
+				dmsService.updateOrders(keys);
 			} catch (Exception e) {
 				logger.error(e);
                 result.setProcessed(Result.UNPROCESSED);
@@ -235,8 +237,16 @@ public class AdapterServiceImpl implements AdapterService {
         return result;
     }
 
-    public Result importSZV(AdapterRequest request) {
-        String orderGroup = request.getDocumentGroup();
+	private String validateResult(String result) throws Exception {
+		if (result.contains("<Success Message")) {
+			return result;
+		} else {
+			throw new Exception(result);
+		}
+	}
+
+	public Result importSZV(AdapterRequest request) {
+		String orderGroup = request.getDocumentGroup();
         String orderNumber = request.getDocumentNumber();
 
         OrderInfo orderInfo = dmsDao.getOrderInfo(orderNumber, orderGroup);

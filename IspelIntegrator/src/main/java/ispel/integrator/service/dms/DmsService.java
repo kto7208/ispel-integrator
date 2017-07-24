@@ -117,17 +117,10 @@ public class DmsService {
             result.append(line);
         }
         client.close();
-        logger.debug("send result: " + result);
-        return validateResult(result.toString());
+        logger.debug("send result: " + result.toString());
+        return result.toString();
     }
 
-    private String validateResult(String result) throws Exception {
-        if (result.contains("<Success Message")) {
-            return result;
-        } else {
-            throw new Exception(result);
-        }
-    }
 
     @Transactional
     public void updateOrder(String skupina, String zakazka) {

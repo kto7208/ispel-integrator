@@ -58,8 +58,8 @@ public class TestClient {
                 .append("110")
                 .append("kto_1                         ")
                 .append("ZAK")
-                .append("0010140148")
-                .append("15");
+                .append("0012140001")
+                .append("17");
         os.write(sb.toString().getBytes("UTF-8"), 0, 48);
 
         os.flush();
