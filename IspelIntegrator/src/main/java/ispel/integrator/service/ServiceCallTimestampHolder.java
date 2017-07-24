@@ -16,7 +16,7 @@ public class ServiceCallTimestampHolder {
 	};
     private static final ThreadLocal<DateFormat> formatYYMMDD = new ThreadLocal<DateFormat>() {
         protected DateFormat initialValue() {
-            DateFormat f = new SimpleDateFormat("yyyymmdd");
+            DateFormat f = new SimpleDateFormat("yyyyMMdd");
             return f;
         }
 
