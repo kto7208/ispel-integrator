@@ -69,9 +69,6 @@ public class RepairOrdersBuilder {
             if (works == null) {
                 throw new IllegalStateException("works is null");
             }
-            if (customerInfo == null) {
-                throw new IllegalStateException("customerInfo is null");
-            }
             if (employeeInfo == null) {
                 throw new IllegalStateException("employeeInfo is null");
             }

@@ -86,17 +86,21 @@ public class VehicleBuilder {
                 vehicle.setNationalEmissionDueDate(buildEmissionDueDate());
 
                 VehicleUser vehicleUser = new VehicleUser();
-                vehicleUser.setTitle(customerInfo.getTitul());
-                vehicleUser.setFirstName(customerInfo.getJmeno());
-                vehicleUser.setLastName(customerInfo.getPrijmeni());
-                vehicleUser.setName(buildName());
-                vehicleUser.setAddress(buildCustomerAddress());
-                vehicleUser.setPostcode(customerInfo.getPsc());
-                vehicleUser.setPrivatePhone(buildPrivatePhone());
-                vehicleUser.setBusinessPhone(buildBusinessPhone());
-                vehicleUser.setMobilePhone(buildMobilePhone());
-                vehicleUser.setEmail(customerInfo.getEmail());
-                vehicleUser.setDateOfBirth(buildDateOfBirth());
+                if (customerInfo != null) {
+                    vehicleUser.setTitle(customerInfo.getTitul());
+                    vehicleUser.setFirstName(customerInfo.getJmeno());
+                    vehicleUser.setLastName(customerInfo.getPrijmeni());
+                    vehicleUser.setName(buildName());
+                    vehicleUser.setAddress(buildCustomerAddress());
+                    vehicleUser.setPostcode(customerInfo.getPsc());
+                    vehicleUser.setPrivatePhone(buildPrivatePhone());
+                    vehicleUser.setBusinessPhone(buildBusinessPhone());
+                    vehicleUser.setMobilePhone(buildMobilePhone());
+                    vehicleUser.setEmail(customerInfo.getEmail());
+                    vehicleUser.setDateOfBirth(buildDateOfBirth());
+                } else {
+                    vehicleUser.setIdentityNotKnown("");
+                }
                 vehicle.setVehicleUser(vehicleUser);
                 VehicleOwner vehicleOwner = new VehicleOwner();
                 vehicleOwner.setSeeVehicleUser(new SeeVehicleUserType());

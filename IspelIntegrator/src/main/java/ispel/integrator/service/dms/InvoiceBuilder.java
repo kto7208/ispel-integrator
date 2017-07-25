@@ -59,23 +59,24 @@ public class InvoiceBuilder {
 
 
         public Invoice build() {
-            if (customerInfo == null) {
-                throw new IllegalStateException("customerInfo null");
-            }
-
             Invoice invoice = new Invoice();
             invoice.setId(buildId());
             invoice.setDate(orderInfo.getKdyUzavDoklad());
             invoice.setType(buildType());
 
             Customer customer = new Customer();
-            customer.setAccount(this.customerInfo.getCi_reg());
-            customer.setType(buildCustomerType());
-            customer.setVATNumber(this.customerInfo.getIcdph());
-            customer.setName(buildName());
-            customer.setAddress(buildCustomerAddress());
-            customer.setPostcode(this.customerInfo.getPsc());
-            customer.setUseForMarketing(buildUseForMarketing());
+            if (customerInfo != null) {
+                customer.setAccount(this.customerInfo.getCi_reg());
+                customer.setType(buildCustomerType());
+                customer.setVATNumber(this.customerInfo.getIcdph());
+                customer.setName(buildName());
+                customer.setAddress(buildCustomerAddress());
+                customer.setPostcode(this.customerInfo.getPsc());
+                customer.setUseForMarketing(buildUseForMarketing());
+            } else {
+                customer.setIdentityNotKnown("");
+                customer.setAccount("0");
+            }
 
             invoice.setEmployee(buildEmployeeName());
             invoice.setOrderRef(buildOrderRef());
