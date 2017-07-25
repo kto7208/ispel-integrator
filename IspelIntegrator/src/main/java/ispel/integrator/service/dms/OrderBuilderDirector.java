@@ -93,10 +93,13 @@ public class OrderBuilderDirector {
         OrderInfo orderInfo = dmsDao.getOrderInfo(documentNumber, documentGroup);
         CustomerInfo customerInfo = dmsDao.getCustomerInfo(orderInfo.getCi_reg());
         EmployeeInfo employeeInfo = dmsDao.getEmployeeInfo(orderInfo.getUserName());
-        VehicleInfo vehicleInfo = dmsDao.getVehicleInfo(orderInfo.getCi_auto());
         List<WorkInfo> works = dmsDao.getWorkInfoList(documentNumber, documentGroup);
         List<PartInfo> parts = dmsDao.getPartInfoList(documentNumber, documentGroup);
         List<DescriptionInfo> descriptions = dmsDao.getDescriptionInfoList(documentNumber, documentGroup);
+        VehicleInfo vehicleInfo = null;
+        if (!"0".equals(orderInfo.getCi_auto())) {
+            vehicleInfo = dmsDao.getVehicleInfo(orderInfo.getCi_auto());
+        }
 
         PartsInvoiceLine[] partsInvoiceLines = partsInvoiceLinesBuilder.newInstance()
                 .withParts(parts)

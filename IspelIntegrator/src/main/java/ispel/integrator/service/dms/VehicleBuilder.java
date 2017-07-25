@@ -73,35 +73,38 @@ public class VehicleBuilder {
 
         public Vehicle build() {
             Vehicle vehicle = new Vehicle();
-            vehicle.setRegistration(this.vehicleInfo.getSpz());
-            vehicle.setVIN(this.vehicleInfo.getVin());
-            vehicle.setManufacturer(this.vehicleInfo.getVyrobce());
-            vehicle.setModel(this.vehicleInfo.getModel());
-            Odometer odometer = new Odometer();
-            odometer.setKilometres(buildKilometers());
-            vehicle.setOdometer(odometer);
-            vehicle.setRegDate(buildRegDate());
-            vehicle.setTechTestDueDate(buildTechTestDueDate());
-            vehicle.setNationalEmissionDueDate(buildEmissionDueDate());
+            if (vehicleInfo != null) {
+                vehicle.setRegistration(this.vehicleInfo.getSpz());
+                vehicle.setVIN(this.vehicleInfo.getVin());
+                vehicle.setManufacturer(this.vehicleInfo.getVyrobce());
+                vehicle.setModel(this.vehicleInfo.getModel());
+                Odometer odometer = new Odometer();
+                odometer.setKilometres(buildKilometers());
+                vehicle.setOdometer(odometer);
+                vehicle.setRegDate(buildRegDate());
+                vehicle.setTechTestDueDate(buildTechTestDueDate());
+                vehicle.setNationalEmissionDueDate(buildEmissionDueDate());
 
-            VehicleUser vehicleUser = new VehicleUser();
-            vehicleUser.setTitle(customerInfo.getTitul());
-            vehicleUser.setFirstName(customerInfo.getJmeno());
-            vehicleUser.setLastName(customerInfo.getPrijmeni());
-            vehicleUser.setName(buildName());
-            vehicleUser.setAddress(buildCustomerAddress());
-            vehicleUser.setPostcode(customerInfo.getPsc());
-            vehicleUser.setPrivatePhone(buildPrivatePhone());
-            vehicleUser.setBusinessPhone(buildBusinessPhone());
-            vehicleUser.setMobilePhone(buildMobilePhone());
-            vehicleUser.setEmail(customerInfo.getEmail());
-            vehicleUser.setDateOfBirth(buildDateOfBirth());
-            vehicle.setVehicleUser(vehicleUser);
+                VehicleUser vehicleUser = new VehicleUser();
+                vehicleUser.setTitle(customerInfo.getTitul());
+                vehicleUser.setFirstName(customerInfo.getJmeno());
+                vehicleUser.setLastName(customerInfo.getPrijmeni());
+                vehicleUser.setName(buildName());
+                vehicleUser.setAddress(buildCustomerAddress());
+                vehicleUser.setPostcode(customerInfo.getPsc());
+                vehicleUser.setPrivatePhone(buildPrivatePhone());
+                vehicleUser.setBusinessPhone(buildBusinessPhone());
+                vehicleUser.setMobilePhone(buildMobilePhone());
+                vehicleUser.setEmail(customerInfo.getEmail());
+                vehicleUser.setDateOfBirth(buildDateOfBirth());
+                vehicle.setVehicleUser(vehicleUser);
+                VehicleOwner vehicleOwner = new VehicleOwner();
+                vehicleOwner.setSeeVehicleUser(new SeeVehicleUserType());
+                vehicle.setVehicleOwner(vehicleOwner);
+            } else {
+                vehicle.setIdentityNotKnown("");
+            }
 
-            VehicleOwner vehicleOwner = new VehicleOwner();
-            vehicleOwner.setSeeVehicleUser(new SeeVehicleUserType());
-
-            vehicle.setVehicleOwner(vehicleOwner);
             vehicle.getJobReference().add(buildJobReference());
             vehicle.getPartsInvoiceLineOrServiceInvoiceLineOrOtherInvoiceLine().addAll(Arrays.asList(serviceInvoiceLines));
             vehicle.getPartsInvoiceLineOrServiceInvoiceLineOrOtherInvoiceLine().addAll(Arrays.asList(partsInvoiceLines));
