@@ -74,6 +74,10 @@ public class RepairOrdersBuilder {
             }
 
             RepairOrders repairOrders = new RepairOrders();
+            if (!hasVlastniPrace()) {
+                return repairOrders;
+            }
+
             RepairOrder repairOrder = new RepairOrder();
             repairOrder.setId(buildId());
             repairOrder.setStartDate(buildStartDate());
@@ -197,6 +201,15 @@ public class RepairOrdersBuilder {
                 i++;
             }
             return stringBuilder.toString();
+        }
+
+        private boolean hasVlastniPrace() {
+            for (WorkInfo work : works) {
+                if (work.isVlastni()) {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 

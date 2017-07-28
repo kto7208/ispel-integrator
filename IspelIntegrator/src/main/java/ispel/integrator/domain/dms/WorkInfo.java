@@ -170,6 +170,10 @@ public class WorkInfo {
         return "A".equals(ostatni) && !"A".equalsIgnoreCase(vlastna_pp);
     }
 
+    public boolean isVlastni() {
+        return !"A".equals(ostatni) || ("A".equals(ostatni) && "A".equalsIgnoreCase(vlastna_pp));
+    }
+
     public boolean isHlavna() {
         return "A".equalsIgnoreCase(hlavna_pp);
     }
