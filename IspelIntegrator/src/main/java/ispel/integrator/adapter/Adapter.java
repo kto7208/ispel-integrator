@@ -79,6 +79,7 @@ public class Adapter {
 		DataInputStream dis = new DataInputStream(new BufferedInputStream(
 				conn.getInputStream(), bufFrame));
 		String reply = null;
+		AdapterRequest request = null;
 		try {
 			byte[] buf = new byte[bufFrame];
 			dis.readFully(buf, 0, bufFrame);
@@ -89,7 +90,7 @@ public class Adapter {
 				stop();
 				return;
 			}
-			AdapterRequest request = AdapterRequest.getRequest(s);
+			request = AdapterRequest.getRequest(s);
 			logger.info("Adapter request received: " + request.toString());
 			Result result = null;
 			ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
@@ -126,7 +127,7 @@ public class Adapter {
 				dos.write(sb.toString().getBytes());
 			} catch (Exception e1) {
 			}
-			logger.error(e.getMessage(), e);
+			logger.error(Adapter.buildAdapterErrorMessage(e, request), e);
 		} finally {
 			try {
 				dos.flush();
@@ -136,6 +137,18 @@ public class Adapter {
 				logger.error(e);
 			}
 		}
+	}
+
+	public static String buildAdapterErrorMessage(Exception e, AdapterRequest request) {
+		StringBuilder sb = new StringBuilder();
+		if (request != null) {
+			sb.append("method_name: ").append(request.getMethodName().name()).append(",")
+					.append("group: ").append(request.getDocumentGroup()).append(",")
+					.append("number: ").append(request.getDocumentNumber()).append(",")
+					.append("type: ").append(request.getDocumentType()).append(", ");
+		}
+		sb.append(e.getMessage()).append(" ");
+		return sb.toString();
 	}
 
 	private String buildReply(AdapterRequest request, Result result)

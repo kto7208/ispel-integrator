@@ -3,6 +3,7 @@ package ispel.integrator.service;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import generated.DMSextract;
+import ispel.integrator.adapter.Adapter;
 import ispel.integrator.adapter.AdapterRequest;
 import ispel.integrator.adapter.Result;
 import ispel.integrator.dao.dms.DmsDao;
@@ -118,7 +119,7 @@ public class AdapterServiceImpl implements AdapterService {
 					.outputString(vinExpertResult));
 			carService.processGetVinExpert(carInfo, vinExpertResult);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(Adapter.buildAdapterErrorMessage(e, request), e);
 			result.setProcessed(Result.UNPROCESSED);
 			result.setErrorText(e.getMessage());
 		}
@@ -127,7 +128,7 @@ public class AdapterServiceImpl implements AdapterService {
 			logService.logResult(result);
 		} catch (Exception e) {
 			logger.error("Log result error.");
-			logger.error(e);
+			logger.error(Adapter.buildAdapterErrorMessage(e, request), e);
 		}
 		return result;
 	}
@@ -154,7 +155,7 @@ public class AdapterServiceImpl implements AdapterService {
 					.outputString(verifyCarResult));
 			carService.processVerifyCar(carInfo, verifyCarResult);
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(Adapter.buildAdapterErrorMessage(e, request), e);
 			result.setProcessed(Result.UNPROCESSED);
 			result.setErrorText(e.getMessage());
 		}
@@ -163,7 +164,7 @@ public class AdapterServiceImpl implements AdapterService {
 			logService.logResult(result);
 		} catch (Exception e) {
 			logger.error("Log result error.");
-			logger.error(e);
+			logger.error(Adapter.buildAdapterErrorMessage(e, request), e);
 		}
 		return result;
 	}
@@ -195,7 +196,7 @@ public class AdapterServiceImpl implements AdapterService {
 				result.setErrorText("Empty RepairOrders element");
 			}
 		} catch (Exception e) {
-			logger.error(e);
+			logger.error(Adapter.buildAdapterErrorMessage(e, request), e);
             result.setProcessed(Result.UNPROCESSED);
             result.setErrorText(e.getClass().getCanonicalName() + " " + e.getMessage());
         }
@@ -203,7 +204,7 @@ public class AdapterServiceImpl implements AdapterService {
             logService.logResult(result);
         } catch (Exception e) {
             logger.error("Log result error.");
-            logger.error(e);
+			logger.error(Adapter.buildAdapterErrorMessage(e, request), e);
         }
         return result;
 	}
@@ -233,7 +234,7 @@ public class AdapterServiceImpl implements AdapterService {
 					result.setErrorText("Empty RepairOrders element");
 				}
 			} catch (Exception e) {
-				logger.error(e);
+				logger.error(Adapter.buildAdapterErrorMessage(e, request), e);
                 result.setProcessed(Result.UNPROCESSED);
                 result.setErrorText(e.getClass().getCanonicalName() + " " + e.getMessage());
             }
@@ -242,7 +243,7 @@ public class AdapterServiceImpl implements AdapterService {
             logService.logResult(result);
         } catch (Exception e) {
             logger.error("Log result error.");
-            logger.error(e);
+			logger.error(Adapter.buildAdapterErrorMessage(e, request), e);
         }
         return result;
     }
@@ -288,7 +289,7 @@ public class AdapterServiceImpl implements AdapterService {
                     .withImportSZVResponse(response)
                     .build();
         } catch (Exception e) {
-            logger.error(e);
+			logger.error(Adapter.buildAdapterErrorMessage(e, request), e);
             if (result == null) {
                 result = builder.build();
             }
@@ -304,7 +305,7 @@ public class AdapterServiceImpl implements AdapterService {
             logService.logResult(result);
         } catch (Exception e) {
             logger.error("Log result error.");
-            logger.error(e);
+			logger.error(Adapter.buildAdapterErrorMessage(e, request), e);
         }
         return result;
     }
