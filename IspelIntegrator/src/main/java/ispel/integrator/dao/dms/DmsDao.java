@@ -217,7 +217,11 @@ public class DmsDao {
                         }
                     });
         } catch (EmptyResultDataAccessException e) {
-            return null;
+            EmployeeInfo employeeInfo = new EmployeeInfo();
+            employeeInfo.setPrijmeni("client");
+            employeeInfo.setJmeno("");
+            employeeInfo.setUzivatelske_meno(employeeId);
+            return employeeInfo;
         }
     }
 

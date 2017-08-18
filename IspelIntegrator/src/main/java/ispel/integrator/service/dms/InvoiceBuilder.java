@@ -230,7 +230,7 @@ public class InvoiceBuilder {
                         .append(this.employeeInfo.getPrijmeni())
                         .append(" ")
                         .append(this.employeeInfo.getJmeno())
-                        .toString();
+                        .toString().trim();
             } else {
                 return "";
             }

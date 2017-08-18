@@ -137,6 +137,13 @@ public class DmsService {
         }
     }
 
+    public boolean emptyRepairOrders(DMSextract dmsExtract) {
+        if (dmsExtract == null) {
+            throw new IllegalStateException("dmsExtract null");
+        }
+        return dmsExtract.getSite().get(0).getRepairOrders().getRepairOrder().size() == 0;
+    }
+
     @Transactional(readOnly = true)
     public List<OrderKey> getOrdersForMultipleProcessing() {
         return dmsDao.getOrdersForMultipleProcessing();

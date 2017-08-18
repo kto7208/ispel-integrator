@@ -180,15 +180,20 @@ public class AdapterServiceImpl implements AdapterService {
         Result result = Result.getInstance(request);
         String sendResult = null;
         try {
-            File f = FileUtils.getFile(dmsDirectory, getFileName(dmsExtract));
-            Files.write(stringWriter.toString(),
-                    f,
-                    Charsets.UTF_8);
-            result.setXmlInput(stringWriter.toString());
-            sendResult = dmsService.sendData(f);
-            result.setXmlOutput(sendResult);
-			validateResult(sendResult);
-			dmsService.updateOrder(documentGroup, documentNumber);
+			File f = FileUtils.getFile(dmsDirectory, getFileName(dmsExtract));
+			Files.write(stringWriter.toString(),
+					f,
+					Charsets.UTF_8);
+			result.setXmlInput(stringWriter.toString());
+			if (!dmsService.emptyRepairOrders(dmsExtract)) {
+				sendResult = dmsService.sendData(f);
+				result.setXmlOutput(sendResult);
+				validateResult(sendResult);
+				dmsService.updateOrder(documentGroup, documentNumber);
+			} else {
+				result.setProcessed(Result.UNPROCESSED);
+				result.setErrorText("Empty RepairOrders element");
+			}
 		} catch (Exception e) {
 			logger.error(e);
             result.setProcessed(Result.UNPROCESSED);
@@ -218,10 +223,15 @@ public class AdapterServiceImpl implements AdapterService {
                         f,
                         Charsets.UTF_8);
                 result.setXmlInput(stringWriter.toString());
-                sendResult = dmsService.sendData(f);
-                result.setXmlOutput(sendResult);
-				validateResult(sendResult);
-				dmsService.updateOrders(keys);
+				if (!dmsService.emptyRepairOrders(dmsExtract)) {
+					sendResult = dmsService.sendData(f);
+					result.setXmlOutput(sendResult);
+					validateResult(sendResult);
+					dmsService.updateOrders(keys);
+				} else {
+					result.setProcessed(Result.UNPROCESSED);
+					result.setErrorText("Empty RepairOrders element");
+				}
 			} catch (Exception e) {
 				logger.error(e);
                 result.setProcessed(Result.UNPROCESSED);
