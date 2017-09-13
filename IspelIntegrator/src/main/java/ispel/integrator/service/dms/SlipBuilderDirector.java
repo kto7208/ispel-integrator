@@ -4,17 +4,17 @@ import com.google.common.collect.Sets;
 import generated.*;
 import ispel.integrator.dao.dms.DmsDao;
 import ispel.integrator.dao.dms.DmsSequenceService;
-import ispel.integrator.domain.dms.CustomerInfo;
-import ispel.integrator.domain.dms.EmployeeInfo;
-import ispel.integrator.domain.dms.SlipInfo;
-import ispel.integrator.domain.dms.SlipPartInfo;
+import ispel.integrator.domain.dms.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.math.BigInteger;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class SlipBuilderDirector {
@@ -74,7 +74,7 @@ public class SlipBuilderDirector {
         logger.debug("ico: " + ico);
     }
 
-    public DMSextract construct(String sklad, String ci_dok) {
+    public DMSextract construct(String sklad, String ci_dok, BigInteger siteSequence, BigInteger sourceSequence) {
         SlipInfo slipInfo = dmsDao.getSlipInfo(ci_dok, sklad);
         CustomerInfo customerInfo = dmsDao.getCustomerInfo(slipInfo.getCi_reg());
         EmployeeInfo employeeInfo = dmsDao.getEmployeeInfo(slipInfo.getUser_name());
@@ -102,11 +102,13 @@ public class SlipBuilderDirector {
 
         return dmsBuilder.newInstance()
                 .withSource(this.ico)
-                .withDmsSequence(this.dmsSequenceService.getDmsSourceSequenceNextVal())
+                .withDmsSequence(sourceSequence == null ?
+                        this.dmsSequenceService.getDmsSourceSequenceNextVal() : sourceSequence)
                 .withDmsVendor(this.vendor)
                 .withDmsProductName(this.productName)
                 .withDmsVersion(this.dmsVersion)
-                .withSiteSequence(this.dmsSequenceService.getDmsSiteSequenceNextVal())
+                .withSiteSequence(siteSequence == null ?
+                        this.dmsSequenceService.getDmsSiteSequenceNextVal() : siteSequence)
                 .withCountry(this.country)
                 .withCurrency(this.currency)
                 .withFranchise(this.franchise)
@@ -116,7 +118,64 @@ public class SlipBuilderDirector {
                 .build();
     }
 
-    public DMSextract constructMultiple() {
+    public DMSextract constructMultiple(List<OrderKey> keys) {
+        DMSextract dms = null;
+        BigInteger siteSequence = this.dmsSequenceService.getDmsSiteSequenceNextVal();
+        BigInteger sourceSequence = this.dmsSequenceService.getDmsSourceSequenceNextVal();
+        for (OrderKey key : keys) {
+            DMSextract d = construct(String.valueOf(key.getSkupina()), String.valueOf(key.getZakazka()),
+                    siteSequence, sourceSequence);
+            if (dms == null) {
+                dms = d;
+            } else {
+                addInvoice(dms, d);
+                addPartsStk(dms, d);
+            }
+        }
+        return dms;
+    }
+
+    private void addInvoice(DMSextract dms, DMSextract invDms) {
+        dms.getSite().get(0).getTransactions().getInvoice().add(
+                invDms.getSite().get(0).getTransactions().getInvoice().get(0));
+    }
+
+    private void addPartsStk(DMSextract dms, DMSextract invDms) {
+        Set<String> parts = new HashSet<String>();
+        for (PartsStk partsStk : invDms.getSite().get(0).getPartsStk()) {
+            PartsStk p = getPartsStk(dms, partsStk);
+            if (p == null) {
+                dms.getSite().get(0).getPartsStk().add(partsStk);
+            } else {
+                addPtStk(p, partsStk);
+            }
+        }
+    }
+
+    private PartsStk getPartsStk(DMSextract dms, PartsStk partsStk) {
+        for (PartsStk p : dms.getSite().get(0).getPartsStk()) {
+            if (p.getWarehouse().equals(partsStk.getWarehouse())) {
+                return p;
+            }
+        }
         return null;
     }
+
+    private void addPtStk(PartsStk p, PartsStk partsStk) {
+        for (PtStk ptStk : partsStk.getPtStk()) {
+            if (!hasPtStk(p, ptStk)) {
+                p.getPtStk().add(ptStk);
+            }
+        }
+    }
+
+    private boolean hasPtStk(PartsStk partsStk, PtStk ptStk) {
+        for (PtStk p : partsStk.getPtStk()) {
+            if (p.getNum().equals(ptStk.getNum())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

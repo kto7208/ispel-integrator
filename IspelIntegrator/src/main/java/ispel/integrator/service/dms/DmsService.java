@@ -82,7 +82,7 @@ public class DmsService {
 
         DMSextract dmsExtract = null;
         if ("VYD".equals(documentType)) {
-            dmsExtract = slipBuilderDirector.constructMultiple();
+            dmsExtract = slipBuilderDirector.constructMultiple(keys);
         } else if ("ZAK".equals(documentType)) {
             dmsExtract = orderBuilderDirector.constructMultiple(keys);
         } else {
@@ -123,8 +123,14 @@ public class DmsService {
 
 
     @Transactional
-    public void updateOrder(String skupina, String zakazka) {
-        dmsDao.updateOrder(zakazka, skupina);
+    public void updateDoc(String skupina, String zakazka, String docType) {
+        if ("ZAK".equalsIgnoreCase(docType)) {
+            dmsDao.updateOrder(zakazka, skupina);
+        } else if ("VYD".equalsIgnoreCase(docType)) {
+            dmsDao.updateSlip(zakazka, skupina);
+        } else {
+            throw new java.lang.IllegalStateException("wrong docType: " + docType);
+        }
     }
 
     @Transactional
@@ -137,16 +143,28 @@ public class DmsService {
         }
     }
 
-    public boolean emptyRepairOrders(DMSextract dmsExtract) {
+    public boolean sendToDMS(DMSextract dmsExtract, String docType) {
         if (dmsExtract == null) {
             throw new IllegalStateException("dmsExtract null");
         }
-        return dmsExtract.getSite().get(0).getRepairOrders().getRepairOrder().size() == 0;
+        if ("ZAK".equalsIgnoreCase(docType)) {
+            return dmsExtract.getSite().get(0).getRepairOrders().getRepairOrder().size() > 0;
+        } else if ("VYD".equalsIgnoreCase(docType)) {
+            return true;
+        } else {
+            throw new IllegalStateException("wrong docType:" + docType);
+        }
     }
 
     @Transactional(readOnly = true)
-    public List<OrderKey> getOrdersForMultipleProcessing() {
-        return dmsDao.getOrdersForMultipleProcessing();
+    public List<OrderKey> getOrdersForMultipleProcessing(String docType) {
+        if ("ZAK".equalsIgnoreCase(docType)) {
+            return dmsDao.getOrdersForMultipleProcessing();
+        } else if ("VYD".equalsIgnoreCase(docType)) {
+            return dmsDao.getSlipsForMultipleProcessing();
+        } else {
+            throw new IllegalStateException("wrong docType: " + docType);
+        }
     }
 }
 

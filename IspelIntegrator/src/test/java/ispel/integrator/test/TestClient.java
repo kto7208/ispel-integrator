@@ -109,7 +109,6 @@ public class TestClient {
         is.read(frame, 0, 1024);
         String str = new String(frame);
         System.out.println("received: " + str);
-
     }
 
 

@@ -186,11 +186,11 @@ public class AdapterServiceImpl implements AdapterService {
 					f,
 					Charsets.UTF_8);
 			result.setXmlInput(stringWriter.toString());
-			if (!dmsService.emptyRepairOrders(dmsExtract)) {
+			if (dmsService.sendToDMS(dmsExtract, documentType)) {
 				sendResult = dmsService.sendData(f);
 				result.setXmlOutput(sendResult);
 				validateResult(sendResult);
-				dmsService.updateOrder(documentGroup, documentNumber);
+				dmsService.updateDoc(documentGroup, documentNumber, documentType);
 			} else {
 				result.setProcessed(Result.UNPROCESSED);
 				result.setErrorText("Empty RepairOrders element");
@@ -211,8 +211,8 @@ public class AdapterServiceImpl implements AdapterService {
 
     public Result submitMultipleInvoiceData(AdapterRequest request) {
         String documentType = request.getDocumentType();
-        List<OrderKey> keys = dmsService.getOrdersForMultipleProcessing();
-        DMSextract dmsExtract = dmsService.buildDMSMultiple(documentType, keys);
+		List<OrderKey> keys = dmsService.getOrdersForMultipleProcessing(documentType);
+		DMSextract dmsExtract = dmsService.buildDMSMultiple(documentType, keys);
         Result result = Result.getInstance(request);
         if (dmsExtract != null) {
             StringWriter stringWriter = new StringWriter();
@@ -224,7 +224,7 @@ public class AdapterServiceImpl implements AdapterService {
                         f,
                         Charsets.UTF_8);
                 result.setXmlInput(stringWriter.toString());
-				if (!dmsService.emptyRepairOrders(dmsExtract)) {
+				if (dmsService.sendToDMS(dmsExtract, documentType)) {
 					sendResult = dmsService.sendData(f);
 					result.setXmlOutput(sendResult);
 					validateResult(sendResult);

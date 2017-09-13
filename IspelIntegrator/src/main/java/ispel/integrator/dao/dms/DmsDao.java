@@ -75,6 +75,13 @@ public class DmsDao {
 
     private static final String UPDATE_ORDER_SQL = "update se_zakazky set write_time=?,nissan_processed=? where zakazka=? and skupina=?";
 
+    private static final String UPDATE_SLIP_SQL = "update mz_doklady set set write_time=?,nissan_processed=? where ci_dok=? and sklad=? and doklad='VYD'";
+
+    private static final String GET_SLIPS_SQL = "select mz_doklady.ci_dok,mz_conf_sklad.KOD from mz_doklady " +
+            "left join mz_conf_sklad on mz_doklady.SKLAD=mz_conf_sklad.KOD " +
+            "where mz_conf_sklad.TLAC_SKLAD=21 and mz_doklady.STAV='Z' " +
+            "and mz_doklady.DOKLAD='VYD' and DOKLAD_TYP in ('PD','VF') and mz_doklady.NISSAN_PROCESSED='N'";
+
     private static final String GET_ORDERS_SQL = "select s.zakazka,s.SKUPINA from se_zakazky s " +
             "left join se_skupz sz on s.SKUPINA=sz.SKUPINA where sz.TLAC_TYP=21 AND s.STAV='U' and s.NISSAN_PROCESSED='N'";
 
@@ -400,6 +407,21 @@ public class DmsDao {
                 });
     }
 
+    public void updateSlip(final String ci_dok, final String sklad) {
+        jdbcTemplate.update(UPDATE_SLIP_SQL,
+                new PreparedStatementSetter() {
+                    public void setValues(PreparedStatement ps)
+                            throws SQLException {
+                        ps.setTimestamp(1, new Timestamp(
+                                ServiceCallTimestampHolder.getAsLong()));
+                        ps.setString(2, "A");
+                        ps.setInt(3, Integer.valueOf(ci_dok).intValue());
+                        ps.setInt(4, Integer.valueOf(sklad).intValue());
+                    }
+
+                });
+    }
+
     public List<OrderKey> getOrdersForMultipleProcessing() {
         List<OrderKey> keys = new ArrayList<OrderKey>();
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(GET_ORDERS_SQL);
@@ -411,4 +433,17 @@ public class DmsDao {
         }
         return keys;
     }
+
+    public List<OrderKey> getSlipsForMultipleProcessing() {
+        List<OrderKey> keys = new ArrayList<OrderKey>();
+        List<Map<String, Object>> rows = jdbcTemplate.queryForList(GET_SLIPS_SQL);
+        for (Map<String, Object> row : rows) {
+            OrderKey key = new OrderKey();
+            key.setZakazka((Long) row.get("ci_dok"));
+            key.setSkupina((Integer) row.get("sklad"));
+            keys.add(key);
+        }
+        return keys;
+    }
+
 }
