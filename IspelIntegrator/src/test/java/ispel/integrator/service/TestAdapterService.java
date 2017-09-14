@@ -75,11 +75,23 @@ public class TestAdapterService {
 	}
 
 	@Test
-	public void submitMultipleData() throws Exception {
+	public void submitMultipleZak() throws Exception {
 		ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
 
 		AdapterRequest request = AdapterRequest.getEmptyRequest();
 		request.setDocumentType("ZAK");
+		request.setMethodName(AdapterRequest.MethodName.SubmitMultipleInvoiceData);
+		request.setDataSourceName("kto_1");
+
+		adapterService.submitMultipleInvoiceData(request);
+	}
+
+	@Test
+	public void submitMultipleVyd() throws Exception {
+		ServiceCallTimestampHolder.setTimestamp(System.currentTimeMillis());
+
+		AdapterRequest request = AdapterRequest.getEmptyRequest();
+		request.setDocumentType("VYD");
 		request.setMethodName(AdapterRequest.MethodName.SubmitMultipleInvoiceData);
 		request.setDataSourceName("kto_1");
 

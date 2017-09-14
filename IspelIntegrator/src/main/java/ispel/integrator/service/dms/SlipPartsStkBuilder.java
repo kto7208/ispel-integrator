@@ -63,8 +63,13 @@ public class SlipPartsStkBuilder {
         }
 
         private BigDecimal buildQty(SlipPartInfo partInfo) {
-            return partInfo.getPocet() == null ?
-                    BigDecimal.ZERO : partInfo.getSklad_pocet();
+//            return partInfo.getPocet() == null ?
+//                    BigDecimal.ZERO : partInfo.getSklad_pocet();
+            if (partInfo.getPocet() != null && partInfo.getSklad_pocet() != null) {
+                return partInfo.getSklad_pocet();
+            } else {
+                return BigDecimal.ZERO;
+            }
         }
 
         private String buildFranchiseName(SlipPartInfo partInfo) {

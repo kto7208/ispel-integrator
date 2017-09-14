@@ -4,6 +4,7 @@ public class OrderKey {
 
     private Long zakazka;
     private Integer skupina;
+    private Long sklad;
 
     public Long getZakazka() {
         return zakazka;
@@ -19,5 +20,13 @@ public class OrderKey {
 
     public void setSkupina(Integer skupina) {
         this.skupina = skupina;
+    }
+
+    public Long getSklad() {
+        return sklad;
+    }
+
+    public void setSklad(Long sklad) {
+        this.sklad = sklad;
     }
 }

@@ -66,6 +66,7 @@ public class SlipInvoiceBuilder {
                 customer.setUseForMarketing(buildUseForMarketing());
             } else {
                 customer.setIdentityNotKnown("");
+                customer.setAccount("0");
             }
             invoice.setCustomer(customer);
             invoice.setEmployee(buildEmployeeName());
@@ -76,7 +77,7 @@ public class SlipInvoiceBuilder {
             invoiceSummary.setInvoiceTotal(buildInvoiceTotal());
             invoiceSummary.setSubtotalLabourBody(BigDecimal.ZERO);
             invoiceSummary.setSubtotalLabourPaint(BigDecimal.ZERO);
-            invoiceSummary.setSubtotalLabourBodyPaint(BigDecimal.ZERO);
+            invoiceSummary.setSubtotalLabourBodyPaint(null);
             invoiceSummary.setSubtotalLabourWkshp(BigDecimal.ZERO);
             invoiceSummary.setSubtotalPaintMaterial(buildSubtotalPaintMaterial());
             invoiceSummary.setSubtotalParts(buildSubtotalParts());

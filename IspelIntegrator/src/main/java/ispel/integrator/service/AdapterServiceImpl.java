@@ -228,7 +228,7 @@ public class AdapterServiceImpl implements AdapterService {
 					sendResult = dmsService.sendData(f);
 					result.setXmlOutput(sendResult);
 					validateResult(sendResult);
-					dmsService.updateOrders(keys);
+					dmsService.updateOrders(documentType, keys);
 				} else {
 					result.setProcessed(Result.UNPROCESSED);
 					result.setErrorText("Empty RepairOrders element");

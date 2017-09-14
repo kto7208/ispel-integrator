@@ -62,7 +62,7 @@ public class DmsService {
 
         DMSextract dmsExtract = null;
         if ("VYD".equals(documentType)) {
-            dmsExtract = slipBuilderDirector.construct(documentGroup, documentNumber);
+            dmsExtract = slipBuilderDirector.construct(documentGroup, documentNumber, null, null);
         } else if ("ZAK".equals(documentType)) {
             dmsExtract = orderBuilderDirector.construct(documentGroup, documentNumber, null, null);
         } else {
@@ -134,12 +134,17 @@ public class DmsService {
     }
 
     @Transactional
-    public void updateOrders(List<OrderKey> keys) {
+    public void updateOrders(String docType, List<OrderKey> keys) {
         if (keys == null) {
             throw new IllegalArgumentException("keys is null");
         }
+
         for (OrderKey key : keys) {
-            dmsDao.updateOrder(String.valueOf(key.getZakazka()), String.valueOf(key.getSkupina()));
+            if ("ZAK".equalsIgnoreCase(docType)) {
+                dmsDao.updateOrder(String.valueOf(key.getZakazka()), String.valueOf(key.getSkupina()));
+            } else {
+                dmsDao.updateSlip(String.valueOf(key.getZakazka()), String.valueOf(key.getSklad()));
+            }
         }
     }
 

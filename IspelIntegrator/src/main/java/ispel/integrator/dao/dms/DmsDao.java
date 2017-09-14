@@ -75,9 +75,9 @@ public class DmsDao {
 
     private static final String UPDATE_ORDER_SQL = "update se_zakazky set write_time=?,nissan_processed=? where zakazka=? and skupina=?";
 
-    private static final String UPDATE_SLIP_SQL = "update mz_doklady set set write_time=?,nissan_processed=? where ci_dok=? and sklad=? and doklad='VYD'";
+    private static final String UPDATE_SLIP_SQL = "update mz_doklady set write_time=?,nissan_processed=? where ci_dok=? and sklad=? and doklad='VYD'";
 
-    private static final String GET_SLIPS_SQL = "select mz_doklady.ci_dok,mz_conf_sklad.KOD from mz_doklady " +
+    private static final String GET_SLIPS_SQL = "select mz_doklady.ci_dok,mz_doklady.sklad from mz_doklady " +
             "left join mz_conf_sklad on mz_doklady.SKLAD=mz_conf_sklad.KOD " +
             "where mz_conf_sklad.TLAC_SKLAD=21 and mz_doklady.STAV='Z' " +
             "and mz_doklady.DOKLAD='VYD' and DOKLAD_TYP in ('PD','VF') and mz_doklady.NISSAN_PROCESSED='N'";
@@ -440,7 +440,7 @@ public class DmsDao {
         for (Map<String, Object> row : rows) {
             OrderKey key = new OrderKey();
             key.setZakazka((Long) row.get("ci_dok"));
-            key.setSkupina((Integer) row.get("sklad"));
+            key.setSklad((Long) row.get("sklad"));
             keys.add(key);
         }
         return keys;

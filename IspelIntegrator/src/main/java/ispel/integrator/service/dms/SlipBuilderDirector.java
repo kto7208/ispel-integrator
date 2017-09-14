@@ -123,7 +123,7 @@ public class SlipBuilderDirector {
         BigInteger siteSequence = this.dmsSequenceService.getDmsSiteSequenceNextVal();
         BigInteger sourceSequence = this.dmsSequenceService.getDmsSourceSequenceNextVal();
         for (OrderKey key : keys) {
-            DMSextract d = construct(String.valueOf(key.getSkupina()), String.valueOf(key.getZakazka()),
+            DMSextract d = construct(String.valueOf(key.getSklad()), String.valueOf(key.getZakazka()),
                     siteSequence, sourceSequence);
             if (dms == null) {
                 dms = d;
