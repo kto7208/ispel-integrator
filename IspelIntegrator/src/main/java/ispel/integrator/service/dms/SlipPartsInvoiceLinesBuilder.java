@@ -41,9 +41,9 @@ public class SlipPartsInvoiceLinesBuilder {
                 part.setIsFranchise("A".equalsIgnoreCase(partInfo.getOriginal_nd()));
                 line.setPart(part);
                 line.setQuantity(partInfo.getPocet());
-                line.setTotalCost(partInfo.getCena().multiply(partInfo.getPocet()));
-                line.setTotalListPrice(partInfo.getCena_prodej().multiply(partInfo.getPocet()));
-                line.setTotalPrice(partInfo.getCelkem_pro());
+                line.setTotalCost(partInfo.getCena().multiply(partInfo.getPocet()).abs());
+                line.setTotalListPrice(partInfo.getCena_prodej().multiply(partInfo.getPocet()).abs());
+                line.setTotalPrice(partInfo.getCelkem_pro().abs());
                 lines.add(line);
             }
             return lines.toArray(new PartsInvoiceLine[lines.size()]);
@@ -59,7 +59,7 @@ public class SlipPartsInvoiceLinesBuilder {
         }
 
         private String buildType(SlipPartInfo slipPartInfo) {
-            if (slipPartInfo.getCena().compareTo(BigDecimal.ZERO) >= 0) {
+            if (slipPartInfo.getCelkem_pro().compareTo(BigDecimal.ZERO) >= 0) {
                 return "invoice";
             } else {
                 return "credit";
