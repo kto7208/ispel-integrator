@@ -72,22 +72,15 @@ public class DmsService {
     }
 
     @Transactional
-    public DMSextract buildDMSMultiple(String documentType, List<OrderKey> keys) {
-        if (documentType == null) {
-            throw new IllegalArgumentException("documentType is null");
+    public DMSextract buildDMSMultiple(List<OrderKey> orderKeys, List<OrderKey> slipKeys) {
+        if (orderKeys == null) {
+            throw new IllegalArgumentException("orderKeys is null");
         }
-        if (keys == null) {
-            throw new IllegalArgumentException("keys is null");
+        if (slipKeys == null) {
+            throw new IllegalArgumentException("slipKeys is null");
         }
-
-        DMSextract dmsExtract = null;
-        if ("VYD".equals(documentType)) {
-            dmsExtract = slipBuilderDirector.constructMultiple(keys);
-        } else if ("ZAK".equals(documentType)) {
-            dmsExtract = orderBuilderDirector.constructMultiple(keys);
-        } else {
-            throw new IllegalStateException("wrong documentType: " + documentType);
-        }
+        DMSextract dmsExtract = orderBuilderDirector.constructMultiple(orderKeys);
+        dmsExtract = slipBuilderDirector.constructMultiple(slipKeys, dmsExtract);
         return dmsExtract;
     }
 
@@ -134,42 +127,53 @@ public class DmsService {
     }
 
     @Transactional
-    public void updateOrders(String docType, List<OrderKey> keys) {
-        if (keys == null) {
-            throw new IllegalArgumentException("keys is null");
+    public void updateOrders(List<OrderKey> orderKeys, List<OrderKey> slipKeys) {
+        if (orderKeys == null) {
+            throw new IllegalArgumentException("orderKeys is null");
         }
-
-        for (OrderKey key : keys) {
-            if ("ZAK".equalsIgnoreCase(docType)) {
-                dmsDao.updateOrder(String.valueOf(key.getZakazka()), String.valueOf(key.getSkupina()));
-            } else {
-                dmsDao.updateSlip(String.valueOf(key.getZakazka()), String.valueOf(key.getSklad()));
-            }
+        if (slipKeys == null) {
+            throw new IllegalArgumentException("slipKeys is null");
+        }
+        for (OrderKey key : orderKeys) {
+            dmsDao.updateOrder(String.valueOf(key.getZakazka()), String.valueOf(key.getSkupina()));
+        }
+        for (OrderKey key : slipKeys) {
+            dmsDao.updateSlip(String.valueOf(key.getZakazka()), String.valueOf(key.getSklad()));
         }
     }
 
-    public boolean sendToDMS(DMSextract dmsExtract, String docType) {
+    public boolean sendToDMS(DMSextract dmsExtract) {
         if (dmsExtract == null) {
             throw new IllegalStateException("dmsExtract null");
         }
-        if ("ZAK".equalsIgnoreCase(docType)) {
-            return dmsExtract.getSite().get(0).getRepairOrders().getRepairOrder().size() > 0;
-        } else if ("VYD".equalsIgnoreCase(docType)) {
+        if ((dmsExtract.getSite().get(0).getRepairOrders() != null) &&
+                (dmsExtract.getSite().get(0).getRepairOrders().getRepairOrder().size() > 0)) {
             return true;
         } else {
-            throw new IllegalStateException("wrong docType:" + docType);
+            return false;
+        }
+    }
+
+    public boolean sendToDMS(DMSextract dmsExtract, String documentType) {
+        if (dmsExtract == null) {
+            throw new IllegalStateException("dmsExtract null");
+        }
+        if ("VYD".equalsIgnoreCase(documentType)) {
+            return true;
+        } else {
+            return dmsExtract.getSite().get(0).getRepairOrders().getRepairOrder().size() > 0;
         }
     }
 
     @Transactional(readOnly = true)
-    public List<OrderKey> getOrdersForMultipleProcessing(String docType) {
-        if ("ZAK".equalsIgnoreCase(docType)) {
-            return dmsDao.getOrdersForMultipleProcessing();
-        } else if ("VYD".equalsIgnoreCase(docType)) {
-            return dmsDao.getSlipsForMultipleProcessing();
-        } else {
-            throw new IllegalStateException("wrong docType: " + docType);
-        }
+    public List<OrderKey> getOrdersForMultipleProcessing() {
+        return dmsDao.getOrdersForMultipleProcessing();
     }
+
+    @Transactional(readOnly = true)
+    public List<OrderKey> getSlipsForMultipleProcessing() {
+        return dmsDao.getSlipsForMultipleProcessing();
+    }
+
 }
 

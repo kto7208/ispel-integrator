@@ -37,7 +37,7 @@ public class PartsInvoiceLinesBuilder {
                 part.setIsFranchise("A".equalsIgnoreCase(partInfo.getOriginal_nd()));
                 part.setPartNumber(partInfo.getKatalog());
                 line.setPart(part);
-                line.setQuantity(partInfo.getMnozstvi());
+                line.setQuantity(partInfo.getMnozstvi().abs());
                 line.setTotalCost(buildTotalCost(partInfo));
                 line.setTotalPrice(partInfo.getCena_bdp().abs());
                 line.setTotalListPrice(buildTotalListPrice(partInfo));

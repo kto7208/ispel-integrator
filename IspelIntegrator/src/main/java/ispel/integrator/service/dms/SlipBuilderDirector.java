@@ -118,18 +118,26 @@ public class SlipBuilderDirector {
                 .build();
     }
 
-    public DMSextract constructMultiple(List<OrderKey> keys) {
-        DMSextract dms = null;
-        BigInteger siteSequence = this.dmsSequenceService.getDmsSiteSequenceNextVal();
-        BigInteger sourceSequence = this.dmsSequenceService.getDmsSourceSequenceNextVal();
-        for (OrderKey key : keys) {
-            DMSextract d = construct(String.valueOf(key.getSklad()), String.valueOf(key.getZakazka()),
-                    siteSequence, sourceSequence);
-            if (dms == null) {
-                dms = d;
-            } else {
-                addInvoice(dms, d);
-                addPartsStk(dms, d);
+    public DMSextract constructMultiple(List<OrderKey> keys, DMSextract dms) {
+        if (keys == null) {
+            throw new IllegalStateException("keys is null");
+        }
+        BigInteger siteSequence = BigInteger.ZERO;
+        BigInteger sourceSequence = BigInteger.ZERO;
+        if (dms == null) {
+            siteSequence = this.dmsSequenceService.getDmsSiteSequenceNextVal();
+            sourceSequence = this.dmsSequenceService.getDmsSourceSequenceNextVal();
+        }
+        if (keys.size() > 0) {
+            for (OrderKey key : keys) {
+                DMSextract d = construct(String.valueOf(key.getSklad()), String.valueOf(key.getZakazka()),
+                        siteSequence, sourceSequence);
+                if (dms == null) {
+                    dms = d;
+                } else {
+                    addInvoice(dms, d);
+                    addPartsStk(dms, d);
+                }
             }
         }
         return dms;
@@ -163,19 +171,21 @@ public class SlipBuilderDirector {
 
     private void addPtStk(PartsStk p, PartsStk partsStk) {
         for (PtStk ptStk : partsStk.getPtStk()) {
-            if (!hasPtStk(p, ptStk)) {
+            PtStk p1 = findPtStk(p, ptStk);
+            if (p1 != null) {
+                p1.setQtyOnOrder(p1.getQtyOnOrder().add(ptStk.getQtyOnOrder()));
+            } else {
                 p.getPtStk().add(ptStk);
             }
         }
     }
 
-    private boolean hasPtStk(PartsStk partsStk, PtStk ptStk) {
+    private PtStk findPtStk(PartsStk partsStk, PtStk ptStk) {
         for (PtStk p : partsStk.getPtStk()) {
             if (p.getNum().equals(ptStk.getNum())) {
-                return true;
+                return p;
             }
         }
-        return false;
+        return null;
     }
-
 }
