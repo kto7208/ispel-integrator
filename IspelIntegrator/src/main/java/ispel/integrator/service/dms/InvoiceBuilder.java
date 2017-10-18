@@ -128,21 +128,21 @@ public class InvoiceBuilder {
         }
 
         private String buildType() {
-            if (isInternal() && isBodyshop()) {
+            if (!isWarranty() && isInternal() && isBodyshop()) {
                 return "BodyshopInternal";
-            } else if (isInternal() && !isBodyshop()) {
+            } else if (!isWarranty() && isInternal() && !isBodyshop()) {
                 return "WorkshopInternal";
             } else if (isWarranty() && isBodyshop()) {
                 return "BodyshopWarranty";
             } else if (isWarranty() && !isBodyshop()) {
                 return "WorkshopWarranty";
-            } else if (isVF() && isBodyshop()) {
+            } else if (!isWarranty() && isVF() && isBodyshop()) {
                 return "BodyshopAccount";
-            } else if (isVF() && !isBodyshop()) {
+            } else if (!isWarranty() && isVF() && !isBodyshop()) {
                 return "WorkshopAccount";
-            } else if (isPD() && isBodyshop()) {
+            } else if (!isWarranty() && isPD() && isBodyshop()) {
                 return "BodyshopCash";
-            } else if (isPD() && !isBodyshop()) {
+            } else if (!isWarranty() && isPD() && !isBodyshop()) {
                 return "WorkshopCash";
             } else {
                 throw new IllegalStateException("wrong invoice type");
