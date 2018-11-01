@@ -49,7 +49,7 @@ public class SlipPartsStkBuilder {
                 PtStk ptStk = new PtStk();
                 ptStk.setNum(partInfo.getKatalog());
                 ptStk.setQty(buildQty(partInfo));
-                ptStk.setQtyOnOrder(partInfo.getPocet());
+                ptStk.setQtyOnOrder(partInfo.getPocet().abs());
                 ptStk.setLastOutDate(buildLastOutDate(partInfo));
                 ptStk.setLastInDate(buildLastInDate(partInfo));
                 ptStk.setUnitCost(buildUniCost(partInfo));

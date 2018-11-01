@@ -58,7 +58,7 @@ public class PartsStkBuilder {
                 PtStk ptStk = new PtStk();
                 ptStk.setNum(partInfo.getKatalog());
                 ptStk.setQty(buildQty(partInfo));
-                ptStk.setQtyOnOrder(partInfo.getMnozstvi());
+                ptStk.setQtyOnOrder(partInfo.getMnozstvi().abs());
                 ptStk.setLastOutDate(buildLastOutDate(partInfo));
                 ptStk.setLastInDate(buildLastInDate(partInfo));
                 ptStk.setUnitCost(buildUniCost(partInfo));
