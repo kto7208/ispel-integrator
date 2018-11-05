@@ -144,8 +144,10 @@ public class ImportSzvBuilder {
                     !vehicleInfo.getDt_vyroby().isEmpty() &&
                     !"00000000".equals(vehicleInfo.getDt_vyroby())) {
                 return Integer.getInteger(vehicleInfo.getDt_vyroby().substring(0, 4)).intValue();
-            } else {
-                Integer.getInteger(vehicleInfo.getDt_prod().substring(0, 4)).intValue();
+            } else if (vehicleInfo.getDt_prod() != null &&
+                    !vehicleInfo.getDt_prod().isEmpty() &&
+                    !"00000000".equals(vehicleInfo.getDt_prod())){
+                return Integer.getInteger (vehicleInfo.getDt_prod().substring(0, 4)).intValue();
             }
             return 0;
         }
