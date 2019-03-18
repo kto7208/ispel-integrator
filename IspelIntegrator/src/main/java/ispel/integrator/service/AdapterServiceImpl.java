@@ -265,7 +265,7 @@ public class AdapterServiceImpl implements AdapterService {
         VehicleInfo vehicleInfo = dmsDao.getVehicleInfo(orderInfo.getCi_auto());
         List<WorkInfo> works = dmsDao.getWorkInfoList(orderNumber, orderGroup);
         List<PartInfo> parts = dmsDao.getPartInfoList(orderNumber, orderGroup);
-        String organizace = dmsDao.getOrganizace();
+        String organizace = dmsDao.getOrganizaceIspel();
 
         ImportSZV importSZV = importSzvBuilder.newInstance()
                 .withOrder(orderInfo)

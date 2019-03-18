@@ -30,6 +30,7 @@ public class DmsDao {
     private JdbcTemplate jdbcTemplate;
 
     private static final String GET_ORGANIZACE_CODE_SQL = "select val from conf_ini where var='ORGANIZACE'";
+    private static final String GET_ORGANIZACE_ISPEL_CODE_SQL = "select val from conf_ini where var='ORGANIZACE_ISPEL'";
     private static final String GET_FRANCHISE_CODE_SQL = "select dealer_cislo from komunik_conf where lower(nazov)=?";
     private static final String GET_DMS_VERSION_SQL = "select val from conf_ini where var='DMS_VERSION'";
     private static final String GET_NISSAN_PARTS_ONLY_SQL = "select val from conf_ini where var='NISSAN_PARTS_ONLY'";
@@ -96,6 +97,10 @@ public class DmsDao {
                 String.class);
     }
 
+    public String getOrganizaceIspel() {
+        return jdbcTemplate.queryForObject(GET_ORGANIZACE_ISPEL_CODE_SQL,
+                String.class);
+    }
     public String getFranchiseCode(String franchise) {
         logger.debug("franchise: " + franchise);
         return jdbcTemplate.queryForObject(GET_FRANCHISE_CODE_SQL,
