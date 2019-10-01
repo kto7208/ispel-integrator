@@ -8,9 +8,9 @@
 	<description>Ispel WS Integration</description>
 
 	<properties>
-		<spring.version>4.3.18</spring.version>
+		<spring.version>4.3.25.RELEASE</spring.version>
         <junit.version>4.12</junit.version>
-		<spring.ws.version>2.2.4.RELEASE</spring.ws.version>
+		<spring.ws.version>2.4.6.RELEASE</spring.ws.version>
 		<httpclient.version>4.5.2</httpclient.version>
 		<httpmime.version>4.5.2</httpmime.version>
 		<guava.version>19.0</guava.version>
